@@ -1,0 +1,19 @@
+.inputContainer {
+  @apply flex flex-col justify-center;
+}
+
+.inputLabel {
+  @apply leading-[100%] w-full text-sm ml-2 font-semibold mb-2;
+}
+
+.inputText {
+  @apply px-2 py-1 w-full h-10
+  bg-gray-800 border-2 border-gray-600 outline-0
+
+  focus-visible:ring-4 focus-visible:ring-yellow-300/30 focus-visible:border-yellow-300
+
+  transition-all duration-300
+  hover:brightness-110
+  rounded hover:rounded-tl-xl hover:rounded-br-xl
+  focus-within:rounded-tl-xl focus-within:rounded-br-xl;
+}

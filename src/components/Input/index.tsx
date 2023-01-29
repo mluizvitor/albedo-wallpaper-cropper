@@ -1,5 +1,5 @@
 import { ComponentPropsWithoutRef, ElementType, HTMLInputTypeAttribute } from "react";
-import { selectSystemNameInput } from "../../utils/SelectInput";
+import styles from './styles.module.css';
 
 interface InputProps extends ComponentPropsWithoutRef<ElementType> {
   id: string;
@@ -12,12 +12,13 @@ interface InputProps extends ComponentPropsWithoutRef<ElementType> {
 
 export default function Input({ id, label, helperText, placeholder, type, className, ...rest }: InputProps) {
   return (
-    <div className={[type === "checkbox" ? "flex-row-reverse items-center" : "flex-col", "flex justify-center", className].join(" ")}>
+    <div className={[styles.inputContainer, className].join(" ")}>
 
-      <label htmlFor={id} className={["leading-[100%] w-full text-sm ml-2 font-semibold", type !== 'checkbox' && 'mb-2'].join(" ")}>{label}</label>
+      <label htmlFor={id} className={styles.inputLabel}>{label}</label>
 
       <input id={id} type={type} {...rest} placeholder={placeholder}
-        className={type !== 'checkbox' ? "px-2 py-1 rounded-lg w-full h-10 bg-gray-800 border border-gray-600" : ""} onFocus={(e) => { e.target.select() }} />
+        className={styles.inputText}
+        onFocus={(e) => { e.target.select() }} />
       {helperText && <span className="opacity-70 leading-[100%] mt-2 text-xs ml-2 w-auto">{helperText}</span>}
     </div>
   )
