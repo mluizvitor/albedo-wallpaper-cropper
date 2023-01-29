@@ -5,6 +5,7 @@ import { SideBar } from '../../components/SideBar';
 import { MenuSection } from '../../components/Section';
 import Input from '../../components/Input';
 import { useSystemsCollection } from '../../hooks/useSystemsCollection';
+import Button from '../../components/Button';
 
 export default function FileListSection() {
 
@@ -14,7 +15,7 @@ export default function FileListSection() {
   console.log(systemCollection)
 
   return (
-    <SideBar anchor="right" className='flex flex-col'>
+    <SideBar anchor="right" className='z-10 flex flex-col'>
       <MenuSection title={'Wallpaper'} className='grid gap-2'>
         <Input id={'systemName'}
           label={'System Name'}
@@ -23,38 +24,28 @@ export default function FileListSection() {
           value={currentSystemName}
           onChange={(e: ChangeEvent<HTMLInputElement>) => updateSystemName(e.target.value)}
         />
-        <label htmlFor="photoWow" className="h-10 flex cursor-pointer shrink-0">
-          <div className="bg-slate-700 rounded-l-lg px-3 text-slate-50 flex items-center">
-            <UploadSimple size={16} weight="bold" />
-          </div>
-          <div className="w-full bg-slate-600 font-bold rounded-r-lg px-3 text-slate-50 flex items-center text-sm">
-            <span className="whitespace-nowrap overflow-ellipsis overflow-hidden min-w-0">
-              {currentSystemImage.name}
-            </span>
-            <span className="shrink-0">
-              {currentSystemImage.extension && `.${currentSystemImage.extension}`}
-            </span>
-          </div>
-        </label>
+        <input className="hidden" id="fileList_imageSelector" type="file" accept=".jpg, .jpeg, .webp, .png" onChange={(e) => updateImage(e)} />
 
-        <input className="hidden" id="photoWow" type="file" accept=".jpg, .jpeg, .webp, .png" onChange={(e) => updateImage(e)} />
-
-        <button className="flex items-stretch shrink-0 h-10" onClick={addSystemToCollection}>
-          <div className="bg-green-700 rounded-l-lg px-3 text-slate-50 flex items-center">
-            <Plus size={16} weight="bold" />
-          </div>
-          <div className="w-full bg-green-600 font-bold rounded-r-lg px-3 text-slate-50 flex items-center text-sm">
-            Add
-          </div>
-        </button>
+        <Button label="Load File"
+          icon={<UploadSimple size={16} weight="bold" />}
+          className='bg-gray-600'
+          onClick={() => {
+            document.getElementById("fileList_imageSelector")?.click()
+          }}
+        />
+        <Button label={'Add system'} type="submit"
+          icon={<Plus size={16} weight='bold' />}
+          className="bg-green-600"
+          onClick={addSystemToCollection}
+        />
       </MenuSection>
 
-      <ul className="mt-4 flex flex-col gap-2 h-full overflow-y-scroll p-6 bg-stone-900 border-t border-stone-700">
+      <ul className="mt-4 flex flex-col gap-2 h-full overflow-y-auto p-4 bg-stone-900 border-t border-stone-700">
         {systemCollection.map(collection => (
           <li key={collection.systemName} className="bg-stone-800 p-3 flex flex-col xl:flex-row items-center rounded-xl first:ring-2 first:ring-yellow-500">
-            <div className="flex shrink-0 lg:mr-4">
-              <img className="h-12 object-cover shrink-0 z-10 rounded-lg mb-4 ring-4 ring-stone-800" src={collection.file.normal} />
-              <img className="h-12 object-cover shrink-0 rounded-lg -ml-12 mt-4" src={collection.file.blurred} />
+            <div className="flex shrink-0 lg:mr-4 w-16 h-12 relative">
+              <img className="object-cover shrink-0 z-10 rounded-lg ring-4 ring-stone-800 top-0 left-0 absolute w-12 h-10" src={collection.file.normal} />
+              <img className="object-cover shrink-0 rounded-lg bottom-0 right-0 absolute w-12 h-10 opacity-70" src={collection.file.blurred} />
             </div>
             <div className='flex items-center w-full'>
               <span className="mr-4 grow leading-5">

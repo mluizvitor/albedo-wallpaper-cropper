@@ -11,8 +11,8 @@ function App() {
     <>
 
       <main>
-        <CropperSection />
         <CanvasSection />
+        <CropperSection />
         <FileListSection />
       </main>
     </>
