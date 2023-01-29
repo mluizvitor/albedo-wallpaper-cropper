@@ -1,0 +1,9 @@
+.buttonHexagon {
+  @apply flex px-3 items-center
+  shrink-0 h-10 bg-stone-700 relative
+  font-semibold
+  
+  transition-all duration-300
+  hover:brightness-110
+  rounded hover:rounded-tl-xl hover:rounded-br-xl;
+}
