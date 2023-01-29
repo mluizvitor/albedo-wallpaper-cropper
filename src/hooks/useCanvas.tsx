@@ -1,29 +1,29 @@
-import { ChangeEvent, InputHTMLAttributes, ReactElement, createContext, useContext, useEffect, useState } from "react";
+import { ChangeEvent, ReactElement, createContext, useContext, useEffect, useState } from "react";
+
+import * as StackBlur from 'stackblur-canvas';
 
 import DefaultImage from '../assets/screenshot.png';
+import { selectSystemNameInput } from "../utils/SelectInput";
 
-interface SystemProps {
-  systemName: string;
-  file: string;
+export interface CanvasContentProps {
+  normal: string;
+  blurred: string;
 }
 
 interface CanvasContextData {
-  systemCollection: SystemProps[];
-
-  currentSystemName: string;
   currentSystemImage: {
     name: string;
     extension: string;
     content: string;
   }
+
+  canvasContent: CanvasContentProps;
   canvasWidth: number;
   canvasHeight: number;
   blurAmount: number;
 
-  addSystemToCollection: () => void;
-  removeSystemFromCollection: (systemName: string) => void;
+  integerScale: boolean;
 
-  updateSystemName: (name: string) => void;
   updateBlur: (blur: number) => void;
   updateImage: (event: ChangeEvent<HTMLInputElement>) => void;
 
@@ -41,24 +41,15 @@ const CanvasContext = createContext<CanvasContextData>({} as CanvasContextData);
 
 export function CanvasProvider({ children }: CanvasProviderProps) {
 
-  const [systemCollection, setSystemCollection] = useState<SystemProps[]>([]);
-
   const [canvasWidth, setCanvasWidth] = useState(480);
   const [canvasHeight, setCanvasHeight] = useState(320);
-
-  const [canvasContent, setCanvasContent] = useState(DefaultImage);
-
-  const [currentSystemName, setCurrentSystemName] = useState("");
+  const [canvasContent, setCanvasContent] = useState({} as CanvasContentProps);
   const [currentSystemImage, setCurrentSystemImage] = useState({ name: "Load File", extension: "", content: DefaultImage });
-
-  const [blurAmount, setBlurAmount] = useState(0);
-
-  function updateSystemName(name: string) {
-    setCurrentSystemName(name.toLowerCase());
-  }
+  const [blurAmount, setBlurAmount] = useState(10);
+  const [integerScale, setIntegerScale] = useState(true);
 
   function updateBlur(blur: number) {
-    if (blur >= 0) {
+    if (0 <= blur && blur <= 180) {
       setBlurAmount(blur)
     }
   }
@@ -74,13 +65,6 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
 
     setCanvasWidth(newWidth);
     setCanvasHeight(newHeight);
-  }
-
-  function selectSystemNameInput() {
-    const input = document.getElementById("systemName") as HTMLInputElement;
-
-    input.focus()
-    input.select()
   }
 
   function updateImage(event: ChangeEvent<HTMLInputElement>) {
@@ -99,7 +83,6 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
         image.src = e.target?.result as string;
 
         image.onload = () => {
-
           const canvas = document.createElement("canvas") as HTMLCanvasElement;
           if (!canvas) {
             return null;
@@ -113,94 +96,67 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
           canvas.width = image.width;
           canvas.height = image.height;
           context.drawImage(image, 0, 0);
-          setCurrentSystemImage({ name: fileName, extension: fileExtension, content: canvas.toDataURL("image/jpg", 0.1) })
+          setCurrentSystemImage({ name: fileName, extension: fileExtension, content: canvas.toDataURL("image/png", 1) })
         }
       }
 
-      selectSystemNameInput()
+      selectSystemNameInput("systemName")
     }
   }
 
-  function addSystemToCollection() {
-    const currentlyAtCollection = systemCollection.find(item => item.systemName === currentSystemName);
-    if (currentlyAtCollection) {
-      alert("Already at collection")
-      return null;
-    }
-
-    if (!currentSystemName) {
-      alert("Please insert a system name")
-      return null;
-    }
-
-    setSystemCollection([...systemCollection, {
-      file: canvasContent,
-      systemName: currentSystemName
-    }])
-
-    selectSystemNameInput()
-  }
-
-  function removeSystemFromCollection(systemName: string) {
-    const newCollection = [...systemCollection].filter(item => item.systemName !== systemName);
-
-    setSystemCollection(newCollection);
-  }
-
-  function handleFile() {
-    const canvas = document.getElementById("wallpaperCanvas") as HTMLCanvasElement;
-    if (!canvas) {
-      return null;
-    }
-
+  async function handleFile() {
+    const canvas = document.createElement("canvas") as HTMLCanvasElement;
     const context = canvas.getContext('2d');
-    if (!context) {
-      return null;
-    }
+
+    let normal = "";
+    let blurred = "";
 
     let image = new Image();
+    image.src = currentSystemImage.content;
     image.onload = function () {
 
-      const imageHeight = (image.width / Number(canvasWidth) * Number(canvasHeight));
-      const imageWidth = (image.height / Number(canvasHeight) * Number(canvasWidth));
 
-      const yPosition = (image.height / 2) - (imageHeight / 2);
-      const xPosition = (image.width / 2) - (imageWidth / 2);
-
-
-      context.filter = `blur(${blurAmount * 0.5}px)`;
-      context.clearRect(0, 0, canvasWidth, canvasHeight);
-
-      if (canvasWidth / canvasHeight > image.width / image.height) {
-        context.drawImage(image, 0, yPosition, image.width, imageHeight, -blurAmount / 2, -blurAmount / 2, (Number(canvasWidth)) + blurAmount, (Number(canvasHeight)) + blurAmount);
-
-        context.globalCompositeOperation = 'destination-over';
-
-        context.filter = "blur(0)";
-        context.drawImage(image, 0, yPosition, image.width, imageHeight, 0, 0 / 2, Number(canvasWidth), Number(canvasHeight));
-
-      } else {
-        context.drawImage(image, xPosition, 0, imageWidth, image.height, -blurAmount / 2, -blurAmount / 2, (Number(canvasWidth)) + blurAmount, (Number(canvasHeight)) + blurAmount);
-
-        context.globalCompositeOperation = 'destination-over';
-
-        context.filter = "blur(0)";
-        context.drawImage(image, xPosition, 0, imageWidth, image.height, 0, 0, Number(canvasWidth), Number(canvasHeight));
+      function getScaleFactor(number: number, compare: number) {
+        return Math.ceil(compare / number);
       }
 
-      setCanvasContent(canvas.toDataURL("image/jpg", 0.1));
+      const integerScaleValue = Math.max(getScaleFactor(image.height, canvasHeight), getScaleFactor(image.width, canvasWidth))
+
+      const imageWidthW = image.width * integerScaleValue;
+      const imageHeightW = image.height * integerScaleValue;
+
+      context!.clearRect(0, 0, canvasWidth, canvasHeight);
+
+      canvas.width = canvasWidth;
+      canvas.height = canvasHeight;
+
+      context!.imageSmoothingEnabled = false;
+
+      if (canvasWidth / canvasHeight > image.width / image.height) {
+        context!.drawImage(image, -(imageWidthW - canvasWidth) / 2, -(imageHeightW - canvasHeight) / 2, imageWidthW, imageHeightW);
+        normal = canvas.toDataURL("image/jpg", 1);
+      } else {
+        context!.drawImage(image, -(imageWidthW - canvasWidth) / 2, -(imageHeightW - canvasHeight) / 2, imageWidthW, imageHeightW);
+        normal = canvas.toDataURL("image/jpg", 1);
+      }
+
+      StackBlur.canvasRGBA(canvas, 0, 0, canvas.width, canvas.height, blurAmount);
+
+      blurred = canvas.toDataURL("image/jpg", 1);
+
+      setCanvasContent({ normal, blurred });
     }
 
-    image.src = currentSystemImage.content;
   }
 
   useEffect(() => {
     handleFile();
+    console.log(canvasContent)
 
-  }, [canvasWidth, canvasHeight, blurAmount, currentSystemImage]);
+  }, [canvasWidth, canvasHeight, currentSystemImage.content, blurAmount])
 
   return (
-    <CanvasContext.Provider value={{ systemCollection, currentSystemName, currentSystemImage, canvasWidth, canvasHeight, blurAmount, addSystemToCollection, removeSystemFromCollection, updateSystemName, updateBlur, updateImage, updateSizes, invertSizes, handleFile }}>
+    <CanvasContext.Provider value={{ canvasContent, currentSystemImage, canvasWidth, canvasHeight, blurAmount, integerScale, updateBlur, updateImage, updateSizes, invertSizes, handleFile }}>
       {children}
     </CanvasContext.Provider>
   )
