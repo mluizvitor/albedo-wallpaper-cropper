@@ -1,5 +1,5 @@
 import { ComponentPropsWithoutRef, ElementType, HTMLInputTypeAttribute } from "react";
-import styles from './styles.module.css';
+import styles from "./styles.module.css";
 
 interface InputProps extends ComponentPropsWithoutRef<ElementType> {
   id: string;
