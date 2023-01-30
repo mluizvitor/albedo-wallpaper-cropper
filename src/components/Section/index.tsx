@@ -1,4 +1,5 @@
-import { ReactNode } from "react";
+import { CaretUp } from "phosphor-react";
+import { ReactNode, useState } from "react";
 
 interface SectionSeparatorProps {
   title: string;
@@ -7,14 +8,26 @@ interface SectionSeparatorProps {
 }
 
 export function MenuSection({ title, className, children }: SectionSeparatorProps) {
+
+  const [isMenuSectionOpen, setIsMenuSectionOpen] = useState(true);
+
+  function toggleMenuSection() {
+    setIsMenuSectionOpen(!isMenuSectionOpen);
+  }
+
   return (
     <div>
-      <div className="pb-1 pt-2 px-6 bg-stone-700 text-sm text-stone-50 border-b border-b-stone-600">
-        <span className="text-bold">
+      <div className="pb-1 pt-2 px-6 bg-neutral-700 text-neutral-50 border-b border-b-neutral-600 flex cursor-pointer items-center"
+        onClick={toggleMenuSection}>
+        <span className="text-bold font-teko uppercase grow">
           {title}
         </span>
+        <CaretUp size={16}
+          weight="bold"
+          className={["shrink-0", !isMenuSectionOpen && "rotate-180"].join(" ")}
+        />
       </div>
-      <div className={["m-4", className].join(" ")}>
+      <div className={["m-4", !isMenuSectionOpen && "hidden", className].join(" ")}>
         {children}
       </div>
     </div>
