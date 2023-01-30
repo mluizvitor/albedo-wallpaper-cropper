@@ -1,6 +1,6 @@
 .buttonHexagon {
   @apply flex px-3 items-center
-  shrink-0 h-10 bg-stone-700 relative
+  shrink-0 h-10 bg-neutral-700 relative
   font-semibold
   
   transition-all duration-300
