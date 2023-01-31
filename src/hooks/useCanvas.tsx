@@ -1,6 +1,6 @@
-import { ChangeEvent, ReactElement, createContext, useContext, useEffect, useState } from "react";
-import * as StackBlur from "stackblur-canvas";
-import { selectSystemNameInput } from "../utils/SelectInput";
+import { ChangeEvent, ReactElement, createContext, useContext, useEffect, useState } from 'react';
+import * as StackBlur from 'stackblur-canvas';
+import { selectSystemNameInput } from '../utils/SelectInput';
 
 export interface CanvasContentProps {
   normal: string;
@@ -42,12 +42,12 @@ const CanvasContext = createContext<CanvasContextData>({} as CanvasContextData);
 
 export function CanvasProvider({ children }: CanvasProviderProps) {
 
-  const [blurAmount, setBlurAmount] = useState(10);
+  const [blurAmount, setBlurAmount] = useState(60);
   const [canvasContent, setCanvasContent] = useState({} as CanvasContentProps);
   const [canvasHeight, setCanvasHeight] = useState(1280);
   const [canvasWidth, setCanvasWidth] = useState(1920);
-  const [currentLoadedImage, setCurrentLoadedImage] = useState("");
-  const [currentLoadedFileName, setCurrentLoadedFileName] = useState("");
+  const [currentLoadedImage, setCurrentLoadedImage] = useState('');
+  const [currentLoadedFileName, setCurrentLoadedFileName] = useState('');
   const [integerScale, setIntegerScale] = useState(false);
   const [integerScaleValue, setIntegerScaleValue] = useState(1);
   const [showBlur, setShowBlur] = useState(false);
@@ -56,7 +56,7 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
 
   function updateBlur(blur: number) {
     if (0 <= blur && blur <= 180) {
-      setBlurAmount(blur)
+      setBlurAmount(blur);
     }
   }
 
@@ -73,7 +73,7 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
   }
 
   function toggleIntegerScale() {
-    setIntegerScale(!integerScale)
+    setIntegerScale(!integerScale);
   }
 
   function updateSizes(width: number, height: number) {
@@ -84,7 +84,7 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
       setCanvasHeight(height);
     }
 
-    updateTimestamp()
+    updateTimestamp();
   }
 
   function updateTimestamp() {
@@ -109,10 +109,10 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
       return;
     }
 
-    const clipboardItem = clipboardData.files[0]
+    const clipboardItem = clipboardData.files[0];
 
 
-    if (clipboardItem && clipboardItem.type.startsWith("image/")) {
+    if (clipboardItem && clipboardItem.type.startsWith('image/')) {
       const reader = new FileReader;
 
       reader.readAsDataURL(clipboardItem);
@@ -120,17 +120,16 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
       reader.onloadstart = () => {
         setShowLoader(true);
         clearCanvas();
-      }
+      };
 
       reader.onload = (e) => {
-        console.log("Loading Image from clipboard...");
+        console.log('Loading Image from clipboard...');
         const image = new Image();
 
 
         image.onload = () => {
-          console.log("WoW")
-          const canvas = document.createElement("canvas");
-          const context = canvas?.getContext("2d")
+          const canvas = document.createElement('canvas');
+          const context = canvas?.getContext('2d');
 
           if (!context) {
             return null;
@@ -140,18 +139,16 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
           canvas.height = image.height;
           context.drawImage(image, 0, 0);
 
-          setCurrentLoadedImage(canvas.toDataURL())
-          setCurrentLoadedFileName("From clipboard");
-          setTimeout(() => {
-            setShowLoader(false);
-            console.log("Image loaded successfully!")
-          }, 1000)
+          setCurrentLoadedImage(canvas.toDataURL());
+          setCurrentLoadedFileName('From clipboard');
+          setShowLoader(false);
+          console.log('Image loaded successfully!');
 
-        }
+        };
 
         image.src = e.target?.result as string;
 
-      }
+      };
     }
   }
 
@@ -166,19 +163,19 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
       reader.readAsDataURL(file);
 
       reader.onloadend = (e) => {
-        let image = new Image();
+        const image = new Image();
 
         image.onloadstart = () => {
           setShowLoader(true);
-        }
+        };
 
         image.onload = () => {
-          const canvas = document.createElement("canvas") as HTMLCanvasElement;
+          const canvas = document.createElement('canvas') as HTMLCanvasElement;
           if (!canvas) {
             return null;
           }
 
-          const context = canvas.getContext("2d");
+          const context = canvas.getContext('2d');
           if (!context) {
             return null;
           }
@@ -190,49 +187,49 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
           setCurrentLoadedImage(canvas.toDataURL(file.type));
           setCurrentLoadedFileName(fileName);
           setShowLoader(false);
-        }
+        };
 
         image.src = e.target?.result as string;
-      }
+      };
 
-      selectSystemNameInput("systemName")
+      selectSystemNameInput('systemName');
     }
   }
 
   function updateCanvas() {
-    const originalCanvas = document.getElementById("canvasNormal") as HTMLCanvasElement;
+    const originalCanvas = document.getElementById('canvasNormal') as HTMLCanvasElement;
 
     if (!originalCanvas) {
       return;
     }
 
-    const newNormalCanvas = document.createElement("canvas");
-    newNormalCanvas.width = originalCanvas.width
-    newNormalCanvas.height = originalCanvas.height
+    const newNormalCanvas = document.createElement('canvas');
+    newNormalCanvas.width = originalCanvas.width;
+    newNormalCanvas.height = originalCanvas.height;
 
-    const newNormalContext = newNormalCanvas.getContext("2d", { willReadFrequently: true })
-    newNormalContext!.drawImage(originalCanvas, 0, 0)
+    const newNormalContext = newNormalCanvas.getContext('2d', { willReadFrequently: true });
+    newNormalContext && newNormalContext.drawImage(originalCanvas, 0, 0);
 
 
-    const newBlurredCanvas = document.createElement("canvas");
-    newBlurredCanvas.width = originalCanvas.width
-    newBlurredCanvas.height = originalCanvas.height
+    const newBlurredCanvas = document.createElement('canvas');
+    newBlurredCanvas.width = originalCanvas.width;
+    newBlurredCanvas.height = originalCanvas.height;
 
-    const newBlurredContext = newBlurredCanvas.getContext("2d", { willReadFrequently: true })
-    newBlurredContext!.drawImage(originalCanvas, 0, 0)
+    const newBlurredContext = newBlurredCanvas.getContext('2d', { willReadFrequently: true });
+    newBlurredContext && newBlurredContext.drawImage(originalCanvas, 0, 0);
 
-    let normal = originalCanvas.toDataURL("image/webp", 0.85)
+    const normal = originalCanvas.toDataURL('image/webp', 0.85);
 
     StackBlur.canvasRGBA(newBlurredCanvas, 0, 0, newBlurredCanvas.width, newBlurredCanvas.height, blurAmount);
 
-    let blurred = newBlurredCanvas.toDataURL("image/webp", 0.85)
+    const blurred = newBlurredCanvas.toDataURL('image/webp', 0.85);
 
     setCanvasContent({ normal, blurred });
   }
 
   function clearCanvas() {
-    const originalCanvas = document.getElementById("canvasNormal") as HTMLCanvasElement;
-    const context = originalCanvas?.getContext("2d", { willReadFrequently: true });
+    const originalCanvas = document.getElementById('canvasNormal') as HTMLCanvasElement;
+    const context = originalCanvas?.getContext('2d', { willReadFrequently: true });
     if (!originalCanvas || !context) {
       return;
     }
@@ -243,9 +240,9 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
   useEffect(() => {
     const timeout = setTimeout(() => {
       updateCanvas();
-    }, 500)
-    return () => clearTimeout(timeout)
-  }, [currentLoadedImage, blurAmount, integerScale, integerScaleValue, timestamp])
+    }, 500);
+    return () => clearTimeout(timeout);
+  }, [currentLoadedImage, blurAmount, integerScale, integerScaleValue, timestamp]);
 
   return (
     <CanvasContext.Provider value={{
@@ -274,7 +271,7 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
     }}>
       {children}
     </CanvasContext.Provider>
-  )
+  );
 }
 
 export function useCanvas() {

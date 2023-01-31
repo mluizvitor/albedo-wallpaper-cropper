@@ -1,7 +1,6 @@
-import { Plus } from "phosphor-react"
-import { ButtonHTMLAttributes, ComponentPropsWithoutRef, ElementType, HTMLProps, ReactNode } from "react";
+import { ComponentPropsWithoutRef, ElementType, ReactNode } from 'react';
 
-import styles from "./styles.module.css";
+import styles from './styles.module.css';
 
 interface ButtonProps extends ComponentPropsWithoutRef<ElementType> {
   label: string;
@@ -12,13 +11,14 @@ interface ButtonProps extends ComponentPropsWithoutRef<ElementType> {
 
 export default function Button({ label, icon, className, hideLabel, ...rest }: ButtonProps) {
   return (
-    <button className={[styles.buttonHexagon, className].join(" ")} {...rest}>
+    <button className={[styles.buttonHexagon, className].join(' ')}
+      {...rest}>
       {icon && icon}
       {!hideLabel && (
-        <span className={icon ? "ml-3" : ""}>
+        <span className={icon ? 'ml-3' : ''}>
           {label}
         </span>
       )}
     </button>
-  )
+  );
 }
