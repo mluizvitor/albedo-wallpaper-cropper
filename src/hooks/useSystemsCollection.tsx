@@ -1,12 +1,13 @@
-import { ReactNode, createContext, useContext, useEffect, useState } from "react";
-import { CanvasContentProps, useCanvas } from "./useCanvas";
-import { selectSystemNameInput } from "../utils/SelectInput";
+import { ReactNode, createContext, useContext, useEffect, useState } from 'react';
+import { CanvasContentProps, useCanvas } from './useCanvas';
+import { selectSystemNameInput } from '../utils/SelectInput';
 
 import JSZip from 'jszip';
-import { saveAs } from 'file-saver'
+import { saveAs } from 'file-saver';
 import short from 'short-uuid';
+import { idbAddElement, idbEditElement, idbGetElement, idbRemoveElement } from '../database/actions';
 
-interface SystemProps {
+export interface SystemProps {
   id: string;
   systemName: string;
   file: CanvasContentProps
@@ -18,7 +19,7 @@ interface SystemsContentData {
 
   addSystemToCollection: () => void;
   parseSystemName: (name: string) => void;
-  removeSystemFromCollection: (systemName: string) => void;
+  removeSystemFromCollection: (id: string) => void;
   updateSystemName: (id: string, name: string) => void;
   clearCollection: () => void;
   exportFilesAsZip: () => void;
@@ -31,20 +32,10 @@ interface SystemProviderProps {
 }
 
 export function SystemsProvider({ children }: SystemProviderProps) {
-  const storageLabel = "@albedoImageHandler:systemCollection"
+  const { canvasContent } = useCanvas();
 
-  const { canvasContent } = useCanvas()
-
-  const [currentSystemName, setCurrentSystemName] = useState("");
-  const [systemCollection, setSystemCollection] = useState<SystemProps[]>(() => {
-    const tasks = localStorage.getItem(storageLabel);
-
-    if (tasks) {
-      return JSON.parse(tasks);
-    }
-
-    return [];
-  })
+  const [currentSystemName, setCurrentSystemName] = useState('');
+  const [systemCollection, setSystemCollection] = useState<SystemProps[]>([]);
 
   /**
    * 
@@ -54,22 +45,26 @@ export function SystemsProvider({ children }: SystemProviderProps) {
   function addSystemToCollection() {
     const currentlyAtCollection = systemCollection.find(item => item.systemName === currentSystemName);
     if (currentlyAtCollection) {
-      alert("Already at collection")
+      alert('Already at collection');
       return null;
     }
 
     if (!currentSystemName) {
-      alert("Please insert a system name")
+      alert('Please insert a system name');
       return null;
     }
 
-    setSystemCollection([...systemCollection, {
+    const generatedInfos: SystemProps = {
       id: short.generate(),
       file: canvasContent,
-      systemName: currentSystemName
-    }])
+      systemName: currentSystemName,
+    };
 
-    selectSystemNameInput("systemName")
+    setSystemCollection([...systemCollection, generatedInfos]);
+
+    selectSystemNameInput('systemName');
+
+    idbAddElement('systemCollection', generatedInfos);
   }
 
   /**
@@ -89,12 +84,21 @@ export function SystemsProvider({ children }: SystemProviderProps) {
    */
 
   function updateSystemName(id: string, name: string) {
-    let newCollection = [...systemCollection];
-    const systemIndex = newCollection.findIndex((item) => item.id === id);
+    const newCollection = [...systemCollection];
+    const originalSystemFound = newCollection.find((item) => item.id === id);
 
-    newCollection[systemIndex].systemName = name;
+    if (originalSystemFound) {
+      const newSystemFound: SystemProps = {
+        id: originalSystemFound.id,
+        file: originalSystemFound.file,
+        systemName: name,
+      };
 
-    setSystemCollection(newCollection);
+      newCollection[newCollection.findIndex((item) => item.id === id)].systemName = name;
+
+      setSystemCollection(newCollection);
+      idbEditElement('systemCollection', id, newSystemFound);
+    }
   }
 
   /**
@@ -102,16 +106,20 @@ export function SystemsProvider({ children }: SystemProviderProps) {
    * Remove System from Collection
    * @param systemName
    */
-  function removeSystemFromCollection(systemName: string) {
-    const newCollection = [...systemCollection].filter(item => item.systemName !== systemName);
+  function removeSystemFromCollection(id: string) {
+    const newCollection = [...systemCollection].filter(item => item.id !== id);
+
     setSystemCollection(newCollection);
+    idbRemoveElement('systemCollection', id);
   }
+
   /**
    * 
    * Clear collection
    */
   function clearCollection() {
     setSystemCollection([]);
+    idbRemoveElement('systemCollection', 'all');
   }
 
   /**
@@ -122,32 +130,30 @@ export function SystemsProvider({ children }: SystemProviderProps) {
 
   function exportFilesAsZip() {
     const zip = new JSZip();
-    const blurredDir = zip.folder("blurred");
+    const blurredDir = zip.folder('blurred');
 
-    console.log("WOW")
 
     systemCollection.map((item) => {
-
       const normaImage = item.file.normal.replace('data:', '').replace(/^.+,/, '');
       const blurredImage = item.file.blurred.replace('data:', '').replace(/^.+,/, '');
 
       zip.file(item.systemName + '.webp', normaImage, { base64: true });
-      blurredDir?.file(item.systemName + ".blurred.webp", blurredImage, { base64: true })
-    })
+      blurredDir?.file(item.systemName + '.blurred.webp', blurredImage, { base64: true });
+    });
 
 
-    zip.generateAsync({ type: "blob" }).then(function (content) {
-      saveAs(content, "wallpapers.zip");
-    })
+    zip.generateAsync({ type: 'blob' }).then(function (content) {
+      saveAs(content, 'wallpapers.zip');
+    });
   }
 
   useEffect(() => {
-    try {
-      localStorage.setItem(storageLabel, JSON.stringify(systemCollection));
-    } catch (e) {
-      console.log(e);
-    }
-  }, [systemCollection]);
+    idbGetElement('systemCollection', 'all').then((result) => {
+      if (result) {
+        setSystemCollection(result as SystemProps[]);
+      }
+    });
+  }, []);
 
   return (
     <SystemsContext.Provider value={{
@@ -158,11 +164,11 @@ export function SystemsProvider({ children }: SystemProviderProps) {
       removeSystemFromCollection,
       updateSystemName,
       clearCollection,
-      exportFilesAsZip
+      exportFilesAsZip,
     }}>
       {children}
     </SystemsContext.Provider>
-  )
+  );
 }
 
 export function useSystemsCollection() {
