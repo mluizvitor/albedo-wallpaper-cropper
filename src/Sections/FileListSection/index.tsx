@@ -6,7 +6,7 @@ import { MenuSection } from '../../components/Section';
 import Input from '../../components/Input';
 import { SystemProps, useSystemsCollection } from '../../hooks/useSystemsCollection';
 import Button from '../../components/Button';
-import { Prompt } from '../../components/Dialog';
+import { Prompt } from '../../components/Prompt';
 
 export default function FileListSection() {
 
