@@ -1,8 +1,13 @@
-import { ReactNode, createContext, useContext, useState } from "react";
+import { ReactNode, createContext, useContext, useEffect, useState } from "react";
 import { CanvasContentProps, useCanvas } from "./useCanvas";
 import { selectSystemNameInput } from "../utils/SelectInput";
 
+import JSZip from 'jszip';
+import { saveAs } from 'file-saver'
+import short from 'short-uuid';
+
 interface SystemProps {
+  id: string;
   systemName: string;
   file: CanvasContentProps
 }
@@ -12,8 +17,11 @@ interface SystemsContentData {
   currentSystemName: string;
 
   addSystemToCollection: () => void;
-  updateSystemName: (name: string) => void;
+  parseSystemName: (name: string) => void;
   removeSystemFromCollection: (systemName: string) => void;
+  updateSystemName: (id: string, name: string) => void;
+  clearCollection: () => void;
+  exportFilesAsZip: () => void;
 }
 
 const SystemsContext = createContext<SystemsContentData>({} as SystemsContentData);
@@ -23,11 +31,20 @@ interface SystemProviderProps {
 }
 
 export function SystemsProvider({ children }: SystemProviderProps) {
+  const storageLabel = "@albedoImageHandler:systemCollection"
 
   const { canvasContent } = useCanvas()
 
-  const [currentSystemName, setCurrentSystemName] = useState("snes");
-  const [systemCollection, setSystemCollection] = useState<SystemProps[]>([]);
+  const [currentSystemName, setCurrentSystemName] = useState("");
+  const [systemCollection, setSystemCollection] = useState<SystemProps[]>(() => {
+    const tasks = localStorage.getItem(storageLabel);
+
+    if (tasks) {
+      return JSON.parse(tasks);
+    }
+
+    return [];
+  })
 
   /**
    * 
@@ -47,6 +64,7 @@ export function SystemsProvider({ children }: SystemProviderProps) {
     }
 
     setSystemCollection([...systemCollection, {
+      id: short.generate(),
       file: canvasContent,
       systemName: currentSystemName
     }])
@@ -56,31 +74,91 @@ export function SystemsProvider({ children }: SystemProviderProps) {
 
   /**
    * 
-   * Update System Name
-   * 
+   * parse System Name to lowercase
+   * @param name
    */
-  function updateSystemName(name: string) {
+  function parseSystemName(name: string) {
     setCurrentSystemName(name.toLowerCase());
   }
 
   /**
    * 
-   * Remove System from Collection
-   * 
+   * Update System Name on Collection
+   * @param id 
+   * @param name 
    */
-  function removeSystemFromCollection(systemName: string) {
-    const newCollection = [...systemCollection].filter(item => item.systemName !== systemName);
+
+  function updateSystemName(id: string, name: string) {
+    let newCollection = [...systemCollection];
+    const systemIndex = newCollection.findIndex((item) => item.id === id);
+
+    newCollection[systemIndex].systemName = name;
 
     setSystemCollection(newCollection);
   }
+
+  /**
+   * 
+   * Remove System from Collection
+   * @param systemName
+   */
+  function removeSystemFromCollection(systemName: string) {
+    const newCollection = [...systemCollection].filter(item => item.systemName !== systemName);
+    setSystemCollection(newCollection);
+  }
+  /**
+   * 
+   * Clear collection
+   */
+  function clearCollection() {
+    setSystemCollection([]);
+  }
+
+  /**
+   * 
+   * Download as zip file
+   * 
+   */
+
+  function exportFilesAsZip() {
+    const zip = new JSZip();
+    const blurredDir = zip.folder("blurred");
+
+    console.log("WOW")
+
+    systemCollection.map((item) => {
+
+      const normaImage = item.file.normal.replace('data:', '').replace(/^.+,/, '');
+      const blurredImage = item.file.blurred.replace('data:', '').replace(/^.+,/, '');
+
+      zip.file(item.systemName + '.webp', normaImage, { base64: true });
+      blurredDir?.file(item.systemName + ".blurred.webp", blurredImage, { base64: true })
+    })
+
+
+    zip.generateAsync({ type: "blob" }).then(function (content) {
+      saveAs(content, "wallpapers.zip");
+    })
+  }
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(storageLabel, JSON.stringify(systemCollection));
+    } catch (e) {
+      console.log(e);
+    }
+  }, [systemCollection]);
 
   return (
     <SystemsContext.Provider value={{
       systemCollection,
       currentSystemName,
       addSystemToCollection,
+      parseSystemName,
+      removeSystemFromCollection,
       updateSystemName,
-      removeSystemFromCollection
+      clearCollection,
+      exportFilesAsZip
     }}>
       {children}
     </SystemsContext.Provider>
