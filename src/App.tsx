@@ -4,18 +4,14 @@ import { CropperSection } from "./Sections/CropperSection";
 import { CanvasSection } from "./Sections/CanvasSection";
 import FileListSection from "./Sections/FileListSection";
 
+
 function App() {
-
-
   return (
-    <>
-
-      <main>
-        <CanvasSection />
-        <CropperSection />
-        <FileListSection />
-      </main>
-    </>
+    <main>
+      <CanvasSection />
+      <CropperSection />
+      <FileListSection />
+    </main>
   )
 }
 

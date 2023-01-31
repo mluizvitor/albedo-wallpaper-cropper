@@ -71,23 +71,6 @@ export function CropperSection() {
         <Button className="justify-center flex-1" label="1920x1152" onClick={() => updateSizes(1920, 1152)} />
       </MenuSection>
 
-
-      <MenuSection title="Other Settings">
-        <Checkbox id={"canvasShowBlurredVariant"}
-          label={"Show blurred variant"}
-          checked={showBlur}
-          triggerMethod={toggleImageBlur}
-          className="px-2 py-1 bg-neutral-700"
-        />
-        <Input label={"Blur"}
-          helperText="0 to 180"
-          id={"imageBlur"}
-          type={"number"}
-          className="mt-4"
-          value={blurAmount}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => updateBlur(Number(e.target.value))} />
-      </MenuSection>
-
       <MenuSection title="Integer Scale">
         <Checkbox
           className="bg-neutral-700 py-1 px-2"
@@ -104,6 +87,22 @@ export function CropperSection() {
             helperText="0.1 to 12"
           />
         )}
+      </MenuSection>
+
+      <MenuSection title="Blur settings">
+        <Checkbox id={"canvasShowBlurredVariant"}
+          label={"Show blurred variant"}
+          checked={showBlur}
+          triggerMethod={toggleImageBlur}
+          className="px-2 py-1 bg-neutral-700"
+        />
+        <Input label={"Blur"}
+          helperText="0 to 180"
+          id={"imageBlur"}
+          type={"number"}
+          className="mt-4"
+          value={blurAmount}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => updateBlur(Number(e.target.value))} />
       </MenuSection>
     </SideBar>
   )

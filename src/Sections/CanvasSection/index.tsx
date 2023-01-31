@@ -1,4 +1,4 @@
-import { Minus, Plus } from "phosphor-react";
+import { CircleNotch, Minus, Plus } from "phosphor-react";
 import Button from "../../components/Button";
 import { useCanvas } from "../../hooks/useCanvas"
 import { getScaleFactor } from "../../utils/GetScaleFactor";
@@ -15,12 +15,14 @@ export function CanvasSection() {
     integerScale,
     integerScaleValue,
     showBlur,
+    showLoader,
+    clearCanvas,
+    updateImageFromClipboard,
     updateTimestamp
   } = useCanvas();
 
-  async function updater() {
+  function updater() {
     const originalCanvas = document.getElementById("canvasNormal") as HTMLCanvasElement;
-
     const context = originalCanvas?.getContext("2d", { willReadFrequently: true });
     if (!originalCanvas || !context) {
       return;
@@ -123,16 +125,6 @@ export function CanvasSection() {
     };
   }
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      updater();
-    }, 100);
-
-    return () => clearTimeout(timeout);
-
-  }, [currentLoadedImage, integerScale, integerScaleValue, canvasHeight, canvasWidth])
-
-
   const [canvasScaleOnScreen, setCanvasScaleOnScreen] = useState(100);
 
   function updateCanvasScaleOnScreen(type: "zoomIn" | "zoomOut") {
@@ -153,9 +145,23 @@ export function CanvasSection() {
     }
   }
 
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      updater();
+    }, 100);
+
+    return () => clearTimeout(timeout);
+
+  }, [currentLoadedImage, integerScale, integerScaleValue, canvasHeight, canvasWidth])
+
+  useEffect(() => {
+    document.addEventListener("paste", (event: ClipboardEvent) => updateImageFromClipboard(event));
+    console.log("listening for paste events")
+  }, []);
+
   return (
     <section id="MainCanvas"
-      className={`z-0 px-[18rem] xl:px-[28rem] max-h-[100vh] h-[100vh] relative overflow-hidden gap-8 grid items-center justify-center grid-rows-[auto_1fr_auto]`}
+      className={`z-0 w-[100vw] h-[100vh] relative overflow-hidden flex items-center justify-center`}
       onWheel={(e: WheelEvent<HTMLDivElement>) => wheelHandler(e)}
     >
       <div className="opacity-50 fixed top-0 inset-x-0 flex items-center justify-center h-16 font-teko text-lg">
@@ -163,28 +169,38 @@ export function CanvasSection() {
       </div>
 
       <div className="flex flex-col h-[100vh] items-center justify-center fixed inset-0">
-        <canvas id="canvasNormal" className={["bg-yellow-800 border-neutral-600", showBlur && "hidden"].join(" ")}
+        <canvas id="canvasNormal"
+          className={["bg-neutral-700", showBlur && "hidden"].join(" ")}
           width={canvasWidth}
           height={canvasHeight}
           style={{
             transform: `scale(${canvasScaleOnScreen / 100})`,
-            borderWidth: 4 / (canvasScaleOnScreen / 100) * 1,
             borderRadius: 6 / (canvasScaleOnScreen / 100) * 1,
           }}
         />
 
         <img src={canvasContent.blurred}
-          className={["bg-yellow-800 rounded ring-4 ring-offset-2 ring-offset-neutral-900 ring-neutral-700 cursor-not-allowed pointer-events-none", !showBlur && "hidden"].join(" ")}
+          className={["bg-neutral-700 cursor-not-allowed pointer-events-none", !showBlur && "hidden"].join(" ")}
           width={canvasWidth}
           height={canvasHeight}
           style={{
-            transform: `scale(${canvasScaleOnScreen / 100})`
+            transform: `scale(${canvasScaleOnScreen / 100})`,
+            borderRadius: 6 / (canvasScaleOnScreen / 100) * 1,
           }}
         />
+
+        {showLoader && (
+          <div className="fixed inset-0 bg-neutral-900/50 flex items-center justify-center backdrop-blur-lg">
+            <CircleNotch size={96} className="animate-spin" />
+          </div>
+        )}
       </div>
 
       <div className="fixed bottom-0 inset-x-0 flex items-center justify-center h-16 text-lg">
+
         <div className="opacity-50 hover:opacity-100 flex group transition-opacity duration-300">
+          <Button label="Clear Canvas" className="mr-4" onClick={clearCanvas} />
+
           <Button label={"Zoom Out"}
             hideLabel
             className="rounded-r-none hover:rounded-l-xl hover:rounded-r-none"
@@ -205,6 +221,7 @@ export function CanvasSection() {
             }}
           />
         </div>
+
       </div>
     </section >
   )
