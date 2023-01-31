@@ -1,18 +1,10 @@
 import { ChangeEvent, ReactElement, createContext, useContext, useEffect, useState } from "react";
-
 import * as StackBlur from "stackblur-canvas";
-
-import DefaultImage from "../assets/screenshot.png";
 import { selectSystemNameInput } from "../utils/SelectInput";
 
 export interface CanvasContentProps {
   normal: string;
   blurred: string;
-}
-
-interface FileProps {
-  name: string;
-  content: string;
 }
 
 interface CanvasContextData {
@@ -26,17 +18,20 @@ interface CanvasContextData {
   blurAmount: number;
   integerScale: boolean;
   showBlur: boolean;
+  showLoader: boolean;
 
-  updateIntegerScale: (scale: number) => void;
+
+  clearCanvas: () => void;
+  invertSizes: () => void;
   updateBlur: (blur: number) => void;
+  updateCanvas: () => void;
+  updateImage: (event: ChangeEvent<HTMLInputElement>) => void;
+  updateImageFromClipboard: (event: ClipboardEvent) => void;
+  updateIntegerScale: (scale: number) => void;
+  updateSizes: (width: number, height: number) => void;
   updateTimestamp: () => void;
   toggleImageBlur: () => void;
   toggleIntegerScale: () => void;
-  updateImage: (event: ChangeEvent<HTMLInputElement>) => void;
-  updateSizes: (width: number, height: number) => void;
-  invertSizes: () => void;
-
-  updateCanvas: () => void;
 }
 
 interface CanvasProviderProps {
@@ -47,16 +42,16 @@ const CanvasContext = createContext<CanvasContextData>({} as CanvasContextData);
 
 export function CanvasProvider({ children }: CanvasProviderProps) {
 
-  const [canvasWidth, setCanvasWidth] = useState(480);
-  const [canvasHeight, setCanvasHeight] = useState(320);
-  const [canvasContent, setCanvasContent] = useState({} as CanvasContentProps);
-  const [currentLoadedImage, setCurrentLoadedImage] = useState(DefaultImage);
-  const [currentLoadedFileName, setCurrentLoadedFileName] = useState("");
-  const [currentLoadedFileType, setCurrentLoadedFileType] = useState("");
   const [blurAmount, setBlurAmount] = useState(10);
+  const [canvasContent, setCanvasContent] = useState({} as CanvasContentProps);
+  const [canvasHeight, setCanvasHeight] = useState(1280);
+  const [canvasWidth, setCanvasWidth] = useState(1920);
+  const [currentLoadedImage, setCurrentLoadedImage] = useState("");
+  const [currentLoadedFileName, setCurrentLoadedFileName] = useState("");
   const [integerScale, setIntegerScale] = useState(false);
   const [integerScaleValue, setIntegerScaleValue] = useState(1);
   const [showBlur, setShowBlur] = useState(false);
+  const [showLoader, setShowLoader] = useState(false);
   const [timestamp, setTimestamp] = useState(new Date);
 
   function updateBlur(blur: number) {
@@ -104,42 +99,63 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
     setCanvasHeight(newHeight);
   }
 
-  document.addEventListener("paste", async (event: any) => {
+  function updateImageFromClipboard(event: ClipboardEvent) {
     event.preventDefault();
 
-    for (const clipboardItem of event.clipboardData.files) {
-      if (clipboardItem.type.startsWith("image/")) {
-        const reader = new FileReader;
 
-        await reader.readAsDataURL(clipboardItem);
+    const { clipboardData } = event;
 
-        reader.onload = (e) => {
-          const image = new Image();
+    if (!clipboardData) {
+      return;
+    }
 
-          image.onload = () => {
-            const canvas = document.createElement("canvas");
-            const context = canvas?.getContext("2d")
+    const clipboardItem = clipboardData.files[0]
 
-            if (!context) {
-              return null;
-            }
 
-            canvas.width = image.width;
-            canvas.height = image.height;
-            context.drawImage(image, 0, 0);
+    if (clipboardItem && clipboardItem.type.startsWith("image/")) {
+      const reader = new FileReader;
 
-            setCurrentLoadedImage(canvas.toDataURL())
-            setCurrentLoadedFileName("From clipboard");
+      reader.readAsDataURL(clipboardItem);
 
+      reader.onloadstart = () => {
+        setShowLoader(true);
+        clearCanvas();
+      }
+
+      reader.onload = (e) => {
+        console.log("Loading Image from clipboard...");
+        const image = new Image();
+
+
+        image.onload = () => {
+          console.log("WoW")
+          const canvas = document.createElement("canvas");
+          const context = canvas?.getContext("2d")
+
+          if (!context) {
+            return null;
           }
-          image.src = e.target?.result as string;
+
+          canvas.width = image.width;
+          canvas.height = image.height;
+          context.drawImage(image, 0, 0);
+
+          setCurrentLoadedImage(canvas.toDataURL())
+          setCurrentLoadedFileName("From clipboard");
+          setTimeout(() => {
+            setShowLoader(false);
+            console.log("Image loaded successfully!")
+          }, 1000)
+
         }
+
+        image.src = e.target?.result as string;
+
       }
     }
-  });
+  }
 
-
-  async function updateImage(event: ChangeEvent<HTMLInputElement>) {
+  function updateImage(event: ChangeEvent<HTMLInputElement>) {
     const data = event.currentTarget.files;
 
     if (data) {
@@ -147,10 +163,14 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
       const fileName = file.name;
 
       const reader = new FileReader();
-      await reader.readAsDataURL(file);
+      reader.readAsDataURL(file);
 
       reader.onloadend = (e) => {
         let image = new Image();
+
+        image.onloadstart = () => {
+          setShowLoader(true);
+        }
 
         image.onload = () => {
           const canvas = document.createElement("canvas") as HTMLCanvasElement;
@@ -169,7 +189,7 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
 
           setCurrentLoadedImage(canvas.toDataURL(file.type));
           setCurrentLoadedFileName(fileName);
-          setCurrentLoadedFileType(file.type)
+          setShowLoader(false);
         }
 
         image.src = e.target?.result as string;
@@ -201,24 +221,30 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
     const newBlurredContext = newBlurredCanvas.getContext("2d", { willReadFrequently: true })
     newBlurredContext!.drawImage(originalCanvas, 0, 0)
 
-    let normal = originalCanvas.toDataURL("image/jpeg", 0.9)
-    // .replace("image/jpeg", "image/octet-stream");
+    let normal = originalCanvas.toDataURL("image/webp", 0.85)
 
     StackBlur.canvasRGBA(newBlurredCanvas, 0, 0, newBlurredCanvas.width, newBlurredCanvas.height, blurAmount);
 
-    let blurred = newBlurredCanvas.toDataURL("image/jpeg", 9)
-    // .replace("image/jpeg", "image/octet-stream");
+    let blurred = newBlurredCanvas.toDataURL("image/webp", 0.85)
 
     setCanvasContent({ normal, blurred });
+  }
+
+  function clearCanvas() {
+    const originalCanvas = document.getElementById("canvasNormal") as HTMLCanvasElement;
+    const context = originalCanvas?.getContext("2d", { willReadFrequently: true });
+    if (!originalCanvas || !context) {
+      return;
+    }
+
+    context.clearRect(0, 0, originalCanvas.width, originalCanvas.height);
   }
 
   useEffect(() => {
     const timeout = setTimeout(() => {
       updateCanvas();
     }, 500)
-
     return () => clearTimeout(timeout)
-
   }, [currentLoadedImage, blurAmount, integerScale, integerScaleValue, timestamp])
 
   return (
@@ -232,8 +258,11 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
       integerScale,
       integerScaleValue,
       showBlur,
+      showLoader,
 
+      clearCanvas,
       updateBlur,
+      updateImageFromClipboard,
       updateIntegerScale,
       updateCanvas,
       updateTimestamp,
