@@ -16,18 +16,20 @@ export function CropperSection() {
     integerScale,
     integerScaleValue,
     showBlur,
+    smoothRendering,
     invertSizes,
     updateBlur,
     updateIntegerScale,
     updateSizes,
     toggleImageBlur,
     toggleIntegerScale,
+    toggleSmoothRendering,
   } = useCanvas();
   return (
     <SideBar anchor='right'>
       <MenuSection title='Crop'
         className='z-10 grid gap-2 grid-cols-[1fr_auto_1fr] place-items-end'>
-        <Input id='imageWidth'
+        <Input id='cropperSection_imageWidth'
           label='Width'
           type='number'
           className='w-full'
@@ -45,7 +47,7 @@ export function CropperSection() {
           onClick={invertSizes}
         />
 
-        <Input id='imageHeight'
+        <Input id='cropperSection_imageHeight'
           label='Height'
           type='number'
           className='w-full'
@@ -88,38 +90,50 @@ export function CropperSection() {
           onClick={() => updateSizes(1920, 1152)} />
       </MenuSection>
 
-      <MenuSection title='Integer Scale'>
+      <MenuSection title='Integer Scale'
+        className='grid gap-2'>
         <Checkbox
           className='bg-neutral-700 py-1 px-2'
-          id='integerCheckbox'
+          id='cropperSection_integerCheckbox'
           checked={integerScale}
           label='Use integer scale'
           triggerMethod={toggleIntegerScale}
         />
         {integerScale && (
-          <Input id='wow'
-            label='Scale'
-            value={integerScaleValue}
-            step='0.1'
-            type='number'
-            className='mt-4'
-            onChange={(e: ChangeEvent<HTMLInputElement>) => updateIntegerScale(Number(e.target.value))}
-            helperText='0.1 to 12'
-          />
+          <>
+            <Checkbox id='cropperSection_smoothRendering'
+              className='bg-neutral-700 py-1 px-2'
+              label='Smooth rendering'
+              checked={smoothRendering}
+              triggerMethod={toggleSmoothRendering} />
+
+            <Input id='cropperSection_integerInput'
+              label={'Scale: ' + integerScaleValue}
+              value={integerScaleValue}
+              step='0.1'
+              type='range'
+              min={0.1}
+              max={20}
+              className='mt-2'
+              onChange={(e: ChangeEvent<HTMLInputElement>) => updateIntegerScale(Number(e.target.value))}
+              helperText='0.1 to 20' />
+          </>
         )}
       </MenuSection>
 
       <MenuSection title='Blur settings'>
-        <Checkbox id='canvasShowBlurredVariant'
+        <Checkbox id='cropperSection_showBlurredVariant'
           label='Show blurred variant'
           checked={showBlur}
           triggerMethod={toggleImageBlur}
           className='px-2 py-1 bg-neutral-700'
         />
-        <Input label='Blur'
+        <Input label={'Blur: ' + blurAmount}
           helperText='0 to 180'
-          id='imageBlur'
-          type='number'
+          id='cropperSection_BlurInput'
+          type='range'
+          min={0}
+          max={180}
           className='mt-4'
           value={blurAmount}
           onChange={(e: ChangeEvent<HTMLInputElement>) => updateBlur(Number(e.target.value))} />

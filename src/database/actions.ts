@@ -2,7 +2,7 @@ import { databaseName } from './config';
 
 let db: IDBDatabase;
 
-export const idbGetElement = <T>(store: string, key: string) => {
+export const idbGetElement = <T>(store: string, key: number | 'all') => {
   const open = indexedDB.open(databaseName);
   return new Promise<T>((resolve, reject) => {
     open.onsuccess = () => {
@@ -50,7 +50,7 @@ export const idbAddElement = (store: string, payload: object) => {
   };
 };
 
-export const idbEditElement = <T>(store: string, key: string, payload: object) => {
+export const idbEditElement = <T>(store: string, key: number | 'all', payload: object) => {
   const open = indexedDB.open(databaseName);
   return new Promise<T>((resolve, reject) => {
     open.onsuccess = () => {
@@ -82,7 +82,7 @@ export const idbEditElement = <T>(store: string, key: string, payload: object) =
   });
 };
 
-export const idbRemoveElement = (store: string, key: string) => {
+export const idbRemoveElement = (store: string, key: number | 'all') => {
   const open = indexedDB.open(databaseName);
   open.onsuccess = () => {
     let request: IDBRequest;

@@ -19,6 +19,7 @@ interface CanvasContextData {
   integerScale: boolean;
   showBlur: boolean;
   showLoader: boolean;
+  smoothRendering: boolean;
 
 
   clearCanvas: () => void;
@@ -32,6 +33,7 @@ interface CanvasContextData {
   updateTimestamp: () => void;
   toggleImageBlur: () => void;
   toggleIntegerScale: () => void;
+  toggleSmoothRendering: () => void;
 }
 
 interface CanvasProviderProps {
@@ -52,6 +54,7 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
   const [integerScaleValue, setIntegerScaleValue] = useState(1);
   const [showBlur, setShowBlur] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
+  const [smoothRendering, setSmoothRendering] = useState(true);
   const [timestamp, setTimestamp] = useState(new Date);
 
   function updateBlur(blur: number) {
@@ -60,8 +63,12 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
     }
   }
 
+  function toggleSmoothRendering() {
+    setSmoothRendering(!smoothRendering);
+  }
+
   function updateIntegerScale(scale: number) {
-    if (scale >= 0.05 && scale <= 12) {
+    if (scale >= 0.05 && scale <= 20) {
       setIntegerScaleValue(scale);
     } else {
       return null;
@@ -242,7 +249,7 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
       updateCanvas();
     }, 500);
     return () => clearTimeout(timeout);
-  }, [currentLoadedImage, blurAmount, integerScale, integerScaleValue, timestamp]);
+  }, [currentLoadedImage, blurAmount, integerScale, integerScaleValue, timestamp, smoothRendering]);
 
   return (
     <CanvasContext.Provider value={{
@@ -256,18 +263,20 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
       integerScaleValue,
       showBlur,
       showLoader,
+      smoothRendering,
 
       clearCanvas,
+      invertSizes,
       updateBlur,
-      updateImageFromClipboard,
-      updateIntegerScale,
       updateCanvas,
-      updateTimestamp,
       toggleImageBlur,
       toggleIntegerScale,
+      toggleSmoothRendering,
+      updateImageFromClipboard,
+      updateTimestamp,
+      updateIntegerScale,
       updateImage,
       updateSizes,
-      invertSizes,
     }}>
       {children}
     </CanvasContext.Provider>

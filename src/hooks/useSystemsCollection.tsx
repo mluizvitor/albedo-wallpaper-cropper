@@ -8,9 +8,9 @@ import short from 'short-uuid';
 import { idbAddElement, idbEditElement, idbGetElement, idbRemoveElement } from '../database/actions';
 
 export interface SystemProps {
-  id: string;
+  id: number;
   systemName: string;
-  file: CanvasContentProps
+  file: CanvasContentProps;
 }
 
 interface SystemsContentData {
@@ -19,8 +19,8 @@ interface SystemsContentData {
 
   addSystemToCollection: () => void;
   parseSystemName: (name: string) => void;
-  removeSystemFromCollection: (id: string) => void;
-  updateSystemName: (id: string, name: string) => void;
+  removeSystemFromCollection: (id: number) => void;
+  updateSystemName: (id: number, name: string) => void;
   clearCollection: () => void;
   exportFilesAsZip: () => void;
 }
@@ -54,17 +54,19 @@ export function SystemsProvider({ children }: SystemProviderProps) {
       return null;
     }
 
-    const generatedInfos: SystemProps = {
-      id: short.generate(),
+    const generatedData: SystemProps = {
+      id: new Date().getTime(),
       file: canvasContent,
       systemName: currentSystemName,
     };
 
-    setSystemCollection([...systemCollection, generatedInfos]);
+    console.log(generatedData);
+
+    setSystemCollection([...systemCollection, generatedData]);
 
     selectSystemNameInput('systemName');
 
-    idbAddElement('systemCollection', generatedInfos);
+    idbAddElement('systemCollection', generatedData);
   }
 
   /**
@@ -83,14 +85,13 @@ export function SystemsProvider({ children }: SystemProviderProps) {
    * @param name 
    */
 
-  function updateSystemName(id: string, name: string) {
+  function updateSystemName(id: number, name: string) {
     const newCollection = [...systemCollection];
     const originalSystemFound = newCollection.find((item) => item.id === id);
 
     if (originalSystemFound) {
       const newSystemFound: SystemProps = {
-        id: originalSystemFound.id,
-        file: originalSystemFound.file,
+        ...originalSystemFound,
         systemName: name,
       };
 
@@ -106,7 +107,7 @@ export function SystemsProvider({ children }: SystemProviderProps) {
    * Remove System from Collection
    * @param systemName
    */
-  function removeSystemFromCollection(id: string) {
+  function removeSystemFromCollection(id: number) {
     const newCollection = [...systemCollection].filter(item => item.id !== id);
 
     setSystemCollection(newCollection);
@@ -150,6 +151,7 @@ export function SystemsProvider({ children }: SystemProviderProps) {
   useEffect(() => {
     idbGetElement('systemCollection', 'all').then((result) => {
       if (result) {
+        console.log(result);
         setSystemCollection(result as SystemProps[]);
       }
     });

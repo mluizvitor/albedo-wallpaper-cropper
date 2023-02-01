@@ -15,6 +15,7 @@ export function CanvasSection() {
     integerScale,
     integerScaleValue,
     showBlur,
+    smoothRendering,
     clearCanvas,
     updateImageFromClipboard,
     updateTimestamp,
@@ -49,15 +50,15 @@ export function CanvasSection() {
       imageWidthScaled = image.width * (integerScale ? integerScaleValue : autoScaleValue);
       imageHeightScaled = image.height * (integerScale ? integerScaleValue : autoScaleValue);
 
+      context.imageSmoothingQuality = 'high';
+
       if (integerScale) {
-        context.imageSmoothingEnabled = false;
-        context.imageSmoothingQuality = 'low';
+        context.imageSmoothingEnabled = smoothRendering;
 
         context.drawImage(image, originalCanvas.width / 2 - imageWidthScaled / 2, originalCanvas.height / 2 - imageHeightScaled / 2, imageWidthScaled, imageHeightScaled);
 
       } else {
         context.imageSmoothingEnabled = true;
-        context.imageSmoothingQuality = 'low';
 
         newImageHeight = image.width / canvasWidth * canvasHeight;
         newImageWidth = image.height / canvasHeight * canvasWidth;
@@ -151,7 +152,7 @@ export function CanvasSection() {
 
     return () => clearTimeout(timeout);
 
-  }, [currentLoadedImage, integerScale, integerScaleValue, canvasHeight, canvasWidth]);
+  }, [currentLoadedImage, integerScale, integerScaleValue, canvasHeight, canvasWidth, smoothRendering]);
 
   useEffect(() => {
     document.addEventListener('paste', (event: ClipboardEvent) => updateImageFromClipboard(event));
