@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent, Fragment, useEffect, useState } from 'react';
 import { useCanvas } from '../../hooks/useCanvas';
-import { Backspace, CaretLeft, CaretRight, CheckCircle, FileZip, List, Plus, Trash, UploadSimple, X } from 'phosphor-react';
+import { Backspace, CaretDoubleLeft, CaretDoubleRight, CaretLeft, CaretRight, CheckCircle, FileZip, List, Plus, Trash, UploadSimple, X } from 'phosphor-react';
 import { SideBar } from '../../components/SideBar';
 import { MenuSection } from '../../components/Section';
 import { SystemProps, useSystemsCollection } from '../../hooks/useSystemsCollection';
@@ -82,7 +82,7 @@ export default function FileListSection() {
   }
 
   function loadMore() {
-    if (paginatorFinish <= filteredAddedSystem.length) {
+    if (paginatorFinish < filteredAddedSystem.length) {
       setPaginatorStart(paginatorStart + imagePerPage);
       setPaginatorFinish(paginatorFinish + imagePerPage);
     }
@@ -206,7 +206,7 @@ export default function FileListSection() {
         </div>
       </div>
 
-      <div className='h-full bg-neutral-900 border-t border-b border-neutral-600 overflow-y-auto relative'>
+      <div className='h-full bg-neutral-900 overflow-y-auto relative  border-t border-b border-neutral-600'>
         <ul className='grid grid-cols-2 w-full gap-2 p-4'>
           {filteredAddedSystem.map(item => (
             <li key={item.id}
@@ -242,27 +242,49 @@ export default function FileListSection() {
         </ul>
       </div >
 
-      <div className='bg-neutral-800 z-[1] px-4 py-2 border-b border-neutral-600 flex flex-col 2xl:flex-row justify-between items-center'>
+      <div className='bg-neutral-800 z-[1] px-4 py-2 border-b border-neutral-600 grid grid-cols-1 2xl:grid-cols-[auto_2fr] gap-4 justify-stretch items-center'>
         <span>{systemCollection.length}{' of '}{systemList.length}{' added'}</span>
 
-        <div className='flex items-center'>
+        <div className='flex items-stretch'>
+          <Button label='To start'
+            hideLabel
+            icon={<CaretDoubleLeft size={16}
+              className='group-disabled:opacity-30'
+              weight='bold' />}
+            className='disabled:pointer-events-none px-2 rounded-r-none hover:rounded-r-none group bg-opacity-70'
+            disabled={!(paginatorStart > 0)}
+            onClick={() => { setPaginatorStart(0); setPaginatorFinish(imagePerPage); }} />
+
           <Button label='Load less'
             hideLabel
             icon={<CaretLeft size={16}
+              className='group-disabled:opacity-30'
               weight='bold' />}
-            className='disabled:opacity-50 disabled:pointer-events-none px-2'
+            className='disabled:pointer-events-none px-2 rounded-none hover:rounded-none group bg-opacity-70'
             disabled={!(paginatorStart > 0)}
             onClick={() => loadLess()} />
 
-          <span className='mx-2'>{'Page '}{Math.ceil(paginatorFinish / imagePerPage)}</span>
+          <div className='px-2 bg-neutral-700 h-auto text-center grow  bg-opacity-70'>
+            <span className='leading-8'>{'Page '}{Math.ceil(paginatorFinish / imagePerPage)}</span>
+          </div>
 
           <Button label='Load more'
             hideLabel
             icon={<CaretRight size={16}
+              className='group-disabled:opacity-30'
               weight='bold' />}
-            className='disabled:opacity-50 disabled:pointer-events-none px-2'
-            disabled={!(paginatorFinish <= filteredAddedSystem.length)}
+            className='disabled:pointer-events-none px-2 rounded-none hover:rounded-none group bg-opacity-70'
+            disabled={!(paginatorFinish < filteredAddedSystem.length)}
             onClick={() => loadMore()} />
+
+          <Button label='To end'
+            hideLabel
+            icon={<CaretDoubleRight size={16}
+              className='group-disabled:opacity-30'
+              weight='bold' />}
+            className='disabled:pointer-events-none px-2 rounded-l-none hover:rounded-l-none group bg-opacity-70'
+            disabled={!(paginatorFinish < filteredAddedSystem.length)}
+            onClick={() => { setPaginatorStart(Math.floor(filteredAddedSystem.length / imagePerPage) * imagePerPage); setPaginatorFinish(Math.ceil(filteredAddedSystem.length / imagePerPage) * imagePerPage); }} />
         </div>
       </div>
 
