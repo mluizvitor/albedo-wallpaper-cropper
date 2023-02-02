@@ -26,5 +26,13 @@
 }
 
 .systemListImg {
-  @apply object-cover shrink-0 rounded-none w-16 2xl:w-20 h-12 2xl:h-16
+  @apply object-cover h-full w-full
+}
+
+.imageWrapper {
+  @apply grid gap-1 grid-cols-2 shrink-0 flex-1 items-stretch;
+}
+
+.imageWrapper div {
+  @apply h-full; 
 }

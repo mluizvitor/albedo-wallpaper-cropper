@@ -33,7 +33,7 @@ export default function FileListSection() {
   const [systemQuerySearch, setSystemQuerySearch] = useState('');
   const [addedSystemQuery, setAddedSystemQuery] = useState('');
 
-  const imagePerPage = 8;
+  const imagePerPage = 10;
   const [paginatorStart, setPaginatorStart] = useState(0);
   const [paginatorFinish, setPaginatorFinish] = useState(imagePerPage);
 
@@ -206,18 +206,18 @@ export default function FileListSection() {
         </div>
       </div>
 
-      <div className='h-full bg-neutral-900 overflow-y-auto relative  border-t border-b border-neutral-600'>
-        <ul className='grid grid-cols-2 w-full gap-2 p-4'>
+      <div className='h-full bg-neutral-900 overflow-y-auto relative border-t border-b border-neutral-600 p-4'>
+        <ul className='grid grid-cols-2 grid-rows-5 w-full h-full gap-2'>
           {filteredAddedSystem.map(item => (
             <li key={item.id}
-              className='relative bg-neutral-800 p-2 grid gap-2 rounded first-of-type:ring-2 ring-orange-500 group'>
+              className='relative bg-neutral-800 p-2 grid gap-2 grid-rows-[1fr_auto] rounded first-of-type:ring-2 ring-orange-500 group'>
 
-              <div className='grid gap-1 grid-cols-2 shrink-0 w-full'>
-                <Zoom>
+              <div className={styles.imageWrapper}>
+                <Zoom zoomMargin={32}>
                   <img className={styles.systemListImg}
                     src={item.file.normal} />
                 </Zoom>
-                <Zoom>
+                <Zoom zoomMargin={32}>
                   <img className={styles.systemListImg}
                     src={item.file.blurred} />
                 </Zoom>
@@ -242,11 +242,11 @@ export default function FileListSection() {
         </ul>
       </div >
 
-      <div className='bg-neutral-800 z-[1] px-4 py-2 border-b border-neutral-600 grid grid-cols-1 2xl:grid-cols-[auto_2fr] gap-4 justify-stretch items-center'>
-        <span>{systemCollection.length}{' of '}{systemList.length}{' added'}</span>
+      <div className='bg-neutral-800 z-[1] px-4 py-2 border-b border-neutral-600 grid grid-cols-1 2xl:grid-cols-[auto_1fr] gap-8 justify-stretch items-center'>
+        <span className='text-sm'>{systemCollection.length}{' of '}{systemList.length}{' added'}</span>
 
         <div className='flex items-stretch'>
-          <Button label='To start'
+          <Button label='First Page'
             hideLabel
             icon={<CaretDoubleLeft size={16}
               className='group-disabled:opacity-30'
@@ -255,7 +255,7 @@ export default function FileListSection() {
             disabled={!(paginatorStart > 0)}
             onClick={() => { setPaginatorStart(0); setPaginatorFinish(imagePerPage); }} />
 
-          <Button label='Load less'
+          <Button label='Previous Page'
             hideLabel
             icon={<CaretLeft size={16}
               className='group-disabled:opacity-30'
@@ -264,11 +264,11 @@ export default function FileListSection() {
             disabled={!(paginatorStart > 0)}
             onClick={() => loadLess()} />
 
-          <div className='px-2 bg-neutral-700 h-auto text-center grow  bg-opacity-70'>
-            <span className='leading-8'>{'Page '}{Math.ceil(paginatorFinish / imagePerPage)}</span>
+          <div className='px-2 bg-neutral-700 h-auto text-center grow bg-opacity-70'>
+            <span className='leading-8 text-sm'>{Math.ceil(paginatorFinish / imagePerPage)}{'/'}{Math.ceil(filteredAddedSystem.length / imagePerPage)}</span>
           </div>
 
-          <Button label='Load more'
+          <Button label='Next Page'
             hideLabel
             icon={<CaretRight size={16}
               className='group-disabled:opacity-30'
@@ -277,14 +277,14 @@ export default function FileListSection() {
             disabled={!(paginatorFinish < filteredAddedSystem.length)}
             onClick={() => loadMore()} />
 
-          <Button label='To end'
+          <Button label='Last Page'
             hideLabel
             icon={<CaretDoubleRight size={16}
               className='group-disabled:opacity-30'
               weight='bold' />}
             className='disabled:pointer-events-none px-2 rounded-l-none hover:rounded-l-none group bg-opacity-70'
             disabled={!(paginatorFinish < filteredAddedSystem.length)}
-            onClick={() => { setPaginatorStart(Math.floor(filteredAddedSystem.length / imagePerPage) * imagePerPage); setPaginatorFinish(Math.ceil(filteredAddedSystem.length / imagePerPage) * imagePerPage); }} />
+            onClick={() => { setPaginatorStart((Math.ceil(filteredAddedSystem.length / imagePerPage) - 1) * imagePerPage); setPaginatorFinish(Math.ceil(filteredAddedSystem.length / imagePerPage) * imagePerPage); }} />
         </div>
       </div>
 
