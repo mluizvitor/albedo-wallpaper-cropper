@@ -11,7 +11,7 @@ interface ButtonProps extends ComponentPropsWithoutRef<ElementType> {
 
 export default function Button({ label, icon, className, hideLabel, ...rest }: ButtonProps) {
   return (
-    <button className={[styles.buttonHexagon, className].join(' ')}
+    <button className={[styles.button, className].join(' ')}
       {...rest}>
       {icon && icon}
       {!hideLabel && (

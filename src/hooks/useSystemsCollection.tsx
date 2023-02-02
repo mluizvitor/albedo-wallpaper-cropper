@@ -1,11 +1,11 @@
 import { ReactNode, createContext, useContext, useEffect, useState } from 'react';
 import { CanvasContentProps, useCanvas } from './useCanvas';
-import { selectSystemNameInput } from '../utils/SelectInput';
 
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
-import short from 'short-uuid';
 import { idbAddElement, idbEditElement, idbGetElement, idbRemoveElement } from '../database/actions';
+import originalSystemList from '../assets/systemList.json';
+import { Sorting } from '../utils/Sorting';
 
 export interface SystemProps {
   id: number;
@@ -15,14 +15,14 @@ export interface SystemProps {
 
 interface SystemsContentData {
   systemCollection: SystemProps[];
-  currentSystemName: string;
+  systemList: { systemName: string, added: boolean }[];
 
-  addSystemToCollection: () => void;
-  parseSystemName: (name: string) => void;
+  addSystemToCollection: (systemName: string) => void;
   removeSystemFromCollection: (id: number) => void;
-  updateSystemName: (id: number, name: string) => void;
+  EditSystemName: (id: number, name: string) => void;
   clearCollection: () => void;
   exportFilesAsZip: () => void;
+  updateSystenList: () => void;
 }
 
 const SystemsContext = createContext<SystemsContentData>({} as SystemsContentData);
@@ -33,8 +33,14 @@ interface SystemProviderProps {
 
 export function SystemsProvider({ children }: SystemProviderProps) {
   const { canvasContent } = useCanvas();
-
-  const [currentSystemName, setCurrentSystemName] = useState('');
+  const [systemList, setSystemList] = useState(() => {
+    return originalSystemList.map(item => {
+      return {
+        systemName: item,
+        added: false,
+      };
+    });
+  });
   const [systemCollection, setSystemCollection] = useState<SystemProps[]>([]);
 
   /**
@@ -42,14 +48,14 @@ export function SystemsProvider({ children }: SystemProviderProps) {
    * Add System Name and Image to the System Collection
    * 
    */
-  function addSystemToCollection() {
-    const currentlyAtCollection = systemCollection.find(item => item.systemName === currentSystemName);
+  function addSystemToCollection(systemName: string) {
+    const currentlyAtCollection = systemCollection.find(item => item.systemName === systemName);
     if (currentlyAtCollection) {
       alert('Already at collection');
       return null;
     }
 
-    if (!currentSystemName) {
+    if (!systemName || systemName.length === 0) {
       alert('Please insert a system name');
       return null;
     }
@@ -57,35 +63,25 @@ export function SystemsProvider({ children }: SystemProviderProps) {
     const generatedData: SystemProps = {
       id: new Date().getTime(),
       file: canvasContent,
-      systemName: currentSystemName,
+      systemName,
     };
 
-    console.log(generatedData);
-
     setSystemCollection([...systemCollection, generatedData]);
-
-    selectSystemNameInput('systemName');
-
     idbAddElement('systemCollection', generatedData);
   }
 
   /**
    * 
-   * parse System Name to lowercase
-   * @param name
-   */
-  function parseSystemName(name: string) {
-    setCurrentSystemName(name.toLowerCase());
-  }
-
-  /**
-   * 
-   * Update System Name on Collection
+   * Edit System Name on Collection
    * @param id 
    * @param name 
    */
 
-  function updateSystemName(id: number, name: string) {
+  function EditSystemName(id: number, name: string) {
+    if (!name || name.length === 0) {
+      return;
+    }
+
     const newCollection = [...systemCollection];
     const originalSystemFound = newCollection.find((item) => item.id === id);
 
@@ -125,9 +121,27 @@ export function SystemsProvider({ children }: SystemProviderProps) {
 
   /**
    * 
-   * Download as zip file
-   * 
    */
+
+  function updateSystenList() {
+    const parsedSystemCollection = systemCollection.map(item => item.systemName);
+
+    const newSystemList = [...systemList].map(item => {
+      if (parsedSystemCollection.includes(item.systemName)) {
+        return { ...item, added: true };
+      } else {
+        return { ...item, added: false };
+      }
+    }).sort((a, b) => Sorting(a.systemName, b.systemName)).sort((a, b) => Sorting(a.added, b.added));
+
+    setSystemList(newSystemList);
+  }
+
+  /**
+ * 
+ * Download as zip file
+ * 
+ */
 
   function exportFilesAsZip() {
     const zip = new JSZip();
@@ -149,9 +163,12 @@ export function SystemsProvider({ children }: SystemProviderProps) {
   }
 
   useEffect(() => {
+    updateSystenList();
+  }, [systemCollection]);
+
+  useEffect(() => {
     idbGetElement('systemCollection', 'all').then((result) => {
       if (result) {
-        console.log(result);
         setSystemCollection(result as SystemProps[]);
       }
     });
@@ -160,13 +177,13 @@ export function SystemsProvider({ children }: SystemProviderProps) {
   return (
     <SystemsContext.Provider value={{
       systemCollection,
-      currentSystemName,
+      systemList,
       addSystemToCollection,
-      parseSystemName,
       removeSystemFromCollection,
-      updateSystemName,
+      EditSystemName,
       clearCollection,
       exportFilesAsZip,
+      updateSystenList,
     }}>
       {children}
     </SystemsContext.Provider>
