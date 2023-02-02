@@ -201,12 +201,12 @@ export function CanvasSection() {
 
         <div className='opacity-50 hover:opacity-100 flex group transition-opacity duration-300'>
           <Button label='Clear Canvas'
-            className='mr-4'
+            className='mr-4 text-sm'
             onClick={clearCanvas} />
 
           <Button label='Zoom Out'
             hideLabel
-            className='rounded-r-none hover:rounded-l-xl hover:rounded-r-none'
+            className='rounded-r-none hover:rounded-l-xl hover:rounded-r-none px-2'
             icon={<Minus size={16} />}
             onClick={() => {
               updateCanvasScaleOnScreen('zoomOut');
@@ -217,7 +217,7 @@ export function CanvasSection() {
           </div>
           <Button label='Zoom Out'
             hideLabel
-            className='rounded-l-none hover:rounded-l-none hover:rounded-r-xl'
+            className='rounded-l-none hover:rounded-l-none hover:rounded-r-xl px-2'
             icon={<Plus size={16} />}
             onClick={() => {
               updateCanvasScaleOnScreen('zoomIn');

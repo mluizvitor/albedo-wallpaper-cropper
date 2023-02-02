@@ -82,7 +82,7 @@ export default function FileListSection() {
   }
 
   function loadMore() {
-    if (paginatorFinish <= systemCollection.length) {
+    if (paginatorFinish <= filteredAddedSystem.length) {
       setPaginatorStart(paginatorStart + imagePerPage);
       setPaginatorFinish(paginatorFinish + imagePerPage);
     }
@@ -94,6 +94,11 @@ export default function FileListSection() {
       setPaginatorFinish(paginatorFinish - imagePerPage);
     }
   }
+
+  useEffect(() => {
+    setPaginatorStart(0);
+    setPaginatorFinish(imagePerPage);
+  }, [addedSystemQuery]);
 
   useEffect(() => {
     document.addEventListener('keydown', (event: KeyboardEvent) => {
@@ -245,7 +250,7 @@ export default function FileListSection() {
             hideLabel
             icon={<CaretLeft size={16}
               weight='bold' />}
-            className='disabled:opacity-50 disabled:pointer-events-none'
+            className='disabled:opacity-50 disabled:pointer-events-none px-2'
             disabled={!(paginatorStart > 0)}
             onClick={() => loadLess()} />
 
@@ -255,8 +260,8 @@ export default function FileListSection() {
             hideLabel
             icon={<CaretRight size={16}
               weight='bold' />}
-            className='disabled:opacity-50 disabled:pointer-events-none'
-            disabled={!(paginatorFinish <= systemCollection.length)}
+            className='disabled:opacity-50 disabled:pointer-events-none px-2'
+            disabled={!(paginatorFinish <= filteredAddedSystem.length)}
             onClick={() => loadMore()} />
         </div>
       </div>
