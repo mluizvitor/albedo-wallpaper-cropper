@@ -42,7 +42,7 @@ export function CropperSection() {
         <Button label='Invert'
           hideLabel
           className='bg-orange-500 px-2'
-          icon={<ArrowsClockwise size={24}
+          icon={<ArrowsClockwise size={16}
             weight='bold' />}
           onClick={invertSizes}
         />
@@ -93,7 +93,7 @@ export function CropperSection() {
       <MenuSection title='Integer Scale'
         className='grid gap-2'>
         <Checkbox
-          className='bg-neutral-700 py-1 px-2'
+          className='bg-neutral-900 py-1 px-2'
           id='cropperSection_integerCheckbox'
           checked={integerScale}
           label='Use integer scale'
@@ -102,7 +102,7 @@ export function CropperSection() {
         {integerScale && (
           <>
             <Checkbox id='cropperSection_smoothRendering'
-              className='bg-neutral-700 py-1 px-2'
+              className='bg-neutral-900 py-1 px-2'
               label='Smooth rendering'
               checked={smoothRendering}
               triggerMethod={toggleSmoothRendering} />
@@ -126,7 +126,7 @@ export function CropperSection() {
           label='Show blurred variant'
           checked={showBlur}
           triggerMethod={toggleImageBlur}
-          className='px-2 py-1 bg-neutral-700'
+          className='px-2 py-1 bg-neutral-900'
         />
         <Input label={'Blur: ' + blurAmount}
           helperText='0 to 180'

@@ -1,13 +1,15 @@
-import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, Fragment, useEffect, useState } from 'react';
 import { useCanvas } from '../../hooks/useCanvas';
-import { CheckCircle, FileZip, List, Plus, Trash, UploadSimple, X } from 'phosphor-react';
+import { Backspace, CaretLeft, CaretRight, CheckCircle, FileZip, List, Plus, Trash, UploadSimple, X } from 'phosphor-react';
 import { SideBar } from '../../components/SideBar';
 import { MenuSection } from '../../components/Section';
-import Input from '../../components/Input';
 import { SystemProps, useSystemsCollection } from '../../hooks/useSystemsCollection';
 import Button from '../../components/Button';
 import { Prompt } from '../../components/Prompt';
 import { Combobox } from '@headlessui/react';
+import Zoom from 'react-medium-image-zoom';
+import 'react-medium-image-zoom/dist/styles.css';
+
 
 import styles from './styles.module.css';
 
@@ -27,35 +29,70 @@ export default function FileListSection() {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   const [currentEditData, setCurrentEditData] = useState({} as SystemProps);
-
   const [selectedSystem, setSelectedSystem] = useState('');
-  const [querySearch, setQuerySearch] = useState('');
+  const [systemQuerySearch, setSystemQuerySearch] = useState('');
+  const [addedSystemQuery, setAddedSystemQuery] = useState('');
 
-  const filteredSystem = querySearch === ''
+  const imagePerPage = 8;
+  const [paginatorStart, setPaginatorStart] = useState(0);
+  const [paginatorFinish, setPaginatorFinish] = useState(imagePerPage);
+
+  const filteredSystem = systemQuerySearch === ''
     ? systemList
     : systemList.filter(item => {
-      return item.systemName.toLowerCase().includes(querySearch.toLowerCase());
+      return item.systemName.toLowerCase().includes(systemQuerySearch.toLowerCase());
+    });
+
+  const filteredAddedSystem = addedSystemQuery === ''
+    ? systemCollection
+    : systemCollection.filter(item => {
+      return item.systemName.toLowerCase().includes(addedSystemQuery.toLowerCase());
     });
 
   function toggleDeleteDialog() {
     setIsClearDialogOpen(!isClearDialogOpen);
-  }
+  };
 
   function toggleEditDialog() {
     setIsEditDialogOpen(!isEditDialogOpen);
+    clearSelection();
+  }
+
+  function editCurrentEditData(systemName: string) {
+    setCurrentEditData({ ...currentEditData, systemName });
+  }
+
+  function clearSelection() {
+    setSystemQuerySearch('');
+    setSelectedSystem('');
   }
 
   function handleSubmit(event: FormEvent) {
     event.preventDefault();
     addSystemToCollection(selectedSystem);
-    setQuerySearch('');
-    setSelectedSystem('');
+    clearSelection();
   }
+
 
   function handleEditSubmit(event: FormEvent) {
     event.preventDefault();
     updateSystemName(currentEditData.id, currentEditData.systemName);
     toggleEditDialog();
+    clearSelection();
+  }
+
+  function loadMore() {
+    if (paginatorFinish <= systemCollection.length) {
+      setPaginatorStart(paginatorStart + imagePerPage);
+      setPaginatorFinish(paginatorFinish + imagePerPage);
+    }
+  }
+
+  function loadLess() {
+    if (paginatorStart > 0) {
+      setPaginatorStart(paginatorStart - imagePerPage);
+      setPaginatorFinish(paginatorFinish - imagePerPage);
+    }
   }
 
   useEffect(() => {
@@ -79,37 +116,42 @@ export default function FileListSection() {
 
       <MenuSection title='Wallpaper Options'>
         <form onSubmit={handleSubmit}
-          className='grid gap-2 grid-cols-1 2xl:grid-cols-2'>
+          className='grid gap-2 grid-cols-1 2xl:grid-cols-2'
+          autoComplete='off'>
 
           <Combobox value={selectedSystem}
             onChange={setSelectedSystem}
             as='div'
-            className='block'>
+            className='block 2xl:col-span-2'>
 
             <Combobox.Label className={styles.comboboxLabel}>
               {'System Name'}
             </Combobox.Label>
 
             <div className={styles.comboboxInput}>
-              <Combobox.Input onChange={(event) => setQuerySearch(event.target.value)}
-                placeholder='Type to search'
+              <Combobox.Input onChange={(event) => setSystemQuerySearch(event.target.value)}
+                placeholder='Type to add a system'
                 className='min-w-0 w-full outline-none border-0 bg-transparent' />
 
               <Combobox.Options className={styles.comboboxList}>
                 {filteredSystem.map((option) => (
                   <Combobox.Option key={option.systemName}
+                    value={option.systemName}
                     disabled={option.added}
-                    className={[styles.comboboxOption, option.added && 'opacity-70 pointer-events-none'].join(' ')}
-                    value={option.systemName}>
-                    <span>
-                      {option.systemName}
-                    </span>
+                    as={Fragment}>
+                    {({ active, selected }) => (
+                      <li className={[styles.comboboxOption, active && 'bg-stone-700', selected && 'bg-orange-500'].join(' ')}>
+                        <span className='w-full rounded py-1'>
+                          {option.systemName}
+                        </span>
 
-                    {option.added && (
-                      <CheckCircle size={16}
-                        weight='bold' />
+                        {option.added && (
+                          <CheckCircle size={16}
+                            weight='bold'
+                            className='shrink-0' />
+                        )}
+                      </li>
                     )}
-
                   </Combobox.Option>
                 ))}
               </Combobox.Options>
@@ -120,6 +162,7 @@ export default function FileListSection() {
               </Combobox.Button>
             </div>
           </Combobox>
+
           <input className='hidden'
             id='fileList_imageSelector'
             type='file'
@@ -144,20 +187,39 @@ export default function FileListSection() {
         </form>
       </MenuSection>
 
-      <div className='h-full bg-neutral-900 border-t border-b border-neutral-600 py-4 overflow-y-auto'>
-        <ul className='grid grid-cols-2 w-full gap-2 px-4'>
-          {systemCollection.map(item => (
-            <li key={item.id}
-              className='relative bg-neutral-800 p-1 pb-2 grid gap-2 rounded-xl first-of-type:ring-2 ring-yellow-500'>
+      <div className='bg-neutral-800 px-4 py-4 border-t border-neutral-600'>
+        <div className={styles.search}>
+          <input className='bg-transparent min-w-0 grow h-full outline-none focus:outline-none'
+            placeholder='Type to search added systems'
+            value={addedSystemQuery}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setAddedSystemQuery(e.target.value)} />
+          <button className='shrink-0 p-2 rounded-lg hover:bg-white/10'
+            onClick={() => setAddedSystemQuery('')}>
+            <Backspace size={16}
+              weight='bold' />
+          </button>
+        </div>
+      </div>
 
-              <div className='flex shrink-0 w-full h-14 2xl:h-20 relative'>
-                <img className='object-cover shrink-0 bottom-0 right-0 absolute rounded-lg w-16 2xl:w-24 h-12 2xl:h-16 opacity-70'
-                  src={item.file.blurred} />
-                <img className='object-cover shrink-0 top-0 left-0 absolute rounded-lg ring-4 ring-neutral-800 w-16 2xl:w-24 h-12 2xl:h-16'
-                  src={item.file.normal} />
+      <div className='h-full bg-neutral-900 border-t border-b border-neutral-600 overflow-y-auto relative'>
+        <ul className='grid grid-cols-2 w-full gap-2 p-4'>
+          {filteredAddedSystem.map(item => (
+            <li key={item.id}
+              className='relative bg-neutral-800 p-2 grid gap-2 rounded first-of-type:ring-2 ring-orange-500 group'>
+
+              <div className='grid gap-1 grid-cols-2 shrink-0 w-full'>
+                <Zoom>
+                  <img className={styles.systemListImg}
+                    src={item.file.normal} />
+                </Zoom>
+                <Zoom>
+                  <img className={styles.systemListImg}
+                    src={item.file.blurred} />
+                </Zoom>
               </div>
 
               <span className='w-full px-1 text-sm min-w-0 text-center cursor-pointer whitespace-nowrap overflow-ellipsis overflow-hidden'
+                title={'Edit ' + item.systemName}
                 onClick={() => {
                   toggleEditDialog();
                   setCurrentEditData(item);
@@ -165,41 +227,63 @@ export default function FileListSection() {
                 {item.systemName}
               </span>
 
-              <button className='absolute rounded-tl-none rounded-br-none top-0 right-0 bg-neutral-800 p-1.5 rounded-xl'
+              <button className='absolute top-1 right-1 opacity-0 group-hover:opacity-100 p-1 rounded group-hover:bg-red-600 transition-all duration-300'
                 onClick={() => removeSystemFromCollection(item.id)}>
                 <X size={16}
                   weight='bold' />
               </button>
             </li>
-          )).reverse()}
+          )).reverse().slice(paginatorStart, paginatorFinish)}
         </ul>
+      </div >
+
+      <div className='bg-neutral-800 z-[1] px-4 py-2 border-b border-neutral-600 flex flex-col 2xl:flex-row justify-between items-center'>
+        <span>{systemCollection.length}{' of '}{systemList.length}{' added'}</span>
+
+        <div className='flex items-center'>
+          <Button label='Load less'
+            hideLabel
+            icon={<CaretLeft size={16}
+              weight='bold' />}
+            className='disabled:opacity-50 disabled:pointer-events-none'
+            disabled={!(paginatorStart > 0)}
+            onClick={() => loadLess()} />
+
+          <span className='mx-2'>{'Page '}{Math.ceil(paginatorFinish / imagePerPage)}</span>
+
+          <Button label='Load more'
+            hideLabel
+            icon={<CaretRight size={16}
+              weight='bold' />}
+            className='disabled:opacity-50 disabled:pointer-events-none'
+            disabled={!(paginatorFinish <= systemCollection.length)}
+            onClick={() => loadMore()} />
+        </div>
       </div>
 
-      {
-        systemCollection.length !== 0 && (
-          <>
-            <div className='relative shrink-0 w-full p-4 grid gap-2'>
-              <Button label='Download Files'
-                id='buttonDownloadZip'
-                icon={<FileZip size={16}
-                  weight='bold' />}
-                onClick={exportFilesAsZip}
-              />
+      {systemCollection.length !== 0 && (
+        <>
+          <div className='relative shrink-0 w-full p-4 grid gap-2'>
+            <Button label='Download Files'
+              id='buttonDownloadZip'
+              icon={<FileZip size={16}
+                weight='bold' />}
+              onClick={exportFilesAsZip}
+            />
 
-              <Button label='Clear Collection'
-                icon={<Trash size={16}
-                  weight='bold' />}
-                className='bg-red-600'
-                onClick={toggleDeleteDialog}
-              />
-            </div>
-          </>
-        )
-      }
+            <Button label='Clear Collection'
+              icon={<Trash size={16}
+                weight='bold' />}
+              className='bg-red-600'
+              onClick={toggleDeleteDialog}
+            />
+          </div>
+        </>
+      )}
 
-      <Prompt open={isClearDialogOpen}
+      < Prompt open={isClearDialogOpen}
         onClose={toggleDeleteDialog}
-        promptTitle='Are you sure you want to clear all System Collection?'>
+        promptTitle='Are you sure you want to clear all System Collection?' >
         <div
           className='grid grid-cols-2 gap-2'>
           <Button label='Nope, keep them'
@@ -212,7 +296,7 @@ export default function FileListSection() {
             className='bg-red-600'
             onClick={() => { clearCollection(); toggleDeleteDialog(); }} />
         </div>
-      </Prompt>
+      </Prompt >
 
       <Prompt open={isEditDialogOpen}
         onClose={toggleEditDialog}
@@ -220,17 +304,50 @@ export default function FileListSection() {
 
         <form onSubmit={(e) => handleEditSubmit(e)}
           className='grid grid-cols-2 gap-2'
-          autoComplete='false'>
-          <Input id='editSystemName'
-            label=''
-            type='text'
-            required
-            autoFocus
-            value={currentEditData.systemName}
-            className='col-span-2'
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              setCurrentEditData({ ...currentEditData, systemName: e.target.value });
-            }} />
+          autoComplete='off'>
+
+          <Combobox value={currentEditData.systemName}
+            onChange={editCurrentEditData}
+            as='div'
+            className='block col-span-2'>
+
+            <div className={styles.comboboxInput}>
+              <Combobox.Input onChange={(event) => setSystemQuerySearch(event.target.value)}
+                placeholder='Type to add a system'
+                autoFocus
+                className='min-w-0 w-full outline-none border-0 bg-transparent' />
+
+              <Combobox.Options className={styles.comboboxList}>
+                {filteredSystem.map((option) => (
+                  <Combobox.Option key={option.systemName}
+                    disabled={option.added}
+                    value={option.systemName}
+                    as={Fragment}>
+
+                    {({ active, selected }) => (
+                      <li className={[styles.comboboxOption, active && 'bg-stone-700', selected && 'bg-yellow-600 font-bold'].join(' ')}>
+                        <span className='w-full rounded py-1'>
+                          {option.systemName}
+                        </span>
+
+                        {option.added && (
+                          <CheckCircle size={16}
+                            weight='bold'
+                            className='shrink-0' />
+                        )}
+                      </li>
+                    )}
+
+                  </Combobox.Option>
+                ))}
+              </Combobox.Options>
+
+              <Combobox.Button className='ml-3 mr-1'>
+                <List size={16}
+                  weight='bold' />
+              </Combobox.Button>
+            </div>
+          </Combobox>
 
           <Button label='Cancel'
             type='button'

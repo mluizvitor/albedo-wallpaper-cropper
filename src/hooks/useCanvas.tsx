@@ -1,6 +1,5 @@
 import { ChangeEvent, ReactElement, createContext, useContext, useEffect, useState } from 'react';
 import * as StackBlur from 'stackblur-canvas';
-import { selectSystemNameInput } from '../utils/SelectInput';
 
 export interface CanvasContentProps {
   normal: string;
@@ -126,13 +125,23 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
 
       reader.onloadstart = () => {
         setShowLoader(true);
-        clearCanvas();
+      };
+
+      reader.onerror = (e) => {
+        console.error('reader error:', e);
+        setShowLoader(false);
+
       };
 
       reader.onload = (e) => {
         console.log('Loading Image from clipboard...');
         const image = new Image();
 
+        image.onerror = (e) => {
+          alert('Error reading image from clipboard. Try to save it and then load via "Load File" button.');
+          console.error('Error loading image:', e);
+          setShowLoader(false);
+        };
 
         image.onload = () => {
           const canvas = document.createElement('canvas');
@@ -169,11 +178,25 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
       const reader = new FileReader();
       reader.readAsDataURL(file);
 
+      reader.onloadstart = () => {
+        setShowLoader(true);
+      };
+
+      reader.onerror = (e) => {
+        console.error(e);
+        setShowLoader(false);
+      };
+
       reader.onloadend = (e) => {
         const image = new Image();
 
         image.onloadstart = () => {
           setShowLoader(true);
+        };
+
+        image.onerror = (e) => {
+          console.error(e);
+          setShowLoader(false);
         };
 
         image.onload = () => {
@@ -198,8 +221,6 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
 
         image.src = e.target?.result as string;
       };
-
-      selectSystemNameInput('systemName');
     }
   }
 
