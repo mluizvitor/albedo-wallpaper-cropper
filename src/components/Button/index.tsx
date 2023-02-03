@@ -16,7 +16,7 @@ export default function Button({ label, icon, className, hideLabel, ...rest }: B
       {...rest}>
       {icon && icon}
       {!hideLabel && (
-        <span className={icon ? 'ml-3' : ''}>
+        <span className={icon ? 'ml-2' : ''}>
           {label}
         </span>
       )}

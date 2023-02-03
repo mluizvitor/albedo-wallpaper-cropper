@@ -1,7 +1,7 @@
 .button {
-  @apply flex px-3 items-center
+  @apply flex px-2 items-center
   shrink-0 h-8 bg-neutral-700
-  font-semibold
+  font-semibold text-sm
   
   transition-all duration-300
   hover:brightness-125

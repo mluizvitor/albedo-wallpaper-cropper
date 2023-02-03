@@ -206,7 +206,7 @@ export function CanvasSection() {
 
           <Button label='Zoom Out'
             hideLabel
-            className='rounded-r-none hover:rounded-l-xl hover:rounded-r-none px-2'
+            className='rounded-r-none hover:rounded-l-xl hover:rounded-r-none'
             icon={<Minus size={16} />}
             onClick={() => {
               updateCanvasScaleOnScreen('zoomOut');
@@ -217,7 +217,7 @@ export function CanvasSection() {
           </div>
           <Button label='Zoom Out'
             hideLabel
-            className='rounded-l-none hover:rounded-l-none hover:rounded-r-xl px-2'
+            className='rounded-l-none hover:rounded-l-none hover:rounded-r-xl'
             icon={<Plus size={16} />}
             onClick={() => {
               updateCanvasScaleOnScreen('zoomIn');

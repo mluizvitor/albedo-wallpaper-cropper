@@ -1,6 +1,7 @@
 import { Dialog } from '@headlessui/react';
 import { X } from 'phosphor-react';
 import { ReactNode } from 'react';
+import Button from '../Button';
 
 interface PromptProps {
   open: boolean;
@@ -19,12 +20,14 @@ export function Prompt({ open, onClose, promptTitle, children }: PromptProps) {
     >
       <div className='bg-black/50 fixed inset-0' />
       <div className='fixed inset-0 flex items-center justify-center p-4'>
-        <Dialog.Panel className='w-full max-w-sm bg-stone-700 p-4 rounded-2xl shadow-xl grid gap-4 relative'>
-          <button className='bg-white/10 absolute p-2 rounded-full top-3 right-3'
-            onClick={onClose}>
-            <X size={16}
-              weight='bold' />
-          </button>
+        <Dialog.Panel className='w-full max-w-sm bg-neutral-700 p-4 rounded-2xl shadow-xl grid gap-4 relative'>
+
+          <Button label='Close'
+            hideLabel
+            icon={<X size={16}
+              weight='bold' />}
+            onClick={onClose}
+            className='absolute top-3 right-3' />
 
           <Dialog.Title className='text-lg leading-6'>
             {promptTitle || 'This is a placeholder text.'}
