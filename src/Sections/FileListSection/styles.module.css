@@ -26,11 +26,11 @@
 }
 
 .systemListImg {
-  @apply object-cover h-full w-full
+  @apply object-cover h-full w-full border border-neutral-700
 }
 
 .imageWrapper {
-  @apply grid gap-1 grid-cols-2 grow;
+  @apply grid gap-1 grid-cols-[2fr_1fr] grow;
 }
 
 .imageWrapper div {

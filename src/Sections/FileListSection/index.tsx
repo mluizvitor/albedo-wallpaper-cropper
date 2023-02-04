@@ -290,15 +290,15 @@ export default function FileListSection() {
         <ul className='grid grid-cols-2 grid-rows-5 grow w-full gap-2'>
           {filteredAddedSystem.map(item => (
             <li key={item.id}
-              className='relative bg-neutral-800 p-2 flex flex-col rounded first-of-type:ring-2 ring-orange-500 group'>
+              className='relative bg-neutral-800 p-2 flex flex-col rounded-md first-of-type:ring-2 ring-orange-500 group'>
 
               <div className={styles.imageWrapper}>
                 <Zoom zoomMargin={32}>
-                  <img className={styles.systemListImg}
+                  <img className={[styles.systemListImg, 'rounded-l'].join(' ')}
                     src={item.file.normal} />
                 </Zoom>
                 <Zoom zoomMargin={32}>
-                  <img className={styles.systemListImg}
+                  <img className={[styles.systemListImg, 'rounded-r'].join(' ')}
                     src={item.file.blurred} />
                 </Zoom>
               </div>
@@ -323,47 +323,50 @@ export default function FileListSection() {
       </div >
 
       <div className='bg-neutral-800 px-4 py-2 flex flex-col justify-center items-stretch'>
-        <div className='flex items-stretch'>
-          <Button label='First Page'
-            hideLabel
-            icon={<CaretDoubleLeft size={16}
-              className='group-disabled:opacity-30'
-              weight='bold' />}
-            className='disabled:pointer-events-none rounded-r-none hover:rounded-r-none group bg-opacity-70'
-            disabled={!(paginatorStart > 0)}
-            onClick={() => { setPaginatorStart(0); setPaginatorFinish(imagePerPage); }} />
+        {(filteredAddedSystem.length > imagePerPage) && (
+          <div className='flex items-stretch'>
+            <Button label='First Page'
+              hideLabel
+              icon={<CaretDoubleLeft size={16}
+                className='group-disabled:opacity-30'
+                weight='bold' />}
+              className='disabled:pointer-events-none rounded-r-none hover:rounded-r-none group bg-opacity-70'
+              disabled={!(paginatorStart > 0)}
+              onClick={() => { setPaginatorStart(0); setPaginatorFinish(imagePerPage); }} />
 
-          <Button label='Previous Page'
-            hideLabel
-            icon={<CaretLeft size={16}
-              className='group-disabled:opacity-30'
-              weight='bold' />}
-            className='disabled:pointer-events-none rounded-none hover:rounded-none group bg-opacity-70'
-            disabled={!(paginatorStart > 0)}
-            onClick={() => loadLess()} />
+            <Button label='Previous Page'
+              hideLabel
+              icon={<CaretLeft size={16}
+                className='group-disabled:opacity-30'
+                weight='bold' />}
+              className='disabled:pointer-events-none rounded-none hover:rounded-none group bg-opacity-70'
+              disabled={!(paginatorStart > 0)}
+              onClick={() => loadLess()} />
 
-          <div className='px-2 bg-neutral-700 h-auto text-center grow bg-opacity-70'>
-            <span className='leading-8 text-sm'>{'Page '}{Math.ceil(paginatorFinish / imagePerPage)}{' of '}{Math.ceil(filteredAddedSystem.length / imagePerPage)}</span>
+            <div className='px-2 bg-neutral-700 h-auto text-center grow bg-opacity-70'>
+              <span className='leading-8 text-sm'>{'Page '}{Math.ceil(paginatorFinish / imagePerPage)}{' of '}{Math.ceil(filteredAddedSystem.length / imagePerPage)}</span>
+            </div>
+
+            <Button label='Next Page'
+              hideLabel
+              icon={<CaretRight size={16}
+                className='group-disabled:opacity-30'
+                weight='bold' />}
+              className='disabled:pointer-events-none rounded-none hover:rounded-none group bg-opacity-70'
+              disabled={!(paginatorFinish < filteredAddedSystem.length)}
+              onClick={() => loadMore()} />
+
+            <Button label='Last Page'
+              hideLabel
+              icon={<CaretDoubleRight size={16}
+                className='group-disabled:opacity-30'
+                weight='bold' />}
+              className='disabled:pointer-events-none rounded-l-none hover:rounded-l-none group bg-opacity-70'
+              disabled={!(paginatorFinish < filteredAddedSystem.length)}
+              onClick={() => { setPaginatorStart((Math.ceil(filteredAddedSystem.length / imagePerPage) - 1) * imagePerPage); setPaginatorFinish(Math.ceil(filteredAddedSystem.length / imagePerPage) * imagePerPage); }} />
           </div>
 
-          <Button label='Next Page'
-            hideLabel
-            icon={<CaretRight size={16}
-              className='group-disabled:opacity-30'
-              weight='bold' />}
-            className='disabled:pointer-events-none rounded-none hover:rounded-none group bg-opacity-70'
-            disabled={!(paginatorFinish < filteredAddedSystem.length)}
-            onClick={() => loadMore()} />
-
-          <Button label='Last Page'
-            hideLabel
-            icon={<CaretDoubleRight size={16}
-              className='group-disabled:opacity-30'
-              weight='bold' />}
-            className='disabled:pointer-events-none rounded-l-none hover:rounded-l-none group bg-opacity-70'
-            disabled={!(paginatorFinish < filteredAddedSystem.length)}
-            onClick={() => { setPaginatorStart((Math.ceil(filteredAddedSystem.length / imagePerPage) - 1) * imagePerPage); setPaginatorFinish(Math.ceil(filteredAddedSystem.length / imagePerPage) * imagePerPage); }} />
-        </div>
+        )}
         <span className='w-full text-xs text-center mt-1 opacity-60'>
           {`${systemCollection.length} of ${systemList.length} added`}
         </span>
