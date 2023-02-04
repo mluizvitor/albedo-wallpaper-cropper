@@ -14,17 +14,13 @@ body {
 }
 
 ::-webkit-scrollbar {
-  @apply w-1
-}
-
-::-webkit-scrollbar:hover {
-  @apply w-2
+  @apply w-1.5;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-transparent
+  @apply bg-transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-neutral-500 hover:bg-yellow-500
+  @apply bg-neutral-400 hover:bg-yellow-500;
 }

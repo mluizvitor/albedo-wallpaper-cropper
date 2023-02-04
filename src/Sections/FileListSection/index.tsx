@@ -19,7 +19,7 @@ export default function FileListSection() {
     systemList,
     addSystemToCollection,
     removeSystemFromCollection,
-    EditSystemName: updateSystemName,
+    editSystemName,
     clearCollection,
     exportFilesAsZip,
     exportProject,
@@ -82,7 +82,7 @@ export default function FileListSection() {
 
   function handleEditSubmit(event: FormEvent) {
     event.preventDefault();
-    updateSystemName(currentEditData.id, currentEditData.systemName);
+    editSystemName(currentEditData.id, currentEditData.systemName);
     toggleEditDialog();
     clearSelection();
   }
@@ -155,7 +155,7 @@ export default function FileListSection() {
   return (
     <SideBar anchor='left'
       className='z-10 flex flex-col'>
-      <div className='relative shrink-0 w-full flex bg-neutral-600 p-4 pb-2'>
+      <div className='relative shrink-0 w-full flex bg-neutral-700 p-4 pb-2'>
 
         <Popover className='relative'>
           <Popover.Button className='px-2 h-8 flex items-center bg-neutral-600 hover:brightness-125 rounded hover:rounded-lg transition-all duration-300'>
@@ -164,15 +164,15 @@ export default function FileListSection() {
             <span className='ml-2 font-bold'>{'Menu'}</span>
           </Popover.Button>
 
-          <Popover.Panel className='absolute top-9 -left-2 z-20 bg-neutral-500 p-2 min-w-[12rem] rounded-lg shadow-md shadow-black/50 grid gap-1'>
+          <Popover.Panel className='absolute top-9 -left-2 z-20 bg-neutral-600 p-2 min-w-[12rem] rounded-lg shadow-xl shadow-black/30 grid gap-1'>
             <Button label='Load Project'
-              className='w-full bg-neutral-500'
+              className='w-full bg-neutral-600'
               onClick={handleOpenProject}
               icon={<UploadSimple size={16}
                 weight='bold' />} />
 
             <Button label='Save Project'
-              className='w-full bg-neutral-500'
+              className='w-full bg-neutral-600'
               onClick={exportProject}
               icon={<FloppyDisk size={16}
                 weight='bold' />} />
@@ -180,20 +180,20 @@ export default function FileListSection() {
 
             {systemCollection.length !== 0 && (
               <>
-                <hr className='border-neutral-600 my-1' />
+                <hr className='border-neutral-500 my-1' />
 
                 <Button label='Download as ZIP'
                   id='buttonDownloadZip'
                   icon={<DownloadSimple size={16}
                     weight='bold' />}
-                  className='w-full'
+                  className='w-full bg-neutral-600'
                   onClick={exportFilesAsZip}
                 />
 
                 <Button label='Clear Collection'
                   icon={<Trash size={16}
                     weight='bold' />}
-                  className='bg-red-600 p-2 w-full'
+                  className='bg-red-500 p-2 w-full text-white'
                   onClick={toggleDeleteDialog}
                 />
               </>
@@ -204,7 +204,7 @@ export default function FileListSection() {
           type='button'
           icon={<UploadSimple size={16}
             weight='bold' />}
-          className='bg-transparent hover:bg-white/20 text-neutral-50 ml-auto'
+          className='bg-neutral-600 ml-auto'
           onClick={() => {
             document.getElementById('fileList_imageSelector')?.click();
           }}
@@ -217,7 +217,7 @@ export default function FileListSection() {
       </div>
 
       <form onSubmit={handleSubmit}
-        className='grid gap-2 p-4 pt-2 bg-neutral-600'
+        className='grid gap-2 p-4 pt-2 bg-neutral-700'
         autoComplete='off'>
 
         <Combobox value={selectedSystem}
@@ -229,6 +229,21 @@ export default function FileListSection() {
               className='min-w-0 w-full outline-none border-0 bg-transparent' />
 
             <Combobox.Options className={styles.comboboxList}>
+              {systemQuerySearch.length > 0 && !systemList.find((item) => item.systemName === systemQuerySearch) && (
+                <Combobox.Option value={systemQuerySearch}
+                  as={Fragment}>
+                  {({ active, selected }) => (
+                    <li className={[styles.comboboxOption, active && 'bg-neutral-700', selected && 'bg-orange-500'].join(' ')}>
+                      <Plus size={16}
+                        weight='bold'
+                        className='mr-2' />
+                      <span className='w-full rounded py-1'>
+                        {systemQuerySearch.toLowerCase()}
+                      </span>
+                    </li>
+                  )}
+                </Combobox.Option>
+              )}
               {filteredSystem.map((option) => (
                 <Combobox.Option key={option.systemName}
                   value={option.systemName}
@@ -239,7 +254,6 @@ export default function FileListSection() {
                       <span className='w-full rounded py-1'>
                         {option.systemName}
                       </span>
-
                       {option.added && (
                         <CheckCircle size={16}
                           weight='bold'
@@ -251,7 +265,7 @@ export default function FileListSection() {
               ))}
             </Combobox.Options>
 
-            <Combobox.Button className='ml-3 shrink-0 relative w-8 h-8'>
+            <Combobox.Button className={styles.comboboxButton}>
               <CaretUp size={12}
                 className='top-1 inset-x-2.5 absolute'
                 weight='bold' />
@@ -272,27 +286,25 @@ export default function FileListSection() {
       </form>
 
       <div className='h-full flex flex-col bg-neutral-900 overflow-y-auto relative border-t border-b border-neutral-600 p-4'>
-        {filteredAddedSystem.length !== 0 && (
-          <div className={[styles.search, 'group'].join(' ')}>
-            <MagnifyingGlass size={16}
-              weight='bold'
-              className='shrink-0 mr-2 opacity-50 group-focus-within:opacity-100' />
-            <input className='bg-transparent min-w-0 grow h-full outline-none focus:outline-none'
-              placeholder='Type to search added systems'
-              value={addedSystemQuery}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setAddedSystemQuery(e.target.value)} />
+        <div className={[styles.search, 'group'].join(' ')}>
+          <MagnifyingGlass size={16}
+            weight='bold'
+            className='shrink-0 mr-2 opacity-50 group-focus-within:opacity-100' />
+          <input className='bg-transparent min-w-0 grow h-full outline-none focus:outline-none'
+            placeholder='Type to search added systems'
+            value={addedSystemQuery}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setAddedSystemQuery(e.target.value)} />
 
-            {addedSystemQuery.length !== 0 && (
-              <Button label='Clear search'
-                hideLabel
-                icon={
-                  <Backspace size={16}
-                    weight='bold' />
-                }
-                onClick={() => setAddedSystemQuery('')} />
-            )}
-          </div>
-        )}
+          {addedSystemQuery.length !== 0 && (
+            <Button label='Clear search'
+              hideLabel
+              icon={
+                <Backspace size={16}
+                  weight='bold' />
+              }
+              onClick={() => setAddedSystemQuery('')} />
+          )}
+        </div>
 
         <ul className='grid grid-cols-2 grid-rows-5 grow w-full gap-2'>
           {filteredAddedSystem.map(item => (
@@ -310,7 +322,7 @@ export default function FileListSection() {
                 </Zoom>
               </div>
 
-              <span className='w-full mt-2 shrink-0 px-1 text-xs 2xl:text-sm min-w-0 text-center cursor-pointer whitespace-nowrap overflow-ellipsis overflow-hidden'
+              <span className={styles.systemCardTitle}
                 title={'Edit ' + item.systemName}
                 onClick={() => {
                   toggleEditDialog();
@@ -319,7 +331,7 @@ export default function FileListSection() {
                 {item.systemName}
               </span>
 
-              <button className='absolute top-1 right-1 opacity-0 group-hover:opacity-100 p-1 rounded group-hover:bg-red-600 transition-all duration-300'
+              <button className='absolute top-1 right-1 opacity-0 group-hover:opacity-100 p-1 rounded group-hover:bg-red-500 transition-all duration-300'
                 onClick={() => removeSystemFromCollection(item.id)}>
                 <X size={16}
                   weight='bold' />
@@ -375,7 +387,7 @@ export default function FileListSection() {
 
         )}
         <span className='w-full text-xs text-center opacity-60'>
-          {`${systemCollection.length} of ${systemList.length} added`}
+          {`${systemCollection.length} of ${systemList.length} currently supported`}
         </span>
       </div>
 
@@ -391,7 +403,7 @@ export default function FileListSection() {
 
           <Button label='Yea, clear all'
             type='submit'
-            className='bg-red-600'
+            className='bg-red-500 text-white'
             onClick={() => { clearCollection(); toggleDeleteDialog(); }} />
         </div>
       </Prompt >
@@ -401,7 +413,7 @@ export default function FileListSection() {
         promptTitle='Enter a new name'>
 
         <form onSubmit={(e) => handleEditSubmit(e)}
-          className='grid grid-cols-2 gap-2'
+          className='grid grid-cols-2 gap-x-2 gap-y-4'
           autoComplete='off'>
 
           <Combobox value={currentEditData.systemName}
@@ -409,7 +421,7 @@ export default function FileListSection() {
             as='div'
             className='block col-span-2'>
 
-            <div className={[styles.comboboxInput, 'bg-neutral-800'].join(' ')}>
+            <div className={[styles.comboboxInput, 'bg-neutral-700'].join(' ')}>
               <Combobox.Input onChange={(event) => setSystemQuerySearch(event.target.value)}
                 placeholder='Type to add a system'
                 autoFocus
@@ -440,7 +452,7 @@ export default function FileListSection() {
                 ))}
               </Combobox.Options>
 
-              <Combobox.Button className='ml-3 shrink-0 relative w-8 h-8'>
+              <Combobox.Button className={styles.comboboxButton}>
                 <CaretUp size={12}
                   className='top-1 inset-x-2.5 absolute'
                   weight='bold' />

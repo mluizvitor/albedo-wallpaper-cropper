@@ -1,11 +1,11 @@
 .comboboxInput {
-  @apply bg-neutral-700 w-full h-8 pl-2 relative
+  @apply bg-neutral-700 w-full h-8 pl-2 relative ring-2 ring-neutral-500
   flex items-center rounded hover:rounded-lg transition-all duration-300 
-  focus-within:outline-none ring-yellow-500/30 focus-within:ring-offset-yellow-500 focus-within:ring-4 focus-within:ring-offset-2
+  focus-within:outline-none focus-within:ring-yellow-500/30 focus-within:ring-offset-yellow-500 focus-within:ring-4 focus-within:ring-offset-2
 }
 
 .comboboxList {
-  @apply absolute top-9 bg-neutral-500 inset-x-0 z-20 w-full
+  @apply absolute top-9 bg-neutral-600 inset-x-0 z-20 w-full
   min-h-fit max-h-[16rem] overflow-y-auto rounded-t rounded-b-md p-2
   shadow-2xl shadow-black/30;
 }
@@ -14,15 +14,30 @@
   @apply h-8 px-2 cursor-pointer flex items-center justify-between rounded
   disabled:pointer-events-none mt-1 first:mt-0;
 }
+.comboboxOption[data-headlessui-state="disabled"] {
+  @apply opacity-60;
+}
 
 .comboboxLabel {
   @apply leading-[100%] w-full text-sm ml-2 font-semibold mb-2 block;
+}
+
+.comboboxButton {
+  @apply ml-1 shrink-0 relative w-8 h-8 bg-neutral-700 rounded-lg hover:brightness-125;
 }
 
 .search {
   @apply bg-neutral-700 w-full h-8 pl-2 mb-4 sticky -top-2 shrink-0 z-10 overflow-hidden
   flex items-center rounded hover:rounded-lg transition-all duration-300 
   focus-within:outline-none ring-yellow-500/30 focus-within:ring-offset-yellow-500 focus-within:ring-4 focus-within:ring-offset-2
+}
+
+.systemCardTitle {
+  @apply w-full mt-2 shrink-0 px-1 text-xs 2xl:text-sm rounded
+  min-w-0 text-center cursor-pointer whitespace-nowrap overflow-ellipsis overflow-hidden
+  
+  bg-neutral-800 hover:brightness-150
+  transition-all duration-300
 }
 
 .systemListImg {

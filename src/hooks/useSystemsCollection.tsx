@@ -20,9 +20,9 @@ interface SystemsContextData {
 
   addSystemToCollection: (systemName: string) => void;
   removeSystemFromCollection: (id: number) => void;
-  EditSystemName: (id: number, name: string) => void;
+  editSystemName: (id: number, name: string) => void;
   clearCollection: () => void;
-  updateSystenList: () => void;
+  updateSystemList: () => void;
 
   exportFilesAsZip: () => void;
   exportProject: () => void;
@@ -128,7 +128,7 @@ export function SystemsProvider({ children }: SystemProviderProps) {
    * 
    */
 
-  function updateSystenList() {
+  function updateSystemList() {
     const parsedSystemCollection = systemCollection.map(item => item.systemName);
 
     const newSystemList = [...systemList].map(item => {
@@ -245,7 +245,7 @@ export function SystemsProvider({ children }: SystemProviderProps) {
   }
 
   useEffect(() => {
-    updateSystenList();
+    updateSystemList();
   }, [systemCollection]);
 
   useEffect(() => {
@@ -262,9 +262,9 @@ export function SystemsProvider({ children }: SystemProviderProps) {
       systemList,
       addSystemToCollection,
       removeSystemFromCollection,
-      EditSystemName,
+      editSystemName: EditSystemName,
       clearCollection,
-      updateSystenList,
+      updateSystemList: updateSystemList,
       exportFilesAsZip,
       exportProject,
       importProject,

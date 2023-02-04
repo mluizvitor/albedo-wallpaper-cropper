@@ -41,7 +41,7 @@ export function CropperSection() {
 
         <Button label='Invert'
           hideLabel
-          className='bg-orange-500'
+          className='bg-neutral-500'
           icon={<ArrowsClockwise size={16}
             weight='bold' />}
           onClick={invertSizes}
