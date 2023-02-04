@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent, Fragment, useEffect, useState } from 'react';
 import { useCanvas } from '../../hooks/useCanvas';
-import { ArrowsOutLineVertical, Backspace, CaretDoubleLeft, CaretDoubleRight, CaretDown, CaretLeft, CaretRight, CaretUp, CheckCircle, DownloadSimple, FileZip, FloppyDisk, List, MagnifyingGlass, Plus, Trash, UploadSimple, X } from 'phosphor-react';
+import { Backspace, CaretDoubleLeft, CaretDoubleRight, CaretDown, CaretLeft, CaretRight, CaretUp, CheckCircle, DownloadSimple, FileZip, FloppyDisk, List, MagnifyingGlass, Plus, Trash, UploadSimple, X } from 'phosphor-react';
 import { SideBar } from '../../components/SideBar';
 import { SystemProps, useSystemsCollection } from '../../hooks/useSystemsCollection';
 import Button from '../../components/Button';
@@ -37,7 +37,7 @@ export default function FileListSection() {
 
   const imagePerPage = 10;
   const [paginatorStart, setPaginatorStart] = useState(0);
-  const [paginatorFinish, setPaginatorFinish] = useState(imagePerPage);
+
 
   const filteredSystem = systemQuerySearch === ''
     ? systemList
@@ -109,23 +109,28 @@ export default function FileListSection() {
   }
 
   function loadMore() {
-    if (paginatorFinish < filteredAddedSystem.length) {
+    if (paginatorStart + imagePerPage < filteredAddedSystem.length) {
       setPaginatorStart(paginatorStart + imagePerPage);
-      setPaginatorFinish(paginatorFinish + imagePerPage);
     }
   }
 
   function loadLess() {
-    if (paginatorStart > 0) {
+    if (paginatorStart >= imagePerPage) {
       setPaginatorStart(paginatorStart - imagePerPage);
-      setPaginatorFinish(paginatorFinish - imagePerPage);
+    } else {
+      setPaginatorStart(0);
     }
   }
 
   useEffect(() => {
     setPaginatorStart(0);
-    setPaginatorFinish(imagePerPage);
-  }, [addedSystemQuery]);
+  }, [addedSystemQuery, filteredAddedSystem]);
+
+  useEffect(() => {
+    if (filteredAddedSystem.length > 0 && filteredAddedSystem.length <= paginatorStart) {
+      setPaginatorStart(paginatorStart - imagePerPage);
+    };
+  }, [filteredSystem]);
 
   useEffect(() => {
     document.addEventListener('keydown', (event: KeyboardEvent) => {
@@ -267,25 +272,27 @@ export default function FileListSection() {
       </form>
 
       <div className='h-full flex flex-col bg-neutral-900 overflow-y-auto relative border-t border-b border-neutral-600 p-4'>
-        <div className={[styles.search, 'group'].join(' ')}>
-          <MagnifyingGlass size={16}
-            weight='bold'
-            className='shrink-0 mr-2 opacity-50 group-focus-within:opacity-100' />
-          <input className='bg-transparent min-w-0 grow h-full outline-none focus:outline-none'
-            placeholder='Type to search added systems'
-            value={addedSystemQuery}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setAddedSystemQuery(e.target.value)} />
+        {filteredAddedSystem.length !== 0 && (
+          <div className={[styles.search, 'group'].join(' ')}>
+            <MagnifyingGlass size={16}
+              weight='bold'
+              className='shrink-0 mr-2 opacity-50 group-focus-within:opacity-100' />
+            <input className='bg-transparent min-w-0 grow h-full outline-none focus:outline-none'
+              placeholder='Type to search added systems'
+              value={addedSystemQuery}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => setAddedSystemQuery(e.target.value)} />
 
-          {addedSystemQuery.length !== 0 && (
-            <Button label='Clear search'
-              hideLabel
-              icon={
-                <Backspace size={16}
-                  weight='bold' />
-              }
-              onClick={() => setAddedSystemQuery('')} />
-          )}
-        </div>
+            {addedSystemQuery.length !== 0 && (
+              <Button label='Clear search'
+                hideLabel
+                icon={
+                  <Backspace size={16}
+                    weight='bold' />
+                }
+                onClick={() => setAddedSystemQuery('')} />
+            )}
+          </div>
+        )}
 
         <ul className='grid grid-cols-2 grid-rows-5 grow w-full gap-2'>
           {filteredAddedSystem.map(item => (
@@ -318,13 +325,13 @@ export default function FileListSection() {
                   weight='bold' />
               </button>
             </li>
-          )).reverse().slice(paginatorStart, paginatorFinish)}
+          )).reverse().slice(paginatorStart, paginatorStart + imagePerPage)}
         </ul>
       </div >
 
       <div className='bg-neutral-800 px-4 py-2 flex flex-col justify-center items-stretch'>
         {(filteredAddedSystem.length > imagePerPage) && (
-          <div className='flex items-stretch'>
+          <div className='flex items-stretch mb-2'>
             <Button label='First Page'
               hideLabel
               icon={<CaretDoubleLeft size={16}
@@ -332,7 +339,7 @@ export default function FileListSection() {
                 weight='bold' />}
               className='disabled:pointer-events-none rounded-r-none hover:rounded-r-none group bg-opacity-70'
               disabled={!(paginatorStart > 0)}
-              onClick={() => { setPaginatorStart(0); setPaginatorFinish(imagePerPage); }} />
+              onClick={() => setPaginatorStart(0)} />
 
             <Button label='Previous Page'
               hideLabel
@@ -344,7 +351,7 @@ export default function FileListSection() {
               onClick={() => loadLess()} />
 
             <div className='px-2 bg-neutral-700 h-auto text-center grow bg-opacity-70'>
-              <span className='leading-8 text-sm'>{'Page '}{Math.ceil(paginatorFinish / imagePerPage)}{' of '}{Math.ceil(filteredAddedSystem.length / imagePerPage)}</span>
+              <span className='leading-8 text-sm'>{'Page '}{Math.ceil((paginatorStart + imagePerPage) / imagePerPage)}{' of '}{Math.ceil(filteredAddedSystem.length / imagePerPage)}</span>
             </div>
 
             <Button label='Next Page'
@@ -353,7 +360,7 @@ export default function FileListSection() {
                 className='group-disabled:opacity-30'
                 weight='bold' />}
               className='disabled:pointer-events-none rounded-none hover:rounded-none group bg-opacity-70'
-              disabled={!(paginatorFinish < filteredAddedSystem.length)}
+              disabled={!(paginatorStart + imagePerPage < filteredAddedSystem.length)}
               onClick={() => loadMore()} />
 
             <Button label='Last Page'
@@ -362,12 +369,12 @@ export default function FileListSection() {
                 className='group-disabled:opacity-30'
                 weight='bold' />}
               className='disabled:pointer-events-none rounded-l-none hover:rounded-l-none group bg-opacity-70'
-              disabled={!(paginatorFinish < filteredAddedSystem.length)}
-              onClick={() => { setPaginatorStart((Math.ceil(filteredAddedSystem.length / imagePerPage) - 1) * imagePerPage); setPaginatorFinish(Math.ceil(filteredAddedSystem.length / imagePerPage) * imagePerPage); }} />
+              disabled={!(paginatorStart + imagePerPage < filteredAddedSystem.length)}
+              onClick={() => { setPaginatorStart((Math.ceil(filteredAddedSystem.length / imagePerPage) - 1) * imagePerPage); }} />
           </div>
 
         )}
-        <span className='w-full text-xs text-center mt-1 opacity-60'>
+        <span className='w-full text-xs text-center opacity-60'>
           {`${systemCollection.length} of ${systemList.length} added`}
         </span>
       </div>
