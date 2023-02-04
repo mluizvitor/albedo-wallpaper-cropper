@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useContext, useEffect, useState } from 'react';
+import { ChangeEvent, ReactNode, createContext, useContext, useEffect, useState } from 'react';
 import { CanvasContentProps, useCanvas } from './useCanvas';
 
 import JSZip from 'jszip';
@@ -6,6 +6,7 @@ import { saveAs } from 'file-saver';
 import { idbAddElement, idbEditElement, idbGetElement, idbRemoveElement } from '../database/actions';
 import originalSystemList from '../assets/systemList.json';
 import { Sorting } from '../utils/Sorting';
+import { useLoader } from './useLoader';
 
 export interface SystemProps {
   id: number;
@@ -13,7 +14,7 @@ export interface SystemProps {
   file: CanvasContentProps;
 }
 
-interface SystemsContentData {
+interface SystemsContextData {
   systemCollection: SystemProps[];
   systemList: { systemName: string, added: boolean }[];
 
@@ -21,11 +22,14 @@ interface SystemsContentData {
   removeSystemFromCollection: (id: number) => void;
   EditSystemName: (id: number, name: string) => void;
   clearCollection: () => void;
-  exportFilesAsZip: () => void;
   updateSystenList: () => void;
+
+  exportFilesAsZip: () => void;
+  exportProject: () => void;
+  importProject: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
-const SystemsContext = createContext<SystemsContentData>({} as SystemsContentData);
+const SystemsContext = createContext<SystemsContextData>({} as SystemsContextData);
 
 interface SystemProviderProps {
   children: ReactNode;
@@ -33,6 +37,7 @@ interface SystemProviderProps {
 
 export function SystemsProvider({ children }: SystemProviderProps) {
   const { canvasContent } = useCanvas();
+  const { showLoader, hideLoader } = useLoader();
   const [systemList, setSystemList] = useState(() => {
     return originalSystemList.map(item => {
       return {
@@ -162,6 +167,83 @@ export function SystemsProvider({ children }: SystemProviderProps) {
     });
   }
 
+  function exportProject() {
+    const file = new Blob([JSON.stringify(systemCollection)], { type: 'application/json' });
+    const parsedDate = new Date().toISOString().slice(0, 19).replaceAll('-', '').replaceAll(':', '').replaceAll('T', '');
+
+    const newName = prompt('Save as...', `AlbedoBackup.${parsedDate}`);
+
+    if (!newName) {
+      return null;
+    }
+
+    saveAs(file, newName + '.awc.json');
+  }
+
+  function importProject(event: ChangeEvent<HTMLInputElement>) {
+    const data = event.target.files;
+    if (!data) {
+      return null;
+    }
+
+    const file = data[0];
+
+    if (!file.type.includes('application/json')) {
+      alert('Unsupported file type');
+      throw new Error('Unsupported file type');
+    }
+
+    const reader = new FileReader();
+    reader.readAsText(file);
+
+    reader.onloadstart = () => {
+      showLoader();
+    };
+
+    reader.onloadend = () => {
+      hideLoader();
+    };
+
+    reader.onerror = (e) => {
+      console.log(e);
+      alert('Error loading project file');
+      hideLoader();
+    };
+
+    reader.onload = (e) => {
+      const content = e.target?.result;
+      if (!content) {
+        hideLoader();
+        throw Error();
+      }
+
+      try {
+        idbRemoveElement('systemCollection', 'all');
+        setSystemCollection([]);
+
+        const parsedContent = JSON.parse(content.toString());
+        if (!Array.isArray(parsedContent)) {
+          throw new Error('Invalid data format');
+        }
+
+        for (const item of parsedContent) {
+          if (item.id && item.systemName && item.file) {
+            idbAddElement('systemCollection', item);
+          } else {
+            throw new Error('Invalid data format');
+          }
+        }
+
+        setSystemCollection(parsedContent);
+
+      } catch (error) {
+        alert(error);
+        console.error(error);
+      }
+
+    };
+  }
+
   useEffect(() => {
     updateSystenList();
   }, [systemCollection]);
@@ -182,8 +264,10 @@ export function SystemsProvider({ children }: SystemProviderProps) {
       removeSystemFromCollection,
       EditSystemName,
       clearCollection,
-      exportFilesAsZip,
       updateSystenList,
+      exportFilesAsZip,
+      exportProject,
+      importProject,
     }}>
       {children}
     </SystemsContext.Provider>

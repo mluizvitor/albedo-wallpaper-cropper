@@ -4,13 +4,16 @@ import App from './App';
 import './index.css';
 import { CanvasProvider } from './hooks/useCanvas';
 import { SystemsProvider } from './hooks/useSystemsCollection';
+import { LoaderProvider } from './hooks/useLoader';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <CanvasProvider>
-      <SystemsProvider>
-        <App />
-      </SystemsProvider>
-    </CanvasProvider>
+    <LoaderProvider>
+      <CanvasProvider>
+        <SystemsProvider>
+          <App />
+        </SystemsProvider>
+      </CanvasProvider>
+    </LoaderProvider>
   </React.StrictMode>
 );

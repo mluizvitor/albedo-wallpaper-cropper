@@ -1,11 +1,11 @@
 import { ChangeEvent, FormEvent, Fragment, useEffect, useState } from 'react';
 import { useCanvas } from '../../hooks/useCanvas';
-import { Backspace, CaretDoubleLeft, CaretDoubleRight, CaretLeft, CaretRight, CheckCircle, DownloadSimple, FileZip, List, MagnifyingGlass, Plus, Trash, UploadSimple, X } from 'phosphor-react';
+import { ArrowsOutLineVertical, Backspace, CaretDoubleLeft, CaretDoubleRight, CaretDown, CaretLeft, CaretRight, CaretUp, CheckCircle, DownloadSimple, FileZip, FloppyDisk, List, MagnifyingGlass, Plus, Trash, UploadSimple, X } from 'phosphor-react';
 import { SideBar } from '../../components/SideBar';
 import { SystemProps, useSystemsCollection } from '../../hooks/useSystemsCollection';
 import Button from '../../components/Button';
 import { Prompt } from '../../components/Prompt';
-import { Combobox } from '@headlessui/react';
+import { Combobox, Popover } from '@headlessui/react';
 import Zoom from 'react-medium-image-zoom';
 import 'react-medium-image-zoom/dist/styles.css';
 
@@ -22,10 +22,13 @@ export default function FileListSection() {
     EditSystemName: updateSystemName,
     clearCollection,
     exportFilesAsZip,
+    exportProject,
+    importProject,
   } = useSystemsCollection();
 
   const [isClearDialogOpen, setIsClearDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isProjectDialogOpen, setIsProjectDialogOpen] = useState(false);
 
   const [currentEditData, setCurrentEditData] = useState({} as SystemProps);
   const [selectedSystem, setSelectedSystem] = useState('');
@@ -57,6 +60,10 @@ export default function FileListSection() {
     clearSelection();
   }
 
+  function toggleProjectDialog() {
+    setIsProjectDialogOpen(!isProjectDialogOpen);
+  }
+
   function editCurrentEditData(systemName: string) {
     setCurrentEditData({ ...currentEditData, systemName });
   }
@@ -78,6 +85,27 @@ export default function FileListSection() {
     updateSystemName(currentEditData.id, currentEditData.systemName);
     toggleEditDialog();
     clearSelection();
+  }
+
+  function handleOpenProject() {
+    console.log(systemCollection.length);
+    if (systemCollection.length === 0) {
+      loadImage();
+    } else {
+      toggleProjectDialog();
+    }
+  }
+
+  function loadImage() {
+    const input = document.createElement('input') as HTMLInputElement;
+    input.type = 'file';
+    input.accept = '.awc.json';
+    input.click();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    input.onchange = (event: any) => {
+      importProject(event);
+      setIsProjectDialogOpen(false);
+    };
   }
 
   function loadMore() {
@@ -104,6 +132,11 @@ export default function FileListSection() {
       if ((event.key === 'o' || event.key === 'O') && event.ctrlKey) {
         event.preventDefault();
 
+        handleOpenProject();
+      }
+      if ((event.key === 'i' || event.key === 'I') && event.ctrlKey) {
+        event.preventDefault();
+
         document.getElementById('fileList_imageSelector')?.click();
       }
       if ((event.key === 's' || event.key === 'S') && event.ctrlKey) {
@@ -118,41 +151,64 @@ export default function FileListSection() {
     <SideBar anchor='left'
       className='z-10 flex flex-col'>
       <div className='relative shrink-0 w-full flex bg-neutral-600 p-4 pb-2'>
+
+        <Popover className='relative'>
+          <Popover.Button className='px-2 h-8 flex items-center bg-neutral-600 hover:brightness-125 rounded hover:rounded-lg transition-all duration-300'>
+            <List size={16}
+              weight='bold' />
+            <span className='ml-2 font-bold'>{'Menu'}</span>
+          </Popover.Button>
+
+          <Popover.Panel className='absolute top-9 -left-2 z-20 bg-neutral-500 p-2 min-w-[12rem] rounded-lg shadow-md shadow-black/50 grid gap-1'>
+            <Button label='Load Project'
+              className='w-full bg-neutral-500'
+              onClick={handleOpenProject}
+              icon={<UploadSimple size={16}
+                weight='bold' />} />
+
+            <Button label='Save Project'
+              className='w-full bg-neutral-500'
+              onClick={exportProject}
+              icon={<FloppyDisk size={16}
+                weight='bold' />} />
+
+
+            {systemCollection.length !== 0 && (
+              <>
+                <hr className='border-neutral-600 my-1' />
+
+                <Button label='Download as ZIP'
+                  id='buttonDownloadZip'
+                  icon={<DownloadSimple size={16}
+                    weight='bold' />}
+                  className='w-full'
+                  onClick={exportFilesAsZip}
+                />
+
+                <Button label='Clear Collection'
+                  icon={<Trash size={16}
+                    weight='bold' />}
+                  className='bg-red-600 p-2 w-full'
+                  onClick={toggleDeleteDialog}
+                />
+              </>
+            )}
+          </Popover.Panel>
+        </Popover>
         <Button label='Load Image'
           type='button'
           icon={<UploadSimple size={16}
             weight='bold' />}
-          className='bg-transparent hover:bg-white/20 text-neutral-50'
+          className='bg-transparent hover:bg-white/20 text-neutral-50 ml-auto'
           onClick={() => {
             document.getElementById('fileList_imageSelector')?.click();
           }}
         />
-
         <input className='hidden'
           id='fileList_imageSelector'
           type='file'
           accept='.jpg, .jpeg, .webp, .png'
           onChange={(e) => updateImage(e)} />
-
-        {systemCollection.length !== 0 && (
-          <>
-            <Button label='Export'
-              id='buttonDownloadZip'
-              className='mx-2 bg-transparent hover:bg-white/20 text-neutral-50'
-              icon={<DownloadSimple size={16}
-                weight='bold' />}
-              onClick={exportFilesAsZip}
-            />
-
-            <Button label='Clear Collection'
-              hideLabel
-              icon={<Trash size={16}
-                weight='bold' />}
-              className='bg-red-600 ml-auto p-2'
-              onClick={toggleDeleteDialog}
-            />
-          </>
-        )}
       </div>
 
       <form onSubmit={handleSubmit}
@@ -190,8 +246,13 @@ export default function FileListSection() {
               ))}
             </Combobox.Options>
 
-            <Combobox.Button className='ml-3 mr-1'>
-              <List size={16}
+            <Combobox.Button className='ml-3 shrink-0 relative w-8 h-8'>
+              <CaretUp size={12}
+                className='top-1 inset-x-2.5 absolute'
+                weight='bold' />
+
+              <CaretDown size={12}
+                className='bottom-1 inset-x-2.5 absolute'
                 weight='bold' />
             </Combobox.Button>
           </div>
@@ -369,8 +430,13 @@ export default function FileListSection() {
                 ))}
               </Combobox.Options>
 
-              <Combobox.Button className='ml-3 mr-1'>
-                <List size={16}
+              <Combobox.Button className='ml-3 shrink-0 relative w-8 h-8'>
+                <CaretUp size={12}
+                  className='top-1 inset-x-2.5 absolute'
+                  weight='bold' />
+
+                <CaretDown size={12}
+                  className='bottom-1 inset-x-2.5 absolute'
                   weight='bold' />
               </Combobox.Button>
             </div>
@@ -385,6 +451,19 @@ export default function FileListSection() {
             type='submit'
             className='bg-neutral-600' />
         </form>
+      </Prompt>
+
+      <Prompt open={isProjectDialogOpen}
+        onClose={toggleProjectDialog}
+        promptTitle='Loading a project will discard current changes. Are you sure you want to load a project?'>
+        <div className='grid grid-cols-2 gap-2'>
+          <Button label='Cancel'
+            className='bg-neutral-600'
+            onClick={toggleProjectDialog} />
+          <Button label='Load Project'
+            className='bg-neutral-600'
+            onClick={loadImage} />
+        </div>
       </Prompt>
 
     </SideBar >

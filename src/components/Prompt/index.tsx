@@ -29,7 +29,7 @@ export function Prompt({ open, onClose, promptTitle, children }: PromptProps) {
             onClick={onClose}
             className='absolute top-3 right-3' />
 
-          <Dialog.Title className='text-lg leading-6'>
+          <Dialog.Title className='text-lg leading-6 mr-7'>
             {promptTitle || 'This is a placeholder text.'}
           </Dialog.Title>
 

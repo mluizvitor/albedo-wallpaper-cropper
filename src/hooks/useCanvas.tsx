@@ -1,5 +1,6 @@
 import { ChangeEvent, ReactElement, createContext, useContext, useEffect, useState } from 'react';
 import * as StackBlur from 'stackblur-canvas';
+import { useLoader } from './useLoader';
 
 export interface CanvasContentProps {
   normal: string;
@@ -17,7 +18,6 @@ interface CanvasContextData {
   blurAmount: number;
   integerScale: boolean;
   showBlur: boolean;
-  showLoader: boolean;
   smoothRendering: boolean;
 
 
@@ -42,6 +42,7 @@ interface CanvasProviderProps {
 const CanvasContext = createContext<CanvasContextData>({} as CanvasContextData);
 
 export function CanvasProvider({ children }: CanvasProviderProps) {
+  const { showLoader, hideLoader } = useLoader();
 
   const [blurAmount, setBlurAmount] = useState(60);
   const [canvasContent, setCanvasContent] = useState({} as CanvasContentProps);
@@ -52,7 +53,6 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
   const [integerScale, setIntegerScale] = useState(false);
   const [integerScaleValue, setIntegerScaleValue] = useState(1);
   const [showBlur, setShowBlur] = useState(false);
-  const [showLoader, setShowLoader] = useState(false);
   const [smoothRendering, setSmoothRendering] = useState(true);
   const [timestamp, setTimestamp] = useState(new Date);
 
@@ -124,12 +124,12 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
       reader.readAsDataURL(clipboardItem);
 
       reader.onloadstart = () => {
-        setShowLoader(true);
+        showLoader();
       };
 
       reader.onerror = (e) => {
         console.error('reader error:', e);
-        setShowLoader(false);
+        hideLoader();
 
       };
 
@@ -140,7 +140,7 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
         image.onerror = (e) => {
           alert('Error reading image from clipboard. Try to save it and then load via "Load File" button.');
           console.error('Error loading image:', e);
-          setShowLoader(false);
+          hideLoader();
         };
 
         image.onload = () => {
@@ -157,7 +157,7 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
 
           setCurrentLoadedImage(canvas.toDataURL());
           setCurrentLoadedFileName('From clipboard');
-          setShowLoader(false);
+          hideLoader();
           console.log('Image loaded successfully!');
 
         };
@@ -170,58 +170,59 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
 
   function updateImage(event: ChangeEvent<HTMLInputElement>) {
     const data = event.currentTarget.files;
-
-    if (data) {
-      const file = data[0];
-      const fileName = file.name;
-
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-
-      reader.onloadstart = () => {
-        setShowLoader(true);
-      };
-
-      reader.onerror = (e) => {
-        console.error(e);
-        setShowLoader(false);
-      };
-
-      reader.onloadend = (e) => {
-        const image = new Image();
-
-        image.onloadstart = () => {
-          setShowLoader(true);
-        };
-
-        image.onerror = (e) => {
-          console.error(e);
-          setShowLoader(false);
-        };
-
-        image.onload = () => {
-          const canvas = document.createElement('canvas') as HTMLCanvasElement;
-          if (!canvas) {
-            return null;
-          }
-
-          const context = canvas.getContext('2d');
-          if (!context) {
-            return null;
-          }
-
-          canvas.width = image.width;
-          canvas.height = image.height;
-          context.drawImage(image, 0, 0);
-
-          setCurrentLoadedImage(canvas.toDataURL(file.type));
-          setCurrentLoadedFileName(fileName);
-          setShowLoader(false);
-        };
-
-        image.src = e.target?.result as string;
-      };
+    if (!data) {
+      return null;
     }
+
+    const file = data[0];
+    const fileName = file.name;
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+
+    reader.onloadstart = () => {
+      showLoader();
+    };
+
+    reader.onerror = (e) => {
+      console.error(e);
+      hideLoader();
+    };
+
+    reader.onloadend = (e) => {
+      const image = new Image();
+
+      image.onloadstart = () => {
+        showLoader();
+      };
+
+      image.onerror = (e) => {
+        console.error(e);
+        hideLoader();
+      };
+
+      image.onload = () => {
+        const canvas = document.createElement('canvas') as HTMLCanvasElement;
+        if (!canvas) {
+          return null;
+        }
+
+        const context = canvas.getContext('2d');
+        if (!context) {
+          return null;
+        }
+
+        canvas.width = image.width;
+        canvas.height = image.height;
+        context.drawImage(image, 0, 0);
+
+        setCurrentLoadedImage(canvas.toDataURL(file.type));
+        setCurrentLoadedFileName(fileName);
+        hideLoader();
+      };
+
+      image.src = e.target?.result as string;
+    };
   }
 
   function updateCanvas() {
@@ -283,7 +284,6 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
       integerScale,
       integerScaleValue,
       showBlur,
-      showLoader,
       smoothRendering,
 
       clearCanvas,
