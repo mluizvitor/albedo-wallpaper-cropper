@@ -36,7 +36,7 @@ interface SystemProviderProps {
 }
 
 export function SystemsProvider({ children }: SystemProviderProps) {
-  const { canvasContent } = useCanvas();
+  const { canvasContent, currentLoadedImage } = useCanvas();
   const { showLoader, hideLoader } = useLoader();
   const [systemList, setSystemList] = useState(() => {
     return originalSystemList.map(item => {
@@ -54,6 +54,11 @@ export function SystemsProvider({ children }: SystemProviderProps) {
    * 
    */
   function addSystemToCollection(systemName: string) {
+    if (!currentLoadedImage) {
+      alert('No image loaded');
+      return null;
+    }
+
     const currentlyAtCollection = systemCollection.find(item => item.systemName === systemName);
     if (currentlyAtCollection) {
       alert('Already at collection');

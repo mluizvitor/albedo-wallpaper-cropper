@@ -67,7 +67,7 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
   }
 
   function updateIntegerScale(scale: number) {
-    if (scale >= 0.05 && scale <= 20) {
+    if (scale >= 1 && scale <= 32) {
       setIntegerScaleValue(scale);
     } else {
       return null;
@@ -247,11 +247,11 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
     const newBlurredContext = newBlurredCanvas.getContext('2d', { willReadFrequently: true });
     newBlurredContext && newBlurredContext.drawImage(originalCanvas, 0, 0);
 
-    const normal = originalCanvas.toDataURL('image/webp', 0.85);
+    const normal = originalCanvas.toDataURL('image/webp', 0.9);
 
     StackBlur.canvasRGBA(newBlurredCanvas, 0, 0, newBlurredCanvas.width, newBlurredCanvas.height, blurAmount);
 
-    const blurred = newBlurredCanvas.toDataURL('image/webp', 0.85);
+    const blurred = newBlurredCanvas.toDataURL('image/webp', 0.9);
 
     setCanvasContent({ normal, blurred });
   }
@@ -263,6 +263,8 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
       return;
     }
 
+    setCanvasContent({ normal: '', blurred: '' });
+    setCurrentLoadedImage('');
     context.clearRect(0, 0, originalCanvas.width, originalCanvas.height);
   }
 

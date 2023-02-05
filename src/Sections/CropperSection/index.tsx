@@ -2,7 +2,7 @@ import { ArrowsClockwise } from 'phosphor-react';
 import { useCanvas } from '../../hooks/useCanvas';
 import { MenuSection } from '../../components/Section';
 import Input from '../../components/Input';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { SideBar } from '../../components/SideBar';
 import Checkbox from '../../components/Checkbox';
 import Button from '../../components/Button';
@@ -25,6 +25,7 @@ export function CropperSection() {
     toggleIntegerScale,
     toggleSmoothRendering,
   } = useCanvas();
+
   return (
     <SideBar anchor='right'>
       <MenuSection title='Crop'
@@ -92,32 +93,31 @@ export function CropperSection() {
 
       <MenuSection title='Integer Scale'
         className='grid gap-2'>
+        <Checkbox id='cropperSection_smoothRendering'
+          className='bg-neutral-900 py-1 px-2'
+          label='Smooth rendering'
+          checked={smoothRendering}
+          triggerMethod={toggleSmoothRendering} />
+
         <Checkbox
           className='bg-neutral-900 py-1 px-2'
           id='cropperSection_integerCheckbox'
           checked={integerScale}
-          label='Use integer scale'
+          label='Manual scale'
           triggerMethod={toggleIntegerScale}
         />
-        {integerScale && (
-          <>
-            <Checkbox id='cropperSection_smoothRendering'
-              className='bg-neutral-900 py-1 px-2'
-              label='Smooth rendering'
-              checked={smoothRendering}
-              triggerMethod={toggleSmoothRendering} />
 
-            <Input id='cropperSection_integerInput'
-              label={'Scale: ' + integerScaleValue}
-              value={integerScaleValue}
-              step='0.1'
-              type='range'
-              min={0.1}
-              max={20}
-              className='mt-2'
-              onChange={(e: ChangeEvent<HTMLInputElement>) => updateIntegerScale(Number(e.target.value))}
-              helperText='0.1 to 20' />
-          </>
+        {integerScale && (
+          <Input id='cropperSection_integerInput'
+            label={'Scale: ' + integerScaleValue}
+            value={integerScaleValue}
+            step='1'
+            type='range'
+            min={1}
+            max={32}
+            className='mt-2'
+            onChange={(e: ChangeEvent<HTMLInputElement>) => updateIntegerScale(Number(e.target.value))}
+            helperText='1 to 20' />
         )}
       </MenuSection>
 

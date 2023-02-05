@@ -51,15 +51,12 @@ export function CanvasSection() {
       imageHeightScaled = image.height * (integerScale ? integerScaleValue : autoScaleValue);
 
       context.imageSmoothingQuality = 'high';
+      context.imageSmoothingEnabled = smoothRendering;
 
       if (integerScale) {
-        context.imageSmoothingEnabled = smoothRendering;
-
         context.drawImage(image, originalCanvas.width / 2 - imageWidthScaled / 2, originalCanvas.height / 2 - imageHeightScaled / 2, imageWidthScaled, imageHeightScaled);
 
       } else {
-        context.imageSmoothingEnabled = true;
-
         newImageHeight = image.width / canvasWidth * canvasHeight;
         newImageWidth = image.height / canvasHeight * canvasWidth;
 
@@ -175,6 +172,7 @@ export function CanvasSection() {
           style={{
             transform: `scale(${canvasScaleOnScreen / 100})`,
             borderRadius: 6 / (canvasScaleOnScreen / 100) * 1,
+            imageRendering: 'pixelated',
           }}
         />
 
