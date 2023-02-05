@@ -20,11 +20,11 @@ interface SystemsContextData {
 
   addSystemToCollection: (systemName: string) => void;
   removeSystemFromCollection: (id: number) => void;
-  editSystemName: (id: number, name: string) => void;
+  editSystem: (id: number, name: string, replaceImage?: boolean) => void;
   clearCollection: () => void;
   updateSystemList: () => void;
 
-  exportFilesAsZip: () => void;
+  exportFilesAsZip: (systemName: string | 'all') => void;
   exportProject: () => void;
   importProject: (event: ChangeEvent<HTMLInputElement>) => void;
 }
@@ -87,7 +87,7 @@ export function SystemsProvider({ children }: SystemProviderProps) {
    * @param name 
    */
 
-  function EditSystemName(id: number, name: string) {
+  function editSystem(id: number, name: string, replaceImage?: boolean) {
     if (!name || name.length === 0) {
       return;
     }
@@ -99,9 +99,10 @@ export function SystemsProvider({ children }: SystemProviderProps) {
       const newSystemFound: SystemProps = {
         ...originalSystemFound,
         systemName: name,
+        file: replaceImage ? canvasContent : originalSystemFound.file,
       };
 
-      newCollection[newCollection.findIndex((item) => item.id === id)].systemName = name;
+      newCollection[newCollection.findIndex((item) => item.id === id)] = newSystemFound;
 
       setSystemCollection(newCollection);
       idbEditElement('systemCollection', id, newSystemFound);
@@ -109,10 +110,10 @@ export function SystemsProvider({ children }: SystemProviderProps) {
   }
 
   /**
-   * 
-   * Remove System from Collection
-   * @param systemName
-   */
+ * 
+ * Remove System from Collection
+ * @param systemName
+ */
   function removeSystemFromCollection(id: number) {
     const newCollection = [...systemCollection].filter(item => item.id !== id);
 
@@ -121,17 +122,17 @@ export function SystemsProvider({ children }: SystemProviderProps) {
   }
 
   /**
-   * 
-   * Clear collection
-   */
+ * 
+ * Clear collection
+ */
   function clearCollection() {
     setSystemCollection([]);
     idbRemoveElement('systemCollection', 'all');
   }
 
   /**
-   * 
-   */
+ * 
+ */
 
   function updateSystemList() {
     const parsedSystemCollection = systemCollection.map(item => item.systemName);
@@ -148,27 +149,50 @@ export function SystemsProvider({ children }: SystemProviderProps) {
   }
 
   /**
- * 
- * Download as zip file
- * 
- */
+* 
+* Download as zip file
+* 
+*/
 
-  function exportFilesAsZip() {
+  function exportFilesAsZip(systemName: string | 'all') {
     const zip = new JSZip();
     const blurredDir = zip.folder('blurred');
 
+    let normalImage = '';
+    let blurredImage = '';
 
-    systemCollection.map((item) => {
-      const normaImage = item.file.normal.replace('data:', '').replace(/^.+,/, '');
-      const blurredImage = item.file.blurred.replace('data:', '').replace(/^.+,/, '');
+    try {
+      if (systemCollection.length === 0) {
+        throw new Error('Empty collection, nothing to do.');
+      }
 
-      zip.file(item.systemName + '.webp', normaImage, { base64: true });
-      blurredDir?.file(item.systemName + '.blurred.webp', blurredImage, { base64: true });
-    });
+      if (systemName === 'all') {
+        systemCollection.map((item) => {
+          normalImage = item.file.normal.replace('data:', '').replace(/^.+,/, '');
+          blurredImage = item.file.blurred.replace('data:', '').replace(/^.+,/, '');
 
+          zip.file(item.systemName + '.webp', normalImage, { base64: true });
+          blurredDir?.file(item.systemName + '.blurred.webp', blurredImage, { base64: true });
+        });
+      } else if (systemName) {
+        const singleSystem = systemCollection.find(item => item.systemName === systemName);
+        if (!singleSystem) {
+          throw new Error('Could not find required system');
+        }
+
+        normalImage = singleSystem.file.normal.replace('data:', '').replace(/^.+,/, '');
+        blurredImage = singleSystem.file.blurred.replace('data:', '').replace(/^.+,/, '');
+
+        zip.file(singleSystem.systemName + '.webp', normalImage, { base64: true });
+        blurredDir?.file(singleSystem.systemName + '.blurred.webp', blurredImage, { base64: true });
+      }
+    } catch (error) {
+      alert('Something went wrong: ' + error);
+      console.error(error);
+    }
 
     zip.generateAsync({ type: 'blob' }).then(function (content) {
-      saveAs(content, 'wallpapers.zip');
+      saveAs(content, systemName === 'all' ? 'wallpapers.zip' : systemName + '.zip');
     });
   }
 
@@ -267,7 +291,7 @@ export function SystemsProvider({ children }: SystemProviderProps) {
       systemList,
       addSystemToCollection,
       removeSystemFromCollection,
-      editSystemName: EditSystemName,
+      editSystem,
       clearCollection,
       updateSystemList: updateSystemList,
       exportFilesAsZip,

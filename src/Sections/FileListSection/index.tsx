@@ -1,16 +1,16 @@
 import { ChangeEvent, FormEvent, Fragment, useEffect, useState } from 'react';
 import { useCanvas } from '../../hooks/useCanvas';
-import { Backspace, CaretDoubleLeft, CaretDoubleRight, CaretDown, CaretLeft, CaretRight, CaretUp, CheckCircle, DownloadSimple, FileZip, FloppyDisk, List, MagnifyingGlass, Plus, Trash, UploadSimple, X } from 'phosphor-react';
+import { Backspace, CaretDoubleLeft, CaretDoubleRight, CaretDown, CaretLeft, CaretRight, CaretUp, CheckCircle, DownloadSimple, FloppyDisk, List, MagnifyingGlass, Plus, Trash, UploadSimple } from 'phosphor-react';
 import { SideBar } from '../../components/SideBar';
 import { SystemProps, useSystemsCollection } from '../../hooks/useSystemsCollection';
 import Button from '../../components/Button';
 import { Prompt } from '../../components/Prompt';
 import { Combobox, Popover } from '@headlessui/react';
-import Zoom from 'react-medium-image-zoom';
 import 'react-medium-image-zoom/dist/styles.css';
 
 
 import styles from './styles.module.css';
+import { FileCard } from '../../components/FileCard';
 
 export default function FileListSection() {
 
@@ -19,7 +19,7 @@ export default function FileListSection() {
     systemList,
     addSystemToCollection,
     removeSystemFromCollection,
-    editSystemName,
+    editSystem,
     clearCollection,
     exportFilesAsZip,
     exportProject,
@@ -35,7 +35,7 @@ export default function FileListSection() {
   const [systemQuerySearch, setSystemQuerySearch] = useState('');
   const [addedSystemQuery, setAddedSystemQuery] = useState('');
 
-  const imagePerPage = 10;
+  const imagePerPage = 15;
   const [paginatorStart, setPaginatorStart] = useState(0);
 
 
@@ -79,10 +79,9 @@ export default function FileListSection() {
     clearSelection();
   }
 
-
   function handleEditSubmit(event: FormEvent) {
     event.preventDefault();
-    editSystemName(currentEditData.id, currentEditData.systemName);
+    editSystem(currentEditData.id, currentEditData.systemName);
     toggleEditDialog();
     clearSelection();
   }
@@ -187,7 +186,7 @@ export default function FileListSection() {
                   icon={<DownloadSimple size={16}
                     weight='bold' />}
                   className='w-full bg-neutral-600'
-                  onClick={exportFilesAsZip}
+                  onClick={() => exportFilesAsZip('all')}
                 />
 
                 <Button label='Clear Collection'
@@ -217,12 +216,11 @@ export default function FileListSection() {
       </div>
 
       <form onSubmit={handleSubmit}
-        className='grid gap-2 p-4 pt-2 bg-neutral-700'
+        className='flex p-4 pt-2 bg-neutral-700'
         autoComplete='off'>
 
         <Combobox value={selectedSystem}
           onChange={setSelectedSystem}>
-
           <div className={styles.comboboxInput}>
             <Combobox.Input onChange={(event) => setSystemQuerySearch(event.target.value)}
               placeholder='Type to add a system'
@@ -281,12 +279,12 @@ export default function FileListSection() {
           type='submit'
           icon={<Plus size={16}
             weight='bold' />}
-          className='bg-yellow-300 text-black/80'
+          className='bg-yellow-300 text-black/80 pr-3 ml-4'
         />
       </form>
 
-      <div className='h-full flex flex-col bg-neutral-900 overflow-y-auto relative border-t border-b border-neutral-600 p-4'>
-        <div className={[styles.search, 'group'].join(' ')}>
+      <div className='h-full flex flex-col bg-neutral-900 overflow-y-auto relative border-t border-b border-neutral-600 px-4 pt-6 pb-8'>
+        <div className={[styles.searchBar, 'group'].join(' ')}>
           <MagnifyingGlass size={16}
             weight='bold'
             className='shrink-0 mr-2 opacity-50 group-focus-within:opacity-100' />
@@ -306,42 +304,25 @@ export default function FileListSection() {
           )}
         </div>
 
-        <ul className='grid grid-cols-2 grid-rows-5 grow w-full gap-2'>
+        <ul className='grid grid-cols-3 grid-rows-5 w-full grow gap-2'>
           {filteredAddedSystem.map(item => (
-            <li key={item.id}
-              className='relative bg-neutral-800 p-2 flex flex-col rounded-md first-of-type:ring-2 ring-orange-500 group'>
-
-              <div className={styles.imageWrapper}>
-                <Zoom zoomMargin={32}>
-                  <img className={[styles.systemListImg, 'rounded-l'].join(' ')}
-                    src={item.file.normal} />
-                </Zoom>
-                <Zoom zoomMargin={32}>
-                  <img className={[styles.systemListImg, 'rounded-r'].join(' ')}
-                    src={item.file.blurred} />
-                </Zoom>
-              </div>
-
-              <span className={styles.systemCardTitle}
-                title={'Edit ' + item.systemName}
-                onClick={() => {
-                  toggleEditDialog();
-                  setCurrentEditData(item);
-                }}>
-                {item.systemName}
-              </span>
-
-              <button className='absolute top-1 right-1 opacity-0 group-hover:opacity-100 p-1 rounded group-hover:bg-red-500 transition-all duration-300'
-                onClick={() => removeSystemFromCollection(item.id)}>
-                <X size={16}
-                  weight='bold' />
-              </button>
-            </li>
+            <FileCard key={item.id}
+              normalSrc={item.file.normal}
+              blurredSrc={item.file.blurred}
+              itemLabel={item.systemName}
+              renameMethod={() => {
+                toggleEditDialog();
+                setCurrentEditData(item);
+              }}
+              replaceMethod={() => editSystem(item.id, item.systemName, true)}
+              exportMethod={() => exportFilesAsZip(item.systemName)}
+              deleteMethod={() => removeSystemFromCollection(item.id)}
+            />
           )).reverse().slice(paginatorStart, paginatorStart + imagePerPage)}
         </ul>
       </div >
 
-      <div className='bg-neutral-800 px-4 py-2 flex flex-col justify-center items-stretch'>
+      <div className='bg-neutral-800 shrink-0 px-4 py-2 flex flex-col justify-center items-stretch'>
         {(filteredAddedSystem.length > imagePerPage) && (
           <div className='flex items-stretch mb-2'>
             <Button label='First Page'

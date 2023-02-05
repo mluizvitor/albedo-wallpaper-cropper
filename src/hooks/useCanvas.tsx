@@ -29,7 +29,6 @@ interface CanvasContextData {
   updateImageFromClipboard: (event: ClipboardEvent) => void;
   updateIntegerScale: (scale: number) => void;
   updateSizes: (width: number, height: number) => void;
-  updateTimestamp: () => void;
   toggleImageBlur: () => void;
   toggleIntegerScale: () => void;
   toggleSmoothRendering: () => void;
@@ -54,7 +53,6 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
   const [integerScaleValue, setIntegerScaleValue] = useState(1);
   const [showBlur, setShowBlur] = useState(false);
   const [smoothRendering, setSmoothRendering] = useState(true);
-  const [timestamp, setTimestamp] = useState(new Date);
 
   function updateBlur(blur: number) {
     if (0 <= blur && blur <= 180) {
@@ -89,12 +87,6 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
     if (height >= 0 && height <= 3000) {
       setCanvasHeight(height);
     }
-
-    updateTimestamp();
-  }
-
-  function updateTimestamp() {
-    setTimestamp(new Date());
   }
 
   function invertSizes() {
@@ -273,7 +265,7 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
       updateCanvas();
     }, 500);
     return () => clearTimeout(timeout);
-  }, [currentLoadedImage, blurAmount, integerScale, integerScaleValue, timestamp, smoothRendering]);
+  }, [currentLoadedImage, blurAmount, integerScale, integerScaleValue, smoothRendering]);
 
   return (
     <CanvasContext.Provider value={{
@@ -296,7 +288,6 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
       toggleIntegerScale,
       toggleSmoothRendering,
       updateImageFromClipboard,
-      updateTimestamp,
       updateIntegerScale,
       updateImage,
       updateSizes,

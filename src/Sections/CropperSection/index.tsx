@@ -2,7 +2,7 @@ import { ArrowsClockwise } from 'phosphor-react';
 import { useCanvas } from '../../hooks/useCanvas';
 import { MenuSection } from '../../components/Section';
 import Input from '../../components/Input';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent } from 'react';
 import { SideBar } from '../../components/SideBar';
 import Checkbox from '../../components/Checkbox';
 import Button from '../../components/Button';
