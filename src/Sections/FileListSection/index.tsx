@@ -439,7 +439,7 @@ export default function FileListSection() {
 
               <Combobox.Options className={styles.comboboxList}>
                 {systemQuerySearch.length > 0 && !systemList.find((item) => (item.theme || item.manufacturer) === systemQuerySearch) && (
-                  <Combobox.Option value={systemQuerySearch}
+                  <Combobox.Option value={{ theme: systemQuerySearch } as IndexedSystemProps}
                     as={Fragment}>
                     {({ active, selected }) => (
                       <li className={[styles.comboboxOption, active && 'bg-neutral-700', selected && 'bg-orange-500'].join(' ')}>
