@@ -8,22 +8,23 @@ import originalSystemList from '../assets/systemList.json';
 import { Sorting } from '../utils/Sorting';
 import { useLoader } from './useLoader';
 
-export interface SystemProps {
+export interface IndexedSystemProps {
+  theme: string;
+  fullName: string;
+  manufacturer: string;
+  added: boolean;
+}
+
+export interface SystemProps extends Omit<IndexedSystemProps, 'added'> {
   id: number;
-  systemName: string;
   file: CanvasContentProps;
 }
 
 interface SystemsContextData {
   systemCollection: SystemProps[];
-  systemList: {
-    theme: string,
-    manufacturer: string,
-    fullName: string,
-    added: boolean
-  }[];
+  systemList: IndexedSystemProps[];
 
-  addSystemToCollection: (systemName: string) => void;
+  addSystemToCollection: (selectedSystem: SystemProps) => void;
   removeSystemFromCollection: (id: number) => void;
   editSystem: (id: number, name: string, replaceImage?: boolean) => void;
   clearCollection: () => void;
@@ -60,19 +61,19 @@ export function SystemsProvider({ children }: SystemProviderProps) {
    * Add System Name and Image to the System Collection
    * 
    */
-  function addSystemToCollection(systemName: string) {
+  function addSystemToCollection(selectedSystem: IndexedSystemProps) {
     if (!currentLoadedImage) {
       alert('No image loaded');
       return null;
     }
 
-    const currentlyAtCollection = systemCollection.find(item => item.systemName === systemName);
+    const currentlyAtCollection = systemCollection.find(item => item.theme === selectedSystem.theme);
     if (currentlyAtCollection) {
       alert('Already at collection');
       return null;
     }
 
-    if (!systemName || systemName.length === 0) {
+    if (!selectedSystem.theme || selectedSystem.theme.length === 0) {
       alert('Please insert a system name');
       return null;
     }
@@ -80,7 +81,7 @@ export function SystemsProvider({ children }: SystemProviderProps) {
     const generatedData: SystemProps = {
       id: new Date().getTime(),
       file: canvasContent,
-      systemName,
+      ...selectedSystem,
     };
 
     setSystemCollection([...systemCollection, generatedData]);
@@ -253,31 +254,45 @@ export function SystemsProvider({ children }: SystemProviderProps) {
         throw Error();
       }
 
-      try {
-        idbRemoveElement('systemCollection', 'all');
-        setSystemCollection([]);
-
-        const parsedContent = JSON.parse(content.toString());
-        if (!Array.isArray(parsedContent)) {
-          throw new Error('Invalid data format');
-        }
-
-        for (const item of parsedContent) {
-          if (item.id && item.systemName && item.file) {
-            idbAddElement('systemCollection', item);
-          } else {
-            throw new Error('Invalid data format');
-          }
-        }
-
-        setSystemCollection(parsedContent);
-
-      } catch (error) {
-        alert(error);
-        console.error(error);
-      }
+      handleLoadPreviousVersion(JSON.parse(content.toString()));
 
     };
+  }
+
+  function handleLoadPreviousVersion(result: object) {
+    if (!result) {
+      return null;
+    }
+
+    try {
+      idbRemoveElement('systemCollection', 'all');
+
+      const parsedContent = result;
+      if (!Array.isArray(parsedContent)) {
+        throw new Error('Invalid data format');
+      }
+
+      let newParsedContent: SystemProps[] = [];
+      console.log(newParsedContent);
+
+      for (const item of parsedContent) {
+        const systemData = systemList.find(foundSys => foundSys.theme === item.theme || foundSys.theme === item.systemName);
+
+        if ((item.id && item.file && item.theme || item.systemName) && systemData) {
+          const newData: SystemProps = { ...systemData, id: item.id, theme: item.theme || item.systemName, file: item.file };
+          idbAddElement('systemCollection', newData);
+          newParsedContent = [...newParsedContent, newData];
+        } else {
+          throw new Error('Invalid data format');
+        }
+      }
+
+      setSystemCollection(newParsedContent);
+
+    } catch (error) {
+      alert(error);
+      console.error(error);
+    }
   }
 
   useEffect(() => {
@@ -286,7 +301,11 @@ export function SystemsProvider({ children }: SystemProviderProps) {
 
   useEffect(() => {
     idbGetElement('systemCollection', 'all').then((result) => {
-      if (result) {
+      if (Array.isArray(result) && result[0].systemName) {
+        console.log('loaded as previous data type');
+        handleLoadPreviousVersion(result);
+      } else {
+        console.log('loaded as current data type');
         setSystemCollection(result as SystemProps[]);
       }
     });

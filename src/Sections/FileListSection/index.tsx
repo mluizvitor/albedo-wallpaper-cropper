@@ -31,7 +31,7 @@ export default function FileListSection() {
   const [isProjectDialogOpen, setIsProjectDialogOpen] = useState(false);
 
   const [currentEditData, setCurrentEditData] = useState({} as SystemProps);
-  const [selectedSystem, setSelectedSystem] = useState('');
+  const [selectedSystem, setSelectedSystem] = useState({} as SystemProps);
   const [systemQuerySearch, setSystemQuerySearch] = useState('');
   const [addedSystemQuery, setAddedSystemQuery] = useState('');
 
@@ -51,7 +51,12 @@ export default function FileListSection() {
   const filteredAddedSystem = addedSystemQuery === ''
     ? systemCollection
     : systemCollection.filter(item => {
-      return item.systemName.toLowerCase().includes(addedSystemQuery.toLowerCase());
+      // return item.systemName.toLowerCase().includes(addedSystemQuery.toLowerCase());
+
+      const filteredByName = item.theme.toLowerCase().includes(addedSystemQuery.toLowerCase());
+      const filteredByManufacturer = item.manufacturer.toLowerCase().includes(addedSystemQuery.toLowerCase());
+      const filteredByFullName = item.fullName.toLowerCase().includes(addedSystemQuery.toLowerCase());
+      return filteredByName || filteredByManufacturer || filteredByFullName;
     });
 
   function toggleDeleteDialog() {
@@ -73,7 +78,7 @@ export default function FileListSection() {
 
   function clearSelection() {
     setSystemQuerySearch('');
-    setSelectedSystem('');
+    setSelectedSystem({} as SystemProps);
   }
 
   function handleSubmit(event: FormEvent) {
@@ -317,13 +322,13 @@ export default function FileListSection() {
             <FileCard key={item.id}
               normalSrc={item.file.normal}
               blurredSrc={item.file.blurred}
-              itemLabel={item.systemName}
+              itemLabel={item.theme}
               renameMethod={() => {
                 toggleEditDialog();
                 setCurrentEditData(item);
               }}
-              replaceMethod={() => editSystem(item.id, item.systemName, true)}
-              exportMethod={() => exportFilesAsZip(item.systemName)}
+              replaceMethod={() => editSystem(item.id, item.theme, true)}
+              exportMethod={() => exportFilesAsZip(item.theme)}
               deleteMethod={() => removeSystemFromCollection(item.id)}
             />
           )).reverse().slice(paginatorStart, paginatorStart + imagePerPage)}
@@ -405,7 +410,7 @@ export default function FileListSection() {
           className='grid grid-cols-2 gap-x-2 gap-y-4'
           autoComplete='off'>
 
-          <Combobox value={currentEditData.systemName}
+          <Combobox value={currentEditData.theme}
             onChange={editCurrentEditData}
             as='div'
             className='block col-span-2'>
