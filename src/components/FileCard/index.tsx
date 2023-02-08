@@ -26,7 +26,7 @@ export function FileCard({ normalSrc, blurredSrc, itemLabel, renameMethod, repla
             src={blurredSrc} />
         </Zoom>
       </div>
-      <div className='flex items-center mt-2'>
+      <div className='flex items-center mt-1'>
         <span className={styles.cardSystemName}
           title={itemLabel}>
           {itemLabel}

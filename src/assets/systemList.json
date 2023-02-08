@@ -1,132 +1,2824 @@
-[
-  "3do",
-  "advision",
-  "amiga",
-  "amigacd32",
-  "amstradcpc",
-  "arcade",
-  "arduboy",
-  "atari2600",
-  "atari5200",
-  "atari7800",
-  "atari800",
-  "atarijaguar",
-  "atarilynx",
-  "atarist",
-  "atomiswave",
-  "auto-allgames",
-  "auto-at2players",
-  "auto-at4players",
-  "auto-favorites",
-  "auto-lastplayed",
-  "auto-lightgun",
-  "auto-neverplayed",
-  "auto-retroachievements",
-  "auto-verticalarcade",
-  "build",
-  "c128",
-  "c16",
-  "c64",
-  "cdi",
-  "channelf",
-  "chip8",
-  "colecovision",
-  "custom-collections",
-  "doom",
-  "dreamcast",
-  "easyrpg",
-  "ecwolf",
-  "ep64-128",
-  "famicom",
-  "fbn",
-  "fds",
-  "gamate",
-  "gameandwatch",
-  "gamegear",
-  "gameking",
-  "gamemaster",
-  "gamepocketcomputer",
-  "gb",
-  "gba",
-  "gbah",
-  "gbc",
-  "gbch",
-  "gbh",
-  "genesis",
-  "genh",
-  "ggh",
-  "homebrew",
-  "imageviewer",
-  "intellivision",
-  "j2me",
-  "laserdisc",
-  "lowresnx",
-  "mame",
-  "mastersystem",
-  "megacd",
-  "megadrive",
-  "megadrive-japan",
-  "megaduck",
-  "mplayer",
-  "msx",
-  "msx2",
-  "n64",
-  "naomi",
-  "nds",
-  "neogeo",
-  "neogeocd",
-  "nes",
-  "nesh",
-  "ngp",
-  "ngpc",
-  "odyssey2",
-  "openbor",
-  "pc",
-  "pc88",
-  "pc98",
-  "pce-cd",
-  "pcengine",
-  "pcfx",
-  "pico-8",
-  "piece",
-  "pokemini",
-  "ports",
-  "psp",
-  "pspminis",
-  "psx",
-  "pv1000",
-  "satellaview",
-  "saturn",
-  "sc-3000",
-  "scummvm",
-  "scv",
-  "sega32x",
-  "segacd",
-  "sfc",
-  "sg-1000",
-  "snes",
-  "snesh",
-  "snesmsu1",
-  "solarus",
-  "sufami",
-  "supergrafx",
-  "supervision",
-  "tg16",
-  "tg16cd",
-  "tic-80",
-  "tools",
-  "tvc",
-  "uzebox",
-  "vectrex",
-  "vic20",
-  "videopac",
-  "virtualboy",
-  "wasm4",
-  "wonderswan",
-  "wonderswancolor",
-  "x1",
-  "x68000",
-  "zmachine",
-  "zx81",
-  "zxspectrum"
-]
+{
+  "systemList": {
+    "system": [
+      {
+        "fullname": "Unknown",
+        "theme" :"unknown",
+        "manufacturer": "Generic Background"
+      },
+      {
+        "fullname": "2 Players",
+        "theme" :"auto-at2players",
+        "manufacturer": "Collection"
+      },
+      {
+        "fullname": "4 Players",
+        "theme" :"auto-at4players",
+        "manufacturer": "Collection"
+      },
+      {
+        "fullname": "All Games",
+        "theme" :"auto-allgames",
+        "manufacturer": "Collection"
+      },
+      {
+        "fullname": "Favorites",
+        "theme" :"auto-favorites",
+        "manufacturer": "Collection"
+      },
+      {
+        "fullname": "Last Played",
+        "theme" :"auto-lastplayed",
+        "manufacturer": "Collection"
+      },
+      {
+        "fullname": "Lightgun",
+        "theme" :"auto-lightgun",
+        "manufacturer": "Collection"
+      },
+      {
+        "fullname": "Never Played",
+        "theme" :"auto-neverplayed",
+        "manufacturer": "Collection"
+      },
+      {
+        "fullname": "Retro Achievements",
+        "theme" :"auto-retroachievements",
+        "manufacturer": "Collection"
+      },
+      {
+        "fullname": "Collections",
+        "theme" :"custom-collections",
+        "manufacturer": "Collection"
+      },
+      {
+        "fullname": "Vertical Arcade",
+        "theme" :"auto-verticalarcade",
+        "manufacturer": "Collection"
+      },
+      {
+        "name": "3do",
+        "fullname": "3DO",
+        "manufacturer": "Panasonic",
+        "release": 1993,
+        "hardware": "console",
+        "path": "/storage/roms/3do",
+        "extension": ".iso .bin .chd .cue",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "3do",
+        "theme": "3do",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "opera"
+            }
+          }
+        }
+      },
+      {
+        "name": "advision",
+        "fullname": "Adventure Vision",
+        "manufacturer": "Entex",
+        "release": 1982,
+        "hardware": "tabletop",
+        "path": "/storage/roms/advision",
+        "extension": ".bin .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers",
+        "platform": "advision",
+        "theme": "advision",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "advision"
+            }
+          }
+        }
+      },
+      {
+        "name": "amiga",
+        "fullname": "Amiga",
+        "manufacturer": "Commodore",
+        "release": 1985,
+        "hardware": "computer",
+        "path": "/storage/roms/amiga",
+        "extension": ".zip .adf .uae .ipf .dms .adz .lha .m3u .hdf .hdz",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "amiga",
+        "theme": "amiga",
+        "emulators": {
+          "emulator": [
+            {
+              "cores": {
+                "core": [
+                  "puae2021",
+                  "puae",
+                  "uae4arm"
+                ]
+              }
+            },
+            {
+              "cores": {
+                "core": "AMIBERRY"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "amigacd32",
+        "fullname": "Amiga CD32",
+        "manufacturer": "Commodore",
+        "release": 1994,
+        "hardware": "console",
+        "path": "/storage/roms/amigacd32",
+        "extension": ".iso .cue .lha .chd",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "amigacd32",
+        "theme": "amigacd32",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": [
+                "puae2021",
+                "puae",
+                "uae4arm"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "amstradcpc",
+        "fullname": "CPC",
+        "manufacturer": "Amstrad",
+        "release": 1984,
+        "hardware": "computer",
+        "path": "/storage/roms/amstradcpc",
+        "extension": ".dsk .sna .tap .cdt .kcr .voc .m3u .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "amstradcpc",
+        "theme": "amstradcpc",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": [
+                "crocods",
+                "cap32",
+                "ep128emu_core"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "arcade",
+        "fullname": "Arcade",
+        "manufacturer": "Arcade",
+        "hardware": "arcade",
+        "path": "/storage/roms/arcade",
+        "extension": ".zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "arcade",
+        "theme": "arcade",
+        "emulators": {
+          "emulator": [
+            {
+              "cores": {
+                "core": [
+                  "mame2003_plus",
+                  "mame2000",
+                  "mame2010",
+                  "mame2015",
+                  "mame2016",
+                  "mame",
+                  "fbneo",
+                  "fbalpha2012",
+                  "fbalpha2019"
+                ]
+              }
+            },
+            {
+              "cores": {
+                "core": "mame"
+              }
+            },
+            {
+              "cores": {
+                "core": "AdvanceMame"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "arduboy",
+        "fullname": "Arduboy",
+        "manufacturer": "Arduboy",
+        "release": 2015,
+        "hardware": "portable",
+        "path": "/storage/roms/arduboy",
+        "extension": ".hex",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "arduboy",
+        "theme": "arduboy",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "arduous"
+            }
+          }
+        }
+      },
+      {
+        "name": "atari2600",
+        "fullname": "Atari 2600",
+        "manufacturer": "Atari",
+        "release": 1977,
+        "hardware": "console",
+        "path": "/storage/roms/atari2600",
+        "extension": ".a26 .bin .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "atari2600",
+        "theme": "atari2600",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": [
+                "stella",
+                "stella2014"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "atari5200",
+        "fullname": "Atari 5200",
+        "manufacturer": "Atari",
+        "release": 1982,
+        "hardware": "console",
+        "path": "/storage/roms/atari5200",
+        "extension": ".rom .xfd .atr .atx .cdm .cas .car .bin .a52 .xex .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "atari5200",
+        "theme": "atari5200",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": [
+                "atari800",
+                "a5200"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "atari7800",
+        "fullname": "Atari 7800",
+        "manufacturer": "Atari",
+        "release": 1986,
+        "hardware": "console",
+        "path": "/storage/roms/atari7800",
+        "extension": ".a78 .bin .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "atari7800",
+        "theme": "atari7800",
+        "emulators": {
+          "emulator": [
+            {
+              "cores": {
+                "core": "prosystem"
+              }
+            },
+            {
+              "cores": {
+                "core": [
+                  "a7800",
+                  "a7800p"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "atari800",
+        "fullname": "Atari 800",
+        "manufacturer": "Atari",
+        "release": 1979,
+        "hardware": "console",
+        "path": "/storage/roms/atari800",
+        "extension": ".rom .xfd .atr .atx .cdm .cas .car .bin .a52 .xex .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "atari800",
+        "theme": "atari800",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "atari800"
+            }
+          }
+        }
+      },
+      {
+        "name": "atarist",
+        "fullname": "Atari ST",
+        "manufacturer": "Atari",
+        "release": 1985,
+        "hardware": "computer",
+        "path": "/storage/roms/atarist",
+        "extension": ".st .msa .stx .dim .ipf .m3u .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "atarist",
+        "theme": "atarist",
+        "emulators": {
+          "emulator": [
+            {
+              "cores": {
+                "core": "hatari"
+              }
+            },
+            {
+              "cores": {
+                "core": "HATARISA"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "atarijaguar",
+        "fullname": "Jaguar",
+        "manufacturer": "Atari",
+        "release": 1993,
+        "hardware": "console",
+        "path": "/storage/roms/atarijaguar",
+        "extension": ".j64 .jag",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers",
+        "platform": "atarijaguar",
+        "theme": "atarijaguar",
+        "emulators": {
+          "emulator": [
+            {
+              "cores": {
+                "core": "virtualjaguar"
+              }
+            },
+            {
+              "cores": {
+                "core": "virtualjaguar"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "atomiswave",
+        "fullname": "Atomiswave",
+        "manufacturer": "Sammy",
+        "release": 2003,
+        "hardware": "arcade",
+        "path": "/storage/roms/atomiswave",
+        "extension": ".lst .bin .dat .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "atomiswave arcade",
+        "theme": "atomiswave",
+        "emulators": {
+          "emulator": [
+            {
+              "cores": {
+                "core": [
+                  "flycast",
+                  "flycast2021"
+                ]
+              }
+            },
+            {
+              "cores": {
+                "core": [
+                  "flycast",
+                  "flycast2021"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "channelf",
+        "fullname": "Channel F",
+        "manufacturer": "Fairchild",
+        "release": 1976,
+        "hardware": "console",
+        "path": "/storage/roms/channelf",
+        "extension": ".bin .chf .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "channelf",
+        "theme": "channelf",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "freechaf"
+            }
+          }
+        }
+      },
+      {
+        "name": "colecovision",
+        "fullname": "ColecoVision",
+        "manufacturer": "Coleco",
+        "release": 1982,
+        "hardware": "console",
+        "path": "/storage/roms/coleco",
+        "extension": ".bin .col .rom .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "colecovision",
+        "theme": "colecovision",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": [
+                "bluemsx",
+                "gearcoleco",
+                "smsplus"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "c16",
+        "fullname": "C16",
+        "manufacturer": "Commodore",
+        "release": 1984,
+        "hardware": "computer",
+        "path": "/storage/roms/c16",
+        "extension": ".d64 .d71 .d80 .d81 .d82 .g64 .g41 .x64 .t64 .tap .prg .p00 .crt .bin .d6z .d7z .d8z .g6z .g4z .x6z .cmd .m3u .vsf .nib .nbz .zip",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "c16",
+        "theme": "c16",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "vice_xplus4"
+            }
+          }
+        }
+      },
+      {
+        "name": "c64",
+        "fullname": "C64",
+        "manufacturer": "Commodore",
+        "release": 1982,
+        "hardware": "computer",
+        "path": "/storage/roms/c64",
+        "extension": ".d64 .d71 .d80 .d81 .d82 .g64 .g41 .x64 .t64 .tap .prg .p00 .crt .bin .d6z .d7z .d8z .g6z .g4z .x6z .cmd .m3u .vsf .nib .nbz .zip",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "c64",
+        "theme": "c64",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "vice_x64"
+            }
+          }
+        }
+      },
+      {
+        "name": "c128",
+        "fullname": "C128",
+        "manufacturer": "Commodore",
+        "release": 1985,
+        "hardware": "computer",
+        "path": "/storage/roms/c128",
+        "extension": ".d64 .d71 .d80 .d81 .d82 .g64 .g41 .x64 .t64 .tap .prg .p00 .crt .bin .d6z .d7z .d8z .g6z .g4z .x6z .cmd .m3u .vsf .nib .nbz .zip",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "c128",
+        "theme": "c128",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "vice_x128"
+            }
+          }
+        }
+      },
+      {
+        "name": "vic20",
+        "fullname": "VIC-20",
+        "manufacturer": "Commodore",
+        "release": 1980,
+        "hardware": "computer",
+        "path": "/storage/roms/vic20",
+        "extension": ".20 .40 .60 .a0 .b0 .d64 .d71 .d80 .d81 .d82 .g64 .g41 .x64 .t64 .tap .prg .p00 .crt .bin .gz .d6z .d7z .d8z .g6z .g4z .x6z .cmd .m3u .vsf .nib .nbz .zip",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "vic20",
+        "theme": "vic20",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "vice_xvic"
+            }
+          }
+        }
+      },
+      {
+        "name": "laserdisc",
+        "fullname": "LaserDisc",
+        "manufacturer": "Arcade",
+        "hardware": "arcade",
+        "path": "/storage/roms/laserdisc",
+        "extension": ".daphne .ld",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "arcade daphne americanlasergames actionmax",
+        "theme": "laserdisc",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "hypseus_singe"
+            }
+          }
+        }
+      },
+      {
+        "name": "dreamcast",
+        "fullname": "Dreamcast",
+        "manufacturer": "Sega",
+        "release": 1998,
+        "hardware": "console",
+        "path": "/storage/roms/dreamcast",
+        "extension": ".cdi .gdi .chd .m3u",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "dreamcast",
+        "theme": "dreamcast",
+        "emulators": {
+          "emulator": [
+            {
+              "cores": {
+                "core": [
+                  "flycast",
+                  "flycast2021"
+                ]
+              }
+            },
+            {
+              "cores": {
+                "core": [
+                  "flycast",
+                  "flycast2021"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "easyrpg",
+        "fullname": "EasyRPG",
+        "manufacturer": "Various",
+        "release": 2003,
+        "hardware": "game engine",
+        "path": "/storage/roms/easyrpg",
+        "extension": ".zip .easyrpg .ldb",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "easyrpg",
+        "theme": "easyrpg",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "easyrpg"
+            }
+          }
+        }
+      },
+      {
+        "name": "famicom",
+        "fullname": "Famicom",
+        "manufacturer": "Nintendo",
+        "release": 1983,
+        "hardware": "console",
+        "path": "/storage/roms/famicom",
+        "extension": ".nes .unif .unf .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "nes",
+        "theme": "famicom",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": [
+                "fceumm",
+                "nestopia",
+                "quicknes",
+                "mesen"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "fds",
+        "fullname": "Famicom Disk System",
+        "manufacturer": "Nintendo",
+        "release": 1986,
+        "hardware": "console",
+        "path": "/storage/roms/fds",
+        "extension": ".fds .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "fds",
+        "theme": "fds",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": [
+                "fceumm",
+                "nestopia",
+                "quicknes",
+                "mesen"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "fbn",
+        "fullname": "FinalBurn Neo",
+        "manufacturer": "Arcade",
+        "hardware": "arcade",
+        "path": "/storage/roms/fbneo",
+        "extension": ".7z .zip",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "arcade",
+        "theme": "fbn",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": [
+                "fbneo",
+                "mame2003_plus",
+                "mame2010",
+                "mame2015",
+                "mame2016",
+                "mame",
+                "fbalpha2012",
+                "fbalpha2019"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "gamate",
+        "fullname": "Gamate",
+        "manufacturer": "Bit Corp",
+        "release": 1990,
+        "hardware": "handheld",
+        "path": "/storage/roms/gamate",
+        "extension": ".bin .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers",
+        "platform": "gamate",
+        "theme": "gamate",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "gamate"
+            }
+          }
+        }
+      },
+      {
+        "name": "gameandwatch",
+        "fullname": "Game &amp; Watch",
+        "manufacturer": "Nintendo",
+        "release": 1980,
+        "hardware": "portable",
+        "path": "/storage/roms/gameandwatch",
+        "extension": ".mgw .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "gameandwatch",
+        "theme": "gameandwatch",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "gw"
+            }
+          }
+        }
+      },
+      {
+        "name": "gb",
+        "fullname": "Game Boy",
+        "manufacturer": "Nintendo",
+        "release": 1989,
+        "hardware": "portable",
+        "path": "/storage/roms/gb",
+        "extension": ".gb .gbc .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "gb",
+        "theme": "gb",
+        "emulators": {
+          "emulator": [
+            {
+              "cores": {
+                "core": [
+                  "gambatte",
+                  "sameboy",
+                  "gearboy",
+                  "tgbdual",
+                  "mgba",
+                  "vbam",
+                  "bsnes",
+                  "mesen-s"
+                ]
+              }
+            },
+            {
+              "cores": {
+                "core": [
+                  "mgba",
+                  "vbam"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "gbh",
+        "fullname": "Game Boy (Hacks)",
+        "manufacturer": "Nintendo",
+        "release": 1989,
+        "hardware": "portable",
+        "path": "/storage/roms/gbh",
+        "extension": ".gb .gbc .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "gb",
+        "theme": "gbh",
+        "emulators": {
+          "emulator": [
+            {
+              "cores": {
+                "core": [
+                  "gambatte",
+                  "sameboy",
+                  "gearboy",
+                  "tgbdual",
+                  "mgba",
+                  "vbam",
+                  "bsnes",
+                  "mesen-s"
+                ]
+              }
+            },
+            {
+              "cores": {
+                "core": [
+                  "mgba",
+                  "vbam"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "gba",
+        "fullname": "Game Boy Advance",
+        "manufacturer": "Nintendo",
+        "release": 2001,
+        "hardware": "portable",
+        "path": "/storage/roms/gba",
+        "extension": ".gba .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "gba",
+        "theme": "gba",
+        "emulators": {
+          "emulator": [
+            {
+              "cores": {
+                "core": [
+                  "mgba",
+                  "gpsp",
+                  "vbam",
+                  "vba_next",
+                  "beetle_gba"
+                ]
+              }
+            },
+            {
+              "cores": {
+                "core": [
+                  "mgba",
+                  "vbam"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "gbah",
+        "fullname": "Game Boy Advance (Hacks)",
+        "manufacturer": "Nintendo",
+        "release": 2001,
+        "hardware": "portable",
+        "path": "/storage/roms/gbah",
+        "extension": ".gba .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "gba",
+        "theme": "gbah",
+        "emulators": {
+          "emulator": [
+            {
+              "cores": {
+                "core": [
+                  "mgba",
+                  "gpsp",
+                  "vbam",
+                  "vba_next",
+                  "beetle_gba"
+                ]
+              }
+            },
+            {
+              "cores": {
+                "core": [
+                  "mgba",
+                  "vbam"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "gbc",
+        "fullname": "Game Boy Color",
+        "manufacturer": "Nintendo",
+        "release": 1998,
+        "hardware": "portable",
+        "path": "/storage/roms/gbc",
+        "extension": ".gb .gbc .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "gbc",
+        "theme": "gbc",
+        "emulators": {
+          "emulator": [
+            {
+              "cores": {
+                "core": [
+                  "gambatte",
+                  "sameboy",
+                  "gearboy",
+                  "tgbdual",
+                  "mgba",
+                  "vbam",
+                  "bsnes",
+                  "mesen-s"
+                ]
+              }
+            },
+            {
+              "cores": {
+                "core": [
+                  "mgba",
+                  "vbam"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "gbch",
+        "fullname": "Game Boy Color (Hacks)",
+        "manufacturer": "Nintendo",
+        "release": 1998,
+        "hardware": "portable",
+        "path": "/storage/roms/gbch",
+        "extension": ".gb .gbc .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "gbc",
+        "theme": "gbch",
+        "emulators": {
+          "emulator": [
+            {
+              "cores": {
+                "core": [
+                  "gambatte",
+                  "sameboy",
+                  "gearboy",
+                  "tgbdual",
+                  "mgba",
+                  "vbam",
+                  "bsnes",
+                  "mesen-s"
+                ]
+              }
+            },
+            {
+              "cores": {
+                "core": [
+                  "mgba",
+                  "vbam"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "gamegear",
+        "fullname": "Game Gear",
+        "manufacturer": "Sega",
+        "release": 1990,
+        "hardware": "portable",
+        "path": "/storage/roms/gamegear",
+        "extension": ".bin .gg .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "gamegear",
+        "theme": "gamegear",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": [
+                "gearsystem",
+                "genesis_plus_gx",
+                "picodrive",
+                "smsplus"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "ggh",
+        "fullname": "Game Gear (Hacks)",
+        "manufacturer": "Sega",
+        "release": 1990,
+        "hardware": "portable",
+        "path": "/storage/roms/gamegearh",
+        "extension": ".bin .gg .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "gamegear",
+        "theme": "ggh",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": [
+                "gearsystem",
+                "genesis_plus_gx",
+                "picodrive",
+                "smsplus"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "gameking",
+        "fullname": "GameKing",
+        "manufacturer": "TimeTop",
+        "release": 2003,
+        "hardware": "handheld",
+        "path": "/storage/roms/gameking",
+        "extension": ".bin .gk .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers",
+        "platform": "gameking",
+        "theme": "gameking",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "gameking"
+            }
+          }
+        }
+      },
+      {
+        "name": "gamemaster",
+        "fullname": "Game Master",
+        "manufacturer": "Hartung",
+        "release": 1990,
+        "hardware": "handheld",
+        "path": "/storage/roms/gamemaster",
+        "extension": ".bin .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers",
+        "platform": "gamemaster",
+        "theme": "gamemaster",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "gmaster"
+            }
+          }
+        }
+      },
+      {
+        "name": "gamepocketcomputer",
+        "fullname": "Game Pocket Computer",
+        "manufacturer": "Epoch",
+        "release": 1984,
+        "hardware": "handheld",
+        "path": "/storage/roms/gamepocketcomputer",
+        "extension": ".bin .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers",
+        "platform": "gamepocketcomputer",
+        "theme": "gamepocketcomputer",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "gamepock"
+            }
+          }
+        }
+      },
+      {
+        "name": "intellivision",
+        "fullname": "Intellivision",
+        "manufacturer": "Mattel",
+        "release": 1979,
+        "hardware": "console",
+        "path": "/storage/roms/intellivision",
+        "extension": ".int .bin .rom .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "intellivision",
+        "theme": "intellivision",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "freeintv"
+            }
+          }
+        }
+      },
+      {
+        "name": "j2me",
+        "fullname": "J2ME",
+        "manufacturer": "Sun Microsystems",
+        "release": 2002,
+        "hardware": "portable",
+        "path": "/storage/roms/j2me",
+        "extension": ".jar",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "j2me",
+        "theme": "j2me",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "freej2me"
+            }
+          }
+        }
+      },
+      {
+        "name": "atarilynx",
+        "fullname": "Lynx",
+        "manufacturer": "Atari",
+        "release": 1989,
+        "hardware": "portable",
+        "path": "/storage/roms/atarilynx",
+        "extension": ".lnx .o .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "atarilynx",
+        "theme": "atarilynx",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": [
+                "handy",
+                "beetle_lynx"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "mame",
+        "fullname": "MAME",
+        "manufacturer": "Arcade",
+        "hardware": "arcade",
+        "path": "/storage/roms/mame",
+        "extension": ".7z .zip",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "arcade",
+        "theme": "mame",
+        "emulators": {
+          "emulator": [
+            {
+              "cores": {
+                "core": [
+                  "mame2003_plus",
+                  "mame2000",
+                  "mame2010",
+                  "mame2015",
+                  "mame2016",
+                  "mame",
+                  "fbneo",
+                  "fbalpha2012",
+                  "fbalpha2019"
+                ]
+              }
+            },
+            {
+              "cores": {
+                "core": "mame"
+              }
+            },
+            {
+              "cores": {
+                "core": "AdvanceMame"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "pc",
+        "fullname": "DOS",
+        "manufacturer": "Microsoft",
+        "release": 1981,
+        "hardware": "computer",
+        "path": "/storage/roms/pc",
+        "extension": ".com .bat .exe .dosz",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "pc",
+        "theme": "pc",
+        "emulators": {
+          "emulator": [
+            {
+              "cores": {
+                "core": [
+                  "dosbox_pure",
+                  "dosbox_core"
+                ]
+              }
+            },
+            {
+              "cores": {
+                "core": [
+                  "dosbox_pure",
+                  "dosbox_core"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "snesmsu1",
+        "fullname": "MSU-1",
+        "manufacturer": "Nintendo",
+        "release": 2012,
+        "hardware": "console",
+        "path": "/storage/roms/snesmsu1",
+        "extension": ".smc .fig .sfc .swc .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "snesmsu1 snes",
+        "theme": "snesmsu1",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": [
+                "snes9x",
+                "beetle_supafaust",
+                "bsnes",
+                "mesen-s"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "msx",
+        "fullname": "MSX",
+        "manufacturer": "Microsoft",
+        "release": 1983,
+        "hardware": "computer",
+        "path": "/storage/roms/msx",
+        "extension": ".dsk .mx1 .mx2 .rom .zip .7z .m3u",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "msx",
+        "theme": "msx",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": [
+                "bluemsx",
+                "fmsx"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "msx2",
+        "fullname": "MSX2",
+        "manufacturer": "Microsoft",
+        "release": 1985,
+        "hardware": "computer",
+        "path": "/storage/roms/msx2",
+        "extension": ".dsk .mx1 .mx2 .rom .zip .7z .m3u",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "msx",
+        "theme": "msx2",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": [
+                "bluemsx",
+                "fmsx"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "naomi",
+        "fullname": "Naomi",
+        "manufacturer": "Sega",
+        "release": 1998,
+        "hardware": "arcade",
+        "path": "/storage/roms/naomi",
+        "extension": ".lst .bin .dat .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "naomi arcade",
+        "theme": "naomi",
+        "emulators": {
+          "emulator": [
+            {
+              "cores": {
+                "core": [
+                  "flycast",
+                  "flycast2021"
+                ]
+              }
+            },
+            {
+              "cores": {
+                "core": [
+                  "flycast",
+                  "flycast2021"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "neogeo",
+        "fullname": "Neo Geo",
+        "manufacturer": "SNK",
+        "release": 1990,
+        "hardware": "console",
+        "path": "/storage/roms/neogeo",
+        "extension": ".7z .zip",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "neogeo",
+        "theme": "neogeo",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": [
+                "fbneo",
+                "mame2003_plus",
+                "fbalpha2012",
+                "fbalpha2019",
+                "mame2010",
+                "mame2015",
+                "mame2016",
+                "mame"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "neocd",
+        "fullname": "Neo Geo CD",
+        "manufacturer": "SNK",
+        "release": 1990,
+        "hardware": "console",
+        "path": "/storage/roms/neocd",
+        "extension": ".cue .iso .chd",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "neogeocd",
+        "theme": "neogeocd",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": [
+                "neocd",
+                "fbneo"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "ngp",
+        "fullname": "Neo Geo Pocket",
+        "manufacturer": "SNK",
+        "release": 1998,
+        "hardware": "portable",
+        "path": "/storage/roms/ngp",
+        "extension": ".ngc .ngp .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "ngp",
+        "theme": "ngp",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": [
+                "beetle_ngp",
+                "race"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "ngpc",
+        "fullname": "Neo Geo Pocket Color",
+        "manufacturer": "SNK",
+        "release": 1999,
+        "hardware": "portable",
+        "path": "/storage/roms/ngpc",
+        "extension": ".ngc .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "ngpc",
+        "theme": "ngpc",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": [
+                "beetle_ngp",
+                "race"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "n64",
+        "fullname": "N64",
+        "manufacturer": "Nintendo",
+        "release": 1996,
+        "hardware": "console",
+        "path": "/storage/roms/n64",
+        "extension": ".z64 .n64 .v64 .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "n64",
+        "theme": "n64",
+        "emulators": {
+          "emulator": [
+            {
+              "cores": {
+                "core": [
+                  "parallel_n64",
+                  "mupen64plus_next"
+                ]
+              }
+            },
+            {
+              "cores": {
+                "core": "parallel_n64"
+              }
+            },
+            {
+              "cores": {
+                "core": [
+                  "m64p_gl64mk2",
+                  "m64p_rice"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "nds",
+        "fullname": "NDS",
+        "manufacturer": "Nintendo",
+        "release": 2005,
+        "hardware": "portable",
+        "path": "/storage/roms/nds",
+        "extension": ".nds .zip",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "nds",
+        "theme": "nds",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "drastic"
+            }
+          }
+        }
+      },
+      {
+        "name": "nes",
+        "fullname": "NES",
+        "manufacturer": "Nintendo",
+        "release": 1985,
+        "hardware": "console",
+        "path": "/storage/roms/nes",
+        "extension": ".nes .unif .unf .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "nes",
+        "theme": "nes",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": [
+                "fceumm",
+                "nestopia",
+                "quicknes",
+                "mesen"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "nesh",
+        "fullname": "NES (Hacks)",
+        "manufacturer": "Nintendo",
+        "release": 1985,
+        "hardware": "console",
+        "path": "/storage/roms/nesh",
+        "extension": ".nes .unif .unf .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "nes",
+        "theme": "nesh",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": [
+                "fceumm",
+                "nestopia",
+                "quicknes",
+                "mesen"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "odyssey2",
+        "fullname": "Odyssey²",
+        "manufacturer": "Magnavox",
+        "release": 1979,
+        "hardware": "console",
+        "path": "/storage/roms/odyssey",
+        "extension": ".bin .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "odyssey2",
+        "theme": "odyssey2",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "o2em"
+            }
+          }
+        }
+      },
+      {
+        "name": "openbor",
+        "fullname": "OpenBOR",
+        "manufacturer": "Various",
+        "release": 2008,
+        "hardware": "game engine",
+        "path": "/storage/roms/openbor",
+        "extension": ".pak",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "openbor",
+        "theme": "openbor",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "OPENBOR"
+            }
+          }
+        }
+      },
+      {
+        "name": "pc-8800",
+        "fullname": "PC-88",
+        "manufacturer": "NEC",
+        "release": 1981,
+        "hardware": "computer",
+        "path": "/storage/roms/pc88",
+        "extension": ".d88 .m3u",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "pc88",
+        "theme": "pc88",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "quasi88"
+            }
+          }
+        }
+      },
+      {
+        "name": "pc-9800",
+        "fullname": "PC-98",
+        "manufacturer": "NEC",
+        "release": 1983,
+        "hardware": "computer",
+        "path": "/storage/roms/pc98",
+        "extension": ".d98 .zip .98d .fdi .fdd .2hd .tfd .d88 .88d .hdm .xdf .dup .hdi .thd .nhd .hdd .hdn",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "pc98",
+        "theme": "pc98",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": [
+                "np2kai",
+                "nekop2"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "pcengine",
+        "fullname": "PC Engine",
+        "manufacturer": "NEC",
+        "release": 1987,
+        "hardware": "console",
+        "path": "/storage/roms/pcengine",
+        "extension": ".pce .bin .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "pcengine",
+        "theme": "pcengine",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": [
+                "beetle_pce_fast",
+                "beetle_pce",
+                "beetle_supergrafx"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "pcenginecd",
+        "fullname": "PC Engine CD",
+        "manufacturer": "NEC",
+        "release": 1988,
+        "hardware": "console",
+        "path": "/storage/roms/pcenginecd",
+        "extension": ".cue .ccd .chd .toc .m3u",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "pcenginecd",
+        "theme": "pce-cd",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": [
+                "beetle_pce_fast",
+                "beetle_pce",
+                "beetle_supergrafx"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "pcfx",
+        "fullname": "PC-FX",
+        "manufacturer": "NEC",
+        "release": 1994,
+        "hardware": "console",
+        "path": "/storage/roms/pcfx",
+        "extension": ".chd .cue .ccd .toc",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "pcfx",
+        "theme": "pcfx",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "beetle_pcfx"
+            }
+          }
+        }
+      },
+      {
+        "name": "pico-8",
+        "fullname": "Pico-8",
+        "manufacturer": "Lexaloffle",
+        "release": 2015,
+        "hardware": "console",
+        "path": "/storage/roms/pico-8",
+        "extension": ".p8 .png",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers %CONTROLLERSCONFIG%",
+        "platform": "pico-8",
+        "theme": "pico-8",
+        "emulators": {
+          "emulator": [
+            {
+              "cores": {
+                "core": "fake08"
+              }
+            },
+            {
+              "cores": {
+                "core": "pico8_64"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "piece",
+        "fullname": "P/ECE",
+        "manufacturer": "Aquaplus",
+        "release": 2001,
+        "hardware": "console",
+        "path": "/storage/roms/piece",
+        "extension": ".pex .pfi",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "piece",
+        "theme": "piece",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "piemu"
+            }
+          }
+        }
+      },
+      {
+        "name": "psx",
+        "fullname": "PlayStation",
+        "manufacturer": "Sony",
+        "release": 1994,
+        "hardware": "console",
+        "path": "/storage/roms/psx",
+        "extension": ".bin .cue .img .mdf .pbp .toc .cbn .m3u .ccd .chd .iso",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "psx",
+        "theme": "psx",
+        "emulators": {
+          "emulator": [
+            {
+              "cores": {
+                "core": [
+                  "pcsx_rearmed",
+                  "duckstation",
+                  "swanstation"
+                ]
+              }
+            },
+            {
+              "cores": {
+                "core": [
+                  "pcsx_rearmed",
+                  "duckstation",
+                  "swanstation"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "psp",
+        "fullname": "PSP",
+        "manufacturer": "Sony",
+        "release": 2004,
+        "hardware": "portable",
+        "path": "/storage/roms/psp",
+        "extension": ".iso .cso .pbp",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "psp",
+        "theme": "psp",
+        "emulators": {
+          "emulator": [
+            {
+              "cores": {
+                "core": "PPSSPPSDL"
+              }
+            },
+            {
+              "cores": {
+                "core": "ppsspp"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "pspminis",
+        "fullname": "PSP Minis",
+        "manufacturer": "Sony",
+        "release": 2004,
+        "hardware": "portable",
+        "path": "/storage/roms/pspminis",
+        "extension": ".iso .cso .pbp",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "psp",
+        "theme": "pspminis",
+        "emulators": {
+          "emulator": [
+            {
+              "cores": {
+                "core": "PPSSPPSDL"
+              }
+            },
+            {
+              "cores": {
+                "core": "ppsspp"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "pokemini",
+        "fullname": "Pokémon Mini",
+        "manufacturer": "Nintendo",
+        "release": 2001,
+        "hardware": "portable",
+        "path": "/storage/roms/pokemini",
+        "extension": ".min .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "pokemini",
+        "theme": "pokemini",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "pokemini"
+            }
+          }
+        }
+      },
+      {
+        "name": "homebrew",
+        "fullname": "Homebrew",
+        "manufacturer": "Various",
+        "release": "unknown",
+        "hardware": "various",
+        "path": "/storage/roms/homebrew",
+        "extension": ".sh",
+        "command": "/usr/bin/bash %ROM% -P%SYSTEM% --core=%CORE% --emulator=%EMULATOR% --controllers=\"%CONTROLLERSCONFIG%\"",
+        "platform": "pc",
+        "theme": "homebrew"
+      },
+      {
+        "name": "ports",
+        "fullname": "Ports",
+        "manufacturer": "Various",
+        "release": "unknown",
+        "hardware": "various",
+        "path": "/storage/roms/ports",
+        "extension": ".sh",
+        "command": "/usr/bin/bash %ROM% -P%SYSTEM% --core=%CORE% --emulator=%EMULATOR% --controllers=\"%CONTROLLERSCONFIG%\"",
+        "platform": "pc",
+        "theme": "ports"
+      },
+      {
+        "name": "pv1000",
+        "fullname": "PV-1000",
+        "manufacturer": "Casio",
+        "release": 1983,
+        "hardware": "console",
+        "path": "/storage/roms/pv1000",
+        "extension": ".bin .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers",
+        "platform": "pv1000",
+        "theme": "pv1000",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "pv1000"
+            }
+          }
+        }
+      },
+      {
+        "name": "sc-3000",
+        "fullname": "SC-3000",
+        "manufacturer": "Sega",
+        "release": 1983,
+        "hardware": "computer",
+        "path": "/storage/roms/sc-3000",
+        "extension": ".bin .sg .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "sc-3000",
+        "theme": "sc-3000",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "bluemsx"
+            }
+          }
+        }
+      },
+      {
+        "name": "scummvm",
+        "fullname": "ScummVM",
+        "manufacturer": "Various",
+        "release": 2001,
+        "hardware": "game engine",
+        "path": "/storage/roms/scummvm",
+        "extension": ".scummvm",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "pc",
+        "theme": "scummvm",
+        "emulators": {
+          "emulator": [
+            {
+              "cores": {
+                "core": "scummvm"
+              }
+            },
+            {
+              "cores": {
+                "core": "SCUMMVMSA"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "sega32x",
+        "fullname": "Sega 32X",
+        "manufacturer": "Sega",
+        "release": 1994,
+        "hardware": "console",
+        "path": "/storage/roms/sega32x",
+        "extension": ".32x .smd .bin .md .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "sega32x",
+        "theme": "sega32x",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "picodrive"
+            }
+          }
+        }
+      },
+      {
+        "name": "segacd",
+        "fullname": "Sega CD",
+        "manufacturer": "Sega",
+        "release": 1991,
+        "hardware": "console",
+        "path": "/storage/roms/segacd",
+        "extension": ".chd .cue .iso .m3u",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "segacd",
+        "theme": "segacd",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": [
+                "genesis_plus_gx",
+                "picodrive"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "megacd",
+        "fullname": "Mega-CD",
+        "manufacturer": "Sega",
+        "release": 1991,
+        "hardware": "console",
+        "path": "/storage/roms/megacd",
+        "extension": ".chd .cue .iso .m3u",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "segacd",
+        "theme": "megacd",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": [
+                "genesis_plus_gx",
+                "picodrive"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "genesis",
+        "fullname": "Genesis",
+        "manufacturer": "Sega",
+        "release": 1989,
+        "hardware": "console",
+        "path": "/storage/roms/genesis",
+        "extension": ".bin .gen .md .sg .smd .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "genesis",
+        "theme": "genesis",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": [
+                "genesis_plus_gx",
+                "genesis_plus_gx_wide",
+                "picodrive"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "genh",
+        "fullname": "Genesis (Hacks)",
+        "manufacturer": "Sega",
+        "release": 1989,
+        "hardware": "console",
+        "path": "/storage/roms/genh",
+        "extension": ".bin .gen .md .sg .smd .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "genesis",
+        "theme": "genh",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": [
+                "genesis_plus_gx",
+                "genesis_plus_gx_wide",
+                "picodrive"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "mastersystem",
+        "fullname": "Master System",
+        "manufacturer": "Sega",
+        "release": 1985,
+        "hardware": "console",
+        "path": "/storage/roms/mastersystem",
+        "extension": ".bin .sms .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "mastersystem",
+        "theme": "mastersystem",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": [
+                "gearsystem",
+                "genesis_plus_gx",
+                "picodrive",
+                "smsplus"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "megadrive",
+        "fullname": "Mega Drive",
+        "manufacturer": "Sega",
+        "release": 1990,
+        "hardware": "console",
+        "path": "/storage/roms/megadrive",
+        "extension": ".bin .gen .md .sg .smd .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "megadrive",
+        "theme": "megadrive",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": [
+                "genesis_plus_gx",
+                "genesis_plus_gx_wide",
+                "picodrive"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "megadrive-japan",
+        "fullname": "Mega Drive",
+        "manufacturer": "Sega",
+        "release": 1988,
+        "hardware": "console",
+        "path": "/storage/roms/megadrive-japan",
+        "extension": ".bin .gen .md .sg .smd .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "megadrive",
+        "theme": "megadrive-japan",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": [
+                "genesis_plus_gx",
+                "genesis_plus_gx_wide",
+                "picodrive"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "megaduck",
+        "fullname": "Mega Duck",
+        "manufacturer": "Welback Holdings",
+        "release": 1993,
+        "hardware": "portable",
+        "path": "/storage/roms/megaduck",
+        "extension": ".bin .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "megaduck",
+        "theme": "megaduck",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "sameduck"
+            }
+          }
+        }
+      },
+      {
+        "name": "saturn",
+        "fullname": "Saturn",
+        "manufacturer": "Sega",
+        "release": 1994,
+        "hardware": "console",
+        "path": "/storage/roms/saturn",
+        "extension": ".cue .chd .iso",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "saturn",
+        "theme": "saturn",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "yabasanshiroSA"
+            }
+          }
+        }
+      },
+      {
+        "name": "sg-1000",
+        "fullname": "SG-1000",
+        "manufacturer": "Sega",
+        "release": 1983,
+        "hardware": "console",
+        "path": "/storage/roms/sg-1000",
+        "extension": ".bin .sg .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "sg-1000",
+        "theme": "sg-1000",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": [
+                "gearsystem",
+                "genesis_plus_gx",
+                "picodrive"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "x1",
+        "fullname": "X1",
+        "manufacturer": "Sharp",
+        "release": 1982,
+        "hardware": "computer",
+        "path": "/storage/roms/x1",
+        "extension": ".dx1 .2d .2hd .tfd .d88 .88d .hdm .xdf .dup .tap .cmd .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "x1",
+        "theme": "x1",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "x1"
+            }
+          }
+        }
+      },
+      {
+        "name": "zxspectrum",
+        "fullname": "ZX Spectrum",
+        "manufacturer": "Sinclair",
+        "release": 1982,
+        "hardware": "computer",
+        "path": "/storage/roms/zxspectrum",
+        "extension": ".tzx .tap .z80 .rzx .scl .trd .dsk .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "zxspectrum",
+        "theme": "zxspectrum",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": [
+                "fuse",
+                "ep128emu_core"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "ep64-128",
+        "fullname": "EP64/128",
+        "manufacturer": "Enterprise",
+        "release": 1985,
+        "hardware": "computer",
+        "path": "/storage/roms/ep64-128",
+        "extension": ".img .dsk .tap .dtf .com .trn .128 .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "ep64-128",
+        "theme": "ep64-128",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "ep128emu_core"
+            }
+          }
+        }
+      },
+      {
+        "name": "tvc",
+        "fullname": "TVC",
+        "manufacturer": "Videoton",
+        "release": 1986,
+        "hardware": "computer",
+        "path": "/storage/roms/tvc",
+        "extension": ".img .dsk .cas .tvcwav .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "tvc",
+        "theme": "tvc",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "ep128emu_core"
+            }
+          }
+        }
+      },
+      {
+        "name": "chip8",
+        "fullname": "CHIP-8",
+        "manufacturer": "Joseph Weisbecker",
+        "release": 1977,
+        "hardware": "computer",
+        "path": "/storage/roms/chip-8",
+        "extension": ".ch8 .sc8 .xo8",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "chip8",
+        "theme": "chip8",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "jaxe"
+            }
+          }
+        }
+      },
+      {
+        "name": "zx81",
+        "fullname": "ZX81",
+        "manufacturer": "Sinclair",
+        "release": 1981,
+        "hardware": "computer",
+        "path": "/storage/roms/zx81",
+        "extension": ".tzx .p .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "zx81",
+        "theme": "zx81",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": 81
+            }
+          }
+        }
+      },
+      {
+        "name": "supergrafx",
+        "fullname": "SuperGrafx",
+        "manufacturer": "NEC",
+        "release": 1989,
+        "hardware": "console",
+        "path": "/storage/roms/sgfx",
+        "extension": ".pce .sgx .cue .ccd .chd .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "supergrafx",
+        "theme": "supergrafx",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": [
+                "beetle_supergrafx",
+                "beetle_pce"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "snes",
+        "fullname": "Super NES",
+        "manufacturer": "Nintendo",
+        "release": 1991,
+        "hardware": "console",
+        "path": "/storage/roms/snes",
+        "extension": ".smc .fig .sfc .swc .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "snes",
+        "theme": "snes",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": [
+                "snes9x",
+                "snes9x2010",
+                "snes9x2002",
+                "snes9x2005_plus",
+                "beetle_supafaust",
+                "beetle_snes",
+                "bsnes",
+                "bsnes2014_performance",
+                "bsnes2014_balanced",
+                "bsnes_mercury_performance",
+                "bsnes_mercury_balanced",
+                "mesen-s"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "snesh",
+        "fullname": "Super NES (Hacks)",
+        "manufacturer": "Nintendo",
+        "release": 1991,
+        "hardware": "console",
+        "path": "/storage/roms/snesh",
+        "extension": ".smc .fig .sfc .swc .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "snes",
+        "theme": "snesh",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": [
+                "snes9x",
+                "snes9x2010",
+                "snes9x2002",
+                "snes9x2005_plus",
+                "beetle_supafaust",
+                "beetle_snes",
+                "bsnes",
+                "bsnes2014_performance",
+                "bsnes2014_balanced",
+                "bsnes_mercury_performance",
+                "bsnes_mercury_balanced",
+                "mesen-s"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "sfc",
+        "fullname": "Super Famicom",
+        "manufacturer": "Nintendo",
+        "release": 1990,
+        "hardware": "console",
+        "path": "/storage/roms/sfc",
+        "extension": ".smc .fig .sfc .swc .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "snes",
+        "theme": "sfc",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": [
+                "snes9x",
+                "snes9x2010",
+                "snes9x2002",
+                "snes9x2005_plus",
+                "beetle_supafaust",
+                "beetle_snes",
+                "bsnes",
+                "bsnes2014_performance",
+                "bsnes2014_balanced",
+                "bsnes_mercury_performance",
+                "bsnes_mercury_balanced",
+                "mesen-s"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "satellaview",
+        "fullname": "Satellaview",
+        "manufacturer": "Nintendo",
+        "release": 1995,
+        "hardware": "console",
+        "path": "/storage/roms/satellaview",
+        "extension": ".smc .fig .bs .BS .sfc .bsx .swc .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "satellaview",
+        "theme": "satellaview",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": [
+                "snes9x",
+                "snes9x2010",
+                "snes9x2002",
+                "snes9x2005_plus",
+                "beetle_snes",
+                "bsnes",
+                "bsnes2014_performance",
+                "bsnes2014_balanced",
+                "bsnes_mercury_performance",
+                "bsnes_mercury_balanced",
+                "mesen-s"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "sufami",
+        "fullname": "SuFami Turbo",
+        "manufacturer": "Bandai",
+        "release": 1996,
+        "hardware": "console",
+        "path": "/storage/roms/sufami",
+        "extension": ".st .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "sufami",
+        "theme": "sufami",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "snes9x"
+            }
+          }
+        }
+      },
+      {
+        "name": "solarus",
+        "fullname": "Solarus",
+        "manufacturer": "Solarus",
+        "release": 2020,
+        "hardware": "game engine",
+        "path": "/storage/roms/solarus",
+        "extension": ".solarus",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "solarus",
+        "theme": "solarus",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "solarus"
+            }
+          }
+        }
+      },
+      {
+        "name": "scv",
+        "fullname": "Super Cassette Vision",
+        "manufacturer": "Epoch",
+        "release": 1984,
+        "hardware": "console",
+        "path": "/storage/roms/scv",
+        "extension": ".bin .rom .0 .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "scv",
+        "theme": "scv",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "emuscv"
+            }
+          }
+        }
+      },
+      {
+        "name": "supervision",
+        "fullname": "Supervision",
+        "manufacturer": "Watara",
+        "release": 1992,
+        "hardware": "portable",
+        "path": "/storage/roms/supervision",
+        "extension": ".sv .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "supervision",
+        "theme": "supervision",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "potator"
+            }
+          }
+        }
+      },
+      {
+        "name": "tic-80",
+        "fullname": "TIC-80",
+        "manufacturer": "Nesbox",
+        "release": 2017,
+        "hardware": "computer",
+        "path": "/storage/roms/tic-80",
+        "extension": ".tic",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "tic80",
+        "theme": "tic-80",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "tic80"
+            }
+          }
+        }
+      },
+      {
+        "name": "wasm-4",
+        "fullname": "WASM-4",
+        "manufacturer": "Bruno Garcia",
+        "release": 2021,
+        "hardware": "computer",
+        "path": "/storage/roms/wasm4",
+        "extension": ".wasm",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "wasm4",
+        "theme": "wasm4",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "wasm4"
+            }
+          }
+        }
+      },
+      {
+        "name": "lowresnx",
+        "fullname": "LowRes NX",
+        "manufacturer": "timoinutilis",
+        "release": 2017,
+        "hardware": "computer",
+        "path": "/storage/roms/lowresnx",
+        "extension": ".nx",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "lowresnx",
+        "theme": "lowresnx",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "lowresnx"
+            }
+          }
+        }
+      },
+      {
+        "name": "tg16",
+        "fullname": "TurboGrafx 16",
+        "manufacturer": "NEC",
+        "release": 1989,
+        "hardware": "console",
+        "path": "/storage/roms/tg16",
+        "extension": ".pce .bin .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "pcengine",
+        "theme": "tg16",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": [
+                "beetle_pce_fast",
+                "beetle_pce",
+                "beetle_supergrafx"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "tg16cd",
+        "fullname": "TurboGrafx CD",
+        "manufacturer": "NEC",
+        "release": 1989,
+        "hardware": "console",
+        "path": "/storage/roms/tg16cd",
+        "extension": ".cue .ccd .chd .toc .m3u",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "pcenginecd",
+        "theme": "tg16cd",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": [
+                "beetle_pce_fast",
+                "beetle_pce",
+                "beetle_supergrafx"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "uzebox",
+        "fullname": "Uzebox",
+        "manufacturer": "Belogic",
+        "release": 2008,
+        "hardware": "console",
+        "path": "/storage/roms/uzebox",
+        "extension": ".uze",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "uzebox",
+        "theme": "uzebox",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "uzem"
+            }
+          }
+        }
+      },
+      {
+        "name": "vectrex",
+        "fullname": "Vectrex",
+        "manufacturer": "Milton Bradley",
+        "release": 1982,
+        "hardware": "console",
+        "path": "/storage/roms/vectrex",
+        "extension": ".bin .gam .vec .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "vectrex",
+        "theme": "vectrex",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "vecx"
+            }
+          }
+        }
+      },
+      {
+        "name": "videopac",
+        "fullname": "VideoPac",
+        "manufacturer": "Philips",
+        "release": 1978,
+        "hardware": "console",
+        "path": "/storage/roms/videopac",
+        "extension": ".bin .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "videopac",
+        "theme": "videopac",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "o2em"
+            }
+          }
+        }
+      },
+      {
+        "name": "cdi",
+        "fullname": "CD-i",
+        "manufacturer": "Philips",
+        "release": 1991,
+        "hardware": "console",
+        "path": "/storage/roms/cdi",
+        "extension": ".chd .iso",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "cdi",
+        "theme": "cdi",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "same_cdi"
+            }
+          }
+        }
+      },
+      {
+        "name": "virtualboy",
+        "fullname": "Virtual Boy",
+        "manufacturer": "Nintendo",
+        "release": 1995,
+        "hardware": "console",
+        "path": "/storage/roms/virtualboy",
+        "extension": ".vb .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "virtualboy",
+        "theme": "virtualboy",
+        "emulators": {
+          "emulator": [
+            {
+              "cores": {
+                "core": "beetle_vb"
+              }
+            },
+            {
+              "cores": {
+                "core": "beetle_vb"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "wonderswan",
+        "fullname": "Wonderswan",
+        "manufacturer": "Bandai",
+        "release": 1999,
+        "hardware": "portable",
+        "path": "/storage/roms/wonderswan",
+        "extension": ".ws .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "wonderswan",
+        "theme": "wonderswan",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "beetle_wswan"
+            }
+          }
+        }
+      },
+      {
+        "name": "wonderswancolor",
+        "fullname": "Wonderswan Color",
+        "manufacturer": "Bandai",
+        "release": 2000,
+        "hardware": "portable",
+        "path": "/storage/roms/wonderswancolor",
+        "extension": ".wsc .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "wonderswancolor",
+        "theme": "wonderswancolor",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "beetle_wswan"
+            }
+          }
+        }
+      },
+      {
+        "name": "x68000",
+        "fullname": "x68000",
+        "manufacturer": "Sharp",
+        "release": 1987,
+        "hardware": "computer",
+        "path": "/storage/roms/x68000",
+        "extension": ".dim .img .d88 .88d .hdm .dup .2hd .xdf .hdf .cmd .m3u .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "x68000",
+        "theme": "x68000",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "px68k"
+            }
+          }
+        }
+      },
+      {
+        "name": "zmachine",
+        "fullname": "Z-Machine",
+        "manufacturer": "Infocom",
+        "release": 1979,
+        "hardware": "game engine",
+        "path": "/storage/roms/zmachine",
+        "extension": ".dat .z1 .z3 .zip .7z",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "z-machine",
+        "theme": "zmachine",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "mojozork"
+            }
+          }
+        }
+      },
+      {
+        "name": "ecwolf",
+        "fullname": "Wolfenstein 3D",
+        "manufacturer": "id Software",
+        "release": 1992,
+        "hardware": "game engine",
+        "path": "/storage/roms/ecwolf",
+        "extension": ".ecwolf",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "pc",
+        "theme": "ecwolf",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "ecwolf"
+            }
+          }
+        }
+      },
+      {
+        "name": "doom",
+        "fullname": "Doom",
+        "manufacturer": "id Software",
+        "release": 1993,
+        "hardware": "game engine",
+        "path": "/storage/roms/doom",
+        "extension": ".doom",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "pc",
+        "theme": "doom",
+        "emulators": {
+          "emulator": [
+            {
+              "cores": {
+                "core": "gzdoom"
+              }
+            },
+            {
+              "cores": {
+                "core": "lzdoom"
+              }
+            },
+            {
+              "cores": {
+                "core": "prboom"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "build",
+        "fullname": "Build Engine",
+        "manufacturer": "3D Realms",
+        "release": 1995,
+        "hardware": "game engine",
+        "path": "/storage/roms/build",
+        "extension": ".build",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "pc",
+        "theme": "build",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "raze"
+            }
+          }
+        }
+      },
+      {
+        "name": "mplayer",
+        "fullname": "MPlayer",
+        "manufacturer": "Various",
+        "release": "unknown",
+        "hardware": "system",
+        "path": "/storage/roms/mplayer",
+        "extension": ".mp4 .mkv .avi .mov .wmv .mpg .mp3 .flac .ogg .m4a .m3u",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "mplayer",
+        "theme": "mplayer",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "mpv"
+            }
+          }
+        }
+      },
+      {
+        "name": "tools",
+        "fullname": "&#xf0ad; Tools",
+        "manufacturer": "Various",
+        "release": "unknown",
+        "hardware": "system",
+        "path": "/storage/.config/distribution/modules",
+        "extension": ".sh",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform tools --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "tools",
+        "theme": "tools"
+      },
+      {
+        "fullname": "Screenshots",
+        "name": "imageviewer",
+        "manufacturer": "Various",
+        "release": "unknown",
+        "hardware": "system",
+        "path": "/roms/screenshots",
+        "extension": ".jpg .jpeg .png .bmp .psd .tga .gif .hdr .pic .ppm .pgm .mkv .pdf .mp4 .avi",
+        "command": "/usr/bin/true",
+        "platform": "imageviewer",
+        "theme": "imageviewer"
+      }
+    ]
+  }
+}

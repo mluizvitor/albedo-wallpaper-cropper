@@ -100,15 +100,12 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
   function updateImageFromClipboard(event: ClipboardEvent) {
     event.preventDefault();
 
-
     const { clipboardData } = event;
-
     if (!clipboardData) {
       return;
     }
 
     const clipboardItem = clipboardData.files[0];
-
 
     if (clipboardItem && clipboardItem.type.startsWith('image/')) {
       const reader = new FileReader;

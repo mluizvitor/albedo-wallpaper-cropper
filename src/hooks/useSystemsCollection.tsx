@@ -16,7 +16,12 @@ export interface SystemProps {
 
 interface SystemsContextData {
   systemCollection: SystemProps[];
-  systemList: { systemName: string, added: boolean }[];
+  systemList: {
+    theme: string,
+    manufacturer: string,
+    fullName: string,
+    added: boolean
+  }[];
 
   addSystemToCollection: (systemName: string) => void;
   removeSystemFromCollection: (id: number) => void;
@@ -39,9 +44,11 @@ export function SystemsProvider({ children }: SystemProviderProps) {
   const { canvasContent, currentLoadedImage } = useCanvas();
   const { showLoader, hideLoader } = useLoader();
   const [systemList, setSystemList] = useState(() => {
-    return originalSystemList.map(item => {
+    return originalSystemList.systemList.system.map(item => {
       return {
-        systemName: item,
+        theme: item.theme,
+        manufacturer: item.manufacturer,
+        fullName: item.fullname,
         added: false,
       };
     });
@@ -138,12 +145,12 @@ export function SystemsProvider({ children }: SystemProviderProps) {
     const parsedSystemCollection = systemCollection.map(item => item.systemName);
 
     const newSystemList = [...systemList].map(item => {
-      if (parsedSystemCollection.includes(item.systemName)) {
+      if (parsedSystemCollection.includes(item.theme)) {
         return { ...item, added: true };
       } else {
         return { ...item, added: false };
       }
-    }).sort((a, b) => Sorting(a.systemName, b.systemName)).sort((a, b) => Sorting(a.added, b.added));
+    }).sort((a, b) => Sorting(a.theme, b.theme)).sort((a, b) => Sorting(a.added, b.added));
 
     setSystemList(newSystemList);
   }

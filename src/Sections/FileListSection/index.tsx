@@ -42,7 +42,10 @@ export default function FileListSection() {
   const filteredSystem = systemQuerySearch === ''
     ? systemList
     : systemList.filter(item => {
-      return item.systemName.toLowerCase().includes(systemQuerySearch.toLowerCase());
+      const filteredByName = item.theme.toLowerCase().includes(systemQuerySearch.toLowerCase());
+      const filteredByManufacturer = item.manufacturer.toLowerCase().includes(systemQuerySearch.toLowerCase());
+      const filteredByFullName = item.fullName.toLowerCase().includes(systemQuerySearch.toLowerCase());
+      return filteredByName || filteredByManufacturer || filteredByFullName;
     });
 
   const filteredAddedSystem = addedSystemQuery === ''
@@ -222,12 +225,12 @@ export default function FileListSection() {
         <Combobox value={selectedSystem}
           onChange={setSelectedSystem}>
           <div className={styles.comboboxInput}>
-            <Combobox.Input onChange={(event) => setSystemQuerySearch(event.target.value)}
+            <Combobox.Input onChange={(event) => setSystemQuerySearch(event.target.value.toLowerCase())}
               placeholder='Type to add a system'
               className='min-w-0 w-full outline-none border-0 bg-transparent' />
 
             <Combobox.Options className={styles.comboboxList}>
-              {systemQuerySearch.length > 0 && !systemList.find((item) => item.systemName === systemQuerySearch) && (
+              {systemQuerySearch.length > 0 && !systemList.find((item) => (item.theme || item.manufacturer) === systemQuerySearch) && (
                 <Combobox.Option value={systemQuerySearch}
                   as={Fragment}>
                   {({ active, selected }) => (
@@ -243,15 +246,20 @@ export default function FileListSection() {
                 </Combobox.Option>
               )}
               {filteredSystem.map((option) => (
-                <Combobox.Option key={option.systemName}
-                  value={option.systemName}
+                <Combobox.Option key={option.theme}
+                  value={option.theme}
                   disabled={option.added}
                   as={Fragment}>
                   {({ active, selected }) => (
                     <li className={[styles.comboboxOption, active && 'bg-neutral-700', selected && 'bg-orange-500'].join(' ')}>
-                      <span className='w-full rounded py-1'>
-                        {option.systemName}
-                      </span>
+                      <div className='w-full'>
+                        <span className='block leading-[100%] mb-1'>
+                          {option.theme}
+                        </span>
+                        <span className='text-xs block font-semibold opacity-60 leading-[100%]'>
+                          {option.manufacturer + ' · ' + option.fullName}
+                        </span>
+                      </div>
                       {option.added && (
                         <CheckCircle size={16}
                           weight='bold'
@@ -409,18 +417,36 @@ export default function FileListSection() {
                 className='min-w-0 w-full outline-none border-0 bg-transparent ' />
 
               <Combobox.Options className={styles.comboboxList}>
-                {filteredSystem.map((option) => (
-                  <Combobox.Option key={option.systemName}
-                    disabled={option.added}
-                    value={option.systemName}
+                {systemQuerySearch.length > 0 && !systemList.find((item) => (item.theme || item.manufacturer) === systemQuerySearch) && (
+                  <Combobox.Option value={systemQuerySearch}
                     as={Fragment}>
-
                     {({ active, selected }) => (
-                      <li className={[styles.comboboxOption, active && 'bg-neutral-700', selected && 'bg-yellow-600 font-bold'].join(' ')}>
+                      <li className={[styles.comboboxOption, active && 'bg-neutral-700', selected && 'bg-orange-500'].join(' ')}>
+                        <Plus size={16}
+                          weight='bold'
+                          className='mr-2' />
                         <span className='w-full rounded py-1'>
-                          {option.systemName}
+                          {systemQuerySearch.toLowerCase()}
                         </span>
-
+                      </li>
+                    )}
+                  </Combobox.Option>
+                )}
+                {filteredSystem.map((option) => (
+                  <Combobox.Option key={option.theme}
+                    value={option.theme}
+                    disabled={option.added}
+                    as={Fragment}>
+                    {({ active, selected }) => (
+                      <li className={[styles.comboboxOption, active && 'bg-neutral-700', selected && 'bg-orange-500'].join(' ')}>
+                        <div className='w-full'>
+                          <span className='block leading-[100%] mb-1'>
+                            {option.theme}
+                          </span>
+                          <span className='text-xs block font-semibold opacity-60 leading-[100%]'>
+                            {option.manufacturer + ' · ' + option.fullName}
+                          </span>
+                        </div>
                         {option.added && (
                           <CheckCircle size={16}
                             weight='bold'
@@ -428,7 +454,6 @@ export default function FileListSection() {
                         )}
                       </li>
                     )}
-
                   </Combobox.Option>
                 ))}
               </Combobox.Options>
