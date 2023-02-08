@@ -2,7 +2,7 @@ import { ChangeEvent, FormEvent, Fragment, useEffect, useState } from 'react';
 import { useCanvas } from '../../hooks/useCanvas';
 import { Backspace, CaretDoubleLeft, CaretDoubleRight, CaretDown, CaretLeft, CaretRight, CaretUp, CheckCircle, DownloadSimple, FloppyDisk, List, MagnifyingGlass, Plus, Trash, UploadSimple } from 'phosphor-react';
 import { SideBar } from '../../components/SideBar';
-import { SystemProps, useSystemsCollection } from '../../hooks/useSystemsCollection';
+import { IndexedSystemProps, SystemProps, useSystemsCollection } from '../../hooks/useSystemsCollection';
 import Button from '../../components/Button';
 import { Prompt } from '../../components/Prompt';
 import { Combobox, Popover } from '@headlessui/react';
@@ -31,7 +31,7 @@ export default function FileListSection() {
   const [isProjectDialogOpen, setIsProjectDialogOpen] = useState(false);
 
   const [currentEditData, setCurrentEditData] = useState({} as SystemProps);
-  const [selectedSystem, setSelectedSystem] = useState({} as SystemProps);
+  const [selectedSystem, setSelectedSystem] = useState({} as IndexedSystemProps);
   const [systemQuerySearch, setSystemQuerySearch] = useState('');
   const [addedSystemQuery, setAddedSystemQuery] = useState('');
 
@@ -78,7 +78,7 @@ export default function FileListSection() {
 
   function clearSelection() {
     setSystemQuerySearch('');
-    setSelectedSystem({} as SystemProps);
+    setSelectedSystem({} as IndexedSystemProps);
   }
 
   function handleSubmit(event: FormEvent) {
@@ -231,6 +231,7 @@ export default function FileListSection() {
           onChange={setSelectedSystem}>
           <div className={styles.comboboxInput}>
             <Combobox.Input onChange={(event) => setSystemQuerySearch(event.target.value.toLowerCase())}
+              displayValue={(option: IndexedSystemProps) => option.theme || ''}
               placeholder='Type to add a system'
               className='min-w-0 w-full outline-none border-0 bg-transparent' />
 
@@ -252,7 +253,7 @@ export default function FileListSection() {
               )}
               {filteredSystem.map((option) => (
                 <Combobox.Option key={option.theme}
-                  value={option.theme}
+                  value={option}
                   disabled={option.added}
                   as={Fragment}>
                   {({ active, selected }) => (

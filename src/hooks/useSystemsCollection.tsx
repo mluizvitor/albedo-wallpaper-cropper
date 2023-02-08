@@ -15,7 +15,7 @@ export interface IndexedSystemProps {
   added: boolean;
 }
 
-export interface SystemProps extends Omit<IndexedSystemProps, 'added'> {
+export interface SystemProps extends IndexedSystemProps {
   id: number;
   file: CanvasContentProps;
 }
@@ -24,7 +24,7 @@ interface SystemsContextData {
   systemCollection: SystemProps[];
   systemList: IndexedSystemProps[];
 
-  addSystemToCollection: (selectedSystem: SystemProps) => void;
+  addSystemToCollection: (selectedSystem: IndexedSystemProps) => void;
   removeSystemFromCollection: (id: number) => void;
   editSystem: (id: number, name: string, replaceImage?: boolean) => void;
   clearCollection: () => void;
@@ -62,6 +62,7 @@ export function SystemsProvider({ children }: SystemProviderProps) {
    * 
    */
   function addSystemToCollection(selectedSystem: IndexedSystemProps) {
+    console.log(selectedSystem);
     if (!currentLoadedImage) {
       alert('No image loaded');
       return null;
@@ -79,9 +80,10 @@ export function SystemsProvider({ children }: SystemProviderProps) {
     }
 
     const generatedData: SystemProps = {
+      ...selectedSystem,
       id: new Date().getTime(),
       file: canvasContent,
-      ...selectedSystem,
+      added: true,
     };
 
     setSystemCollection([...systemCollection, generatedData]);
@@ -143,7 +145,7 @@ export function SystemsProvider({ children }: SystemProviderProps) {
  */
 
   function updateSystemList() {
-    const parsedSystemCollection = systemCollection.map(item => item.systemName);
+    const parsedSystemCollection = systemCollection.map(item => item.theme);
 
     const newSystemList = [...systemList].map(item => {
       if (parsedSystemCollection.includes(item.theme)) {
@@ -319,7 +321,7 @@ export function SystemsProvider({ children }: SystemProviderProps) {
       removeSystemFromCollection,
       editSystem,
       clearCollection,
-      updateSystemList: updateSystemList,
+      updateSystemList,
       exportFilesAsZip,
       exportProject,
       importProject,
