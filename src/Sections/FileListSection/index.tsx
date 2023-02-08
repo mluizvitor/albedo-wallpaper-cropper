@@ -100,7 +100,6 @@ export default function FileListSection() {
   }
 
   function handleOpenProject() {
-    console.log(systemCollection.length);
     if (systemCollection.length === 0) {
       loadImage();
     } else {
@@ -133,10 +132,6 @@ export default function FileListSection() {
       setPaginatorStart(0);
     }
   }
-
-  useEffect(() => {
-    console.log(selectedSystem);
-  }, [selectedSystem]);
 
   useEffect(() => {
     setPaginatorStart(0);
@@ -246,7 +241,7 @@ export default function FileListSection() {
 
             <Combobox.Options className={styles.comboboxList}>
               {systemQuerySearch.length > 0 && !systemList.find((item) => (item.theme || item.manufacturer) === systemQuerySearch) && (
-                <Combobox.Option value={systemQuerySearch}
+                <Combobox.Option value={{ theme: systemQuerySearch } as IndexedSystemProps}
                   as={Fragment}>
                   {({ active, selected }) => (
                     <li className={[styles.comboboxOption, active && 'bg-neutral-700', selected && 'bg-orange-500'].join(' ')}>
@@ -330,9 +325,7 @@ export default function FileListSection() {
         <ul className='grid grid-cols-3 grid-rows-5 w-full grow gap-2'>
           {filteredAddedSystem.map(item => (
             <FileCard key={item.id}
-              normalSrc={item.file.normal}
-              blurredSrc={item.file.blurred}
-              itemLabel={item.theme}
+              item={item}
               renameMethod={() => {
                 toggleEditDialog();
                 setCurrentEditData(item);

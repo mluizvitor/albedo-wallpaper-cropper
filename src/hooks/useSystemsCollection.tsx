@@ -62,7 +62,6 @@ export function SystemsProvider({ children }: SystemProviderProps) {
    * 
    */
   function addSystemToCollection(selectedSystem: IndexedSystemProps) {
-    console.log(selectedSystem);
     if (!currentLoadedImage) {
       alert('No image loaded');
       return null;
@@ -74,17 +73,33 @@ export function SystemsProvider({ children }: SystemProviderProps) {
       return null;
     }
 
-    if (!selectedSystem.theme || selectedSystem.theme.length === 0) {
+    let generatedData: SystemProps = {} as SystemProps;
+
+    if (
+      'theme' in selectedSystem && selectedSystem.theme.length !== 0 &&
+      'fullName' in selectedSystem && selectedSystem.fullName.length !== 0 &&
+      'manufacturer' in selectedSystem && selectedSystem.manufacturer.length !== 0
+    ) {
+      generatedData = {
+        ...selectedSystem,
+        id: new Date().getTime(),
+        file: canvasContent,
+        added: true,
+      };
+    } else if ('theme' in selectedSystem && selectedSystem.theme.length !== 0) {
+      generatedData = {
+        theme: selectedSystem.theme,
+        fullName: selectedSystem.theme,
+        manufacturer: 'Unknown',
+        added: true,
+        id: new Date().getTime(),
+        file: canvasContent,
+      };
+    } else {
       alert('Please insert a system name');
       return null;
     }
 
-    const generatedData: SystemProps = {
-      ...selectedSystem,
-      id: new Date().getTime(),
-      file: canvasContent,
-      added: true,
-    };
 
     setSystemCollection([...systemCollection, generatedData]);
     idbAddElement('systemCollection', generatedData);
@@ -99,7 +114,6 @@ export function SystemsProvider({ children }: SystemProviderProps) {
    */
 
   function editSystem(idToEdit: number, targetSystem: IndexedSystemProps, replaceImage?: boolean) {
-    console.log(idToEdit, targetSystem, replaceImage);
     if (!idToEdit) {
       return null;
     }
@@ -111,7 +125,6 @@ export function SystemsProvider({ children }: SystemProviderProps) {
 
     const newCollection = [...systemCollection];
     const originalSystemFound = newCollection.find((item) => item.id === idToEdit);
-    console.log(originalSystemFound);
 
     if (originalSystemFound) {
       const newSystemFound: SystemProps = {
@@ -119,8 +132,6 @@ export function SystemsProvider({ children }: SystemProviderProps) {
         ...targetSystem,
         file: replaceImage ? canvasContent : originalSystemFound.file,
       };
-
-      console.log(newSystemFound);
 
       newCollection[newCollection.findIndex((item) => item.id === idToEdit)] = newSystemFound;
 
@@ -285,7 +296,6 @@ export function SystemsProvider({ children }: SystemProviderProps) {
       }
 
       let newParsedContent: SystemProps[] = [];
-      console.log(newParsedContent);
 
       for (const item of parsedContent) {
         const systemData = systemList.find(foundSys => foundSys.theme === item.theme || foundSys.theme === item.systemName);
@@ -313,13 +323,13 @@ export function SystemsProvider({ children }: SystemProviderProps) {
 
   useEffect(() => {
     idbGetElement('systemCollection', 'all').then((result) => {
+      console.log('Loading fom local database');
       if (Array.isArray(result) && result.length !== 0 && 'systemName' in result[0]) {
-        console.log('loaded as previous data type');
         handleLoadPreviousVersion(result);
       } else {
-        console.log('loaded as current data type');
         setSystemCollection(result as SystemProps[]);
       }
+      console.log('Finished loading fom local database');
     });
   }, []);
 

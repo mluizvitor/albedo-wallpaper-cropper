@@ -2,34 +2,33 @@ import Zoom from 'react-medium-image-zoom';
 import styles from './styles.module.css';
 import { Menu } from '@headlessui/react';
 import { ArrowsLeftRight, DotsThreeVertical, DownloadSimple, Question, Textbox, TrashSimple } from 'phosphor-react';
+import { SystemProps } from '../../hooks/useSystemsCollection';
 
 interface FileCardProps {
-  normalSrc: string;
-  blurredSrc: string;
-  itemLabel: string;
+  item: SystemProps;
   renameMethod: () => void;
   replaceMethod: () => void;
   exportMethod: () => void;
   deleteMethod: () => void;
 }
 
-export function FileCard({ normalSrc, blurredSrc, itemLabel, renameMethod, replaceMethod, exportMethod, deleteMethod }: FileCardProps) {
+export function FileCard({ item, renameMethod, replaceMethod, exportMethod, deleteMethod }: FileCardProps) {
   return (
     <li className={[styles.cardContainer, 'group'].join(' ')}>
-      <div className={styles.cardImageWrapper}>
+      <div className={styles.cardImageWrapper}
+        title={`ES theme: ${item.theme}\nName: ${item.fullName}\nManufacturer: ${item.manufacturer}`}>
         <Zoom zoomMargin={32}>
           <img className={[styles.cardSystemImg, 'rounded-l aspect-video'].join(' ')}
-            src={normalSrc} />
+            src={item.file.normal} />
         </Zoom>
         <Zoom zoomMargin={32}>
           <img className={[styles.cardSystemImg, 'rounded-r aspect-auto'].join(' ')}
-            src={blurredSrc} />
+            src={item.file.blurred} />
         </Zoom>
       </div>
       <div className='flex items-center mt-1'>
-        <span className={styles.cardSystemName}
-          title={itemLabel}>
-          {itemLabel}
+        <span className={styles.cardSystemName}>
+          {item.theme}
         </span>
         <Menu as='div'
           className='relative'>
@@ -43,7 +42,7 @@ export function FileCard({ normalSrc, blurredSrc, itemLabel, renameMethod, repla
               {({ active }) => (
                 <button className={[styles.menuItem, active ? 'bg-stone-500' : ''].join(' ')}
                   onClick={renameMethod}
-                  title={'Rename ' + itemLabel}>
+                  title={'Rename ' + item.theme}>
                   <Textbox size={16}
                     weight='bold' />
                   <span className={styles.menuItemLabel}>
@@ -73,11 +72,11 @@ export function FileCard({ normalSrc, blurredSrc, itemLabel, renameMethod, repla
               {({ active }) => (
                 <button className={[styles.menuItem, active ? 'bg-stone-500' : ''].join(' ')}
                   onClick={exportMethod}
-                  title={`Download ${itemLabel} and its blurred version as a ZIP file.`}>
+                  title={`Download ${item.theme} and its blurred version as a ZIP file.`}>
                   <DownloadSimple size={16}
                     weight='bold' />
                   <span className={styles.menuItemLabel}>
-                    {'Export ' + itemLabel}
+                    {'Export ' + item.theme}
                   </span>
                 </button>
               )}
