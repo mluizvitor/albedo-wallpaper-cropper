@@ -301,7 +301,7 @@ export function SystemsProvider({ children }: SystemProviderProps) {
 
   useEffect(() => {
     idbGetElement('systemCollection', 'all').then((result) => {
-      if (Array.isArray(result) && result[0].systemName) {
+      if (Array.isArray(result) && result.length !== 0 && 'systemName' in result[0]) {
         console.log('loaded as previous data type');
         handleLoadPreviousVersion(result);
       } else {
