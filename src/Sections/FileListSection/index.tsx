@@ -72,8 +72,13 @@ export default function FileListSection() {
     setIsProjectDialogOpen(!isProjectDialogOpen);
   }
 
-  function editCurrentEditData(systemName: string) {
-    setCurrentEditData({ ...currentEditData, systemName });
+  function editCurrentEditData(targetSystem: IndexedSystemProps) {
+    setCurrentEditData({
+      ...currentEditData,
+      manufacturer: targetSystem.manufacturer,
+      fullName: targetSystem.fullName,
+      theme: targetSystem.theme,
+    });
   }
 
   function clearSelection() {
@@ -89,7 +94,7 @@ export default function FileListSection() {
 
   function handleEditSubmit(event: FormEvent) {
     event.preventDefault();
-    editSystem(currentEditData.id, currentEditData.systemName);
+    editSystem(currentEditData.id, currentEditData);
     toggleEditDialog();
     clearSelection();
   }
@@ -128,6 +133,10 @@ export default function FileListSection() {
       setPaginatorStart(0);
     }
   }
+
+  useEffect(() => {
+    console.log(selectedSystem);
+  }, [selectedSystem]);
 
   useEffect(() => {
     setPaginatorStart(0);
@@ -328,7 +337,7 @@ export default function FileListSection() {
                 toggleEditDialog();
                 setCurrentEditData(item);
               }}
-              replaceMethod={() => editSystem(item.id, item.theme, true)}
+              replaceMethod={() => editSystem(item.id, item, true)}
               exportMethod={() => exportFilesAsZip(item.theme)}
               deleteMethod={() => removeSystemFromCollection(item.id)}
             />
@@ -386,6 +395,12 @@ export default function FileListSection() {
         </span>
       </div>
 
+      {/**
+       * 
+       * Clear added system prompt
+       * 
+      */}
+
       <Prompt open={isClearDialogOpen}
         onClose={toggleDeleteDialog}
         promptTitle='Are you sure you want to clear all System Collection?' >
@@ -403,6 +418,12 @@ export default function FileListSection() {
         </div>
       </Prompt >
 
+      {/**
+       * 
+       * Rename Prompt
+       * 
+      */}
+
       <Prompt open={isEditDialogOpen}
         onClose={toggleEditDialog}
         promptTitle='Enter a new name'>
@@ -411,13 +432,14 @@ export default function FileListSection() {
           className='grid grid-cols-2 gap-x-2 gap-y-4'
           autoComplete='off'>
 
-          <Combobox value={currentEditData.theme}
+          <Combobox value={currentEditData}
             onChange={editCurrentEditData}
             as='div'
             className='block col-span-2'>
 
             <div className={[styles.comboboxInput, 'bg-neutral-700'].join(' ')}>
               <Combobox.Input onChange={(event) => setSystemQuerySearch(event.target.value)}
+                displayValue={(option: IndexedSystemProps) => option.theme || ''}
                 placeholder='Type to add a system'
                 autoFocus
                 className='min-w-0 w-full outline-none border-0 bg-transparent ' />
@@ -440,7 +462,7 @@ export default function FileListSection() {
                 )}
                 {filteredSystem.map((option) => (
                   <Combobox.Option key={option.theme}
-                    value={option.theme}
+                    value={option}
                     disabled={option.added}
                     as={Fragment}>
                     {({ active, selected }) => (

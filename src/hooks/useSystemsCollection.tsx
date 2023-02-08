@@ -26,7 +26,7 @@ interface SystemsContextData {
 
   addSystemToCollection: (selectedSystem: IndexedSystemProps) => void;
   removeSystemFromCollection: (id: number) => void;
-  editSystem: (id: number, name: string, replaceImage?: boolean) => void;
+  editSystem: (idToEdit: number, newSystemProps: IndexedSystemProps, replaceImage?: boolean) => void;
   clearCollection: () => void;
   updateSystemList: () => void;
 
@@ -93,37 +93,47 @@ export function SystemsProvider({ children }: SystemProviderProps) {
   /**
    * 
    * Edit System Name on Collection
-   * @param id 
-   * @param name 
+   * @param idToEdit
+   * @param targetSystem
+   * @param replaceImage
    */
 
-  function editSystem(id: number, name: string, replaceImage?: boolean) {
-    if (!name || name.length === 0) {
-      return;
+  function editSystem(idToEdit: number, targetSystem: IndexedSystemProps, replaceImage?: boolean) {
+    console.log(idToEdit, targetSystem, replaceImage);
+    if (!idToEdit) {
+      return null;
+    }
+
+    if (replaceImage && !currentLoadedImage) {
+      alert('No image loaded');
+      return null;
     }
 
     const newCollection = [...systemCollection];
-    const originalSystemFound = newCollection.find((item) => item.id === id);
+    const originalSystemFound = newCollection.find((item) => item.id === idToEdit);
+    console.log(originalSystemFound);
 
     if (originalSystemFound) {
       const newSystemFound: SystemProps = {
         ...originalSystemFound,
-        systemName: name,
+        ...targetSystem,
         file: replaceImage ? canvasContent : originalSystemFound.file,
       };
 
-      newCollection[newCollection.findIndex((item) => item.id === id)] = newSystemFound;
+      console.log(newSystemFound);
+
+      newCollection[newCollection.findIndex((item) => item.id === idToEdit)] = newSystemFound;
 
       setSystemCollection(newCollection);
-      idbEditElement('systemCollection', id, newSystemFound);
+      idbEditElement('systemCollection', idToEdit, newSystemFound);
     }
   }
 
   /**
- * 
- * Remove System from Collection
- * @param systemName
- */
+   * 
+   * Remove System from Collection
+   * @param systemName
+   */
   function removeSystemFromCollection(id: number) {
     const newCollection = [...systemCollection].filter(item => item.id !== id);
 
@@ -132,17 +142,17 @@ export function SystemsProvider({ children }: SystemProviderProps) {
   }
 
   /**
- * 
- * Clear collection
- */
+   * 
+   * Clear collection
+   */
   function clearCollection() {
     setSystemCollection([]);
     idbRemoveElement('systemCollection', 'all');
   }
 
   /**
- * 
- */
+   * 
+   */
 
   function updateSystemList() {
     const parsedSystemCollection = systemCollection.map(item => item.theme);
@@ -159,10 +169,10 @@ export function SystemsProvider({ children }: SystemProviderProps) {
   }
 
   /**
-* 
-* Download as zip file
-* 
-*/
+  * 
+  * Download as zip file
+  * 
+  */
 
   function exportFilesAsZip(systemName: string | 'all') {
     const zip = new JSZip();
