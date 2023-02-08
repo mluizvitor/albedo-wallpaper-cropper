@@ -191,11 +191,11 @@ export function SystemsProvider({ children }: SystemProviderProps) {
           normalImage = item.file.normal.replace('data:', '').replace(/^.+,/, '');
           blurredImage = item.file.blurred.replace('data:', '').replace(/^.+,/, '');
 
-          zip.file(item.systemName + '.webp', normalImage, { base64: true });
-          blurredDir?.file(item.systemName + '.blurred.webp', blurredImage, { base64: true });
+          zip.file(item.theme + '.webp', normalImage, { base64: true });
+          blurredDir?.file(item.theme + '.blurred.webp', blurredImage, { base64: true });
         });
       } else if (systemName) {
-        const singleSystem = systemCollection.find(item => item.systemName === systemName);
+        const singleSystem = systemCollection.find(item => item.theme === systemName);
         if (!singleSystem) {
           throw new Error('Could not find required system');
         }
@@ -203,8 +203,8 @@ export function SystemsProvider({ children }: SystemProviderProps) {
         normalImage = singleSystem.file.normal.replace('data:', '').replace(/^.+,/, '');
         blurredImage = singleSystem.file.blurred.replace('data:', '').replace(/^.+,/, '');
 
-        zip.file(singleSystem.systemName + '.webp', normalImage, { base64: true });
-        blurredDir?.file(singleSystem.systemName + '.blurred.webp', blurredImage, { base64: true });
+        zip.file(singleSystem.theme + '.webp', normalImage, { base64: true });
+        blurredDir?.file(singleSystem.theme + '.blurred.webp', blurredImage, { base64: true });
       }
     } catch (error) {
       alert('Something went wrong: ' + error);
