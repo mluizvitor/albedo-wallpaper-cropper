@@ -135,7 +135,7 @@ export default function FileListSection() {
 
   useEffect(() => {
     setPaginatorStart(0);
-  }, [addedSystemQuery, filteredAddedSystem]);
+  }, [addedSystemQuery]);
 
   useEffect(() => {
     if (filteredAddedSystem.length > 0 && filteredAddedSystem.length <= paginatorStart) {
@@ -384,7 +384,7 @@ export default function FileListSection() {
 
         )}
         <span className='w-full text-xs text-center opacity-60'>
-          {`${systemCollection.length} of ${systemList.length} currently supported`}
+          {addedSystemQuery.length !== 0 ? `Found ${filteredAddedSystem.length} ${filteredAddedSystem.length === 1 ? 'system' : 'systems'}` : `${systemCollection.length} of ${systemList.length} currently supported`}
         </span>
       </div>
 
