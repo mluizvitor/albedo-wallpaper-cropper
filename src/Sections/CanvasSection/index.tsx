@@ -18,6 +18,7 @@ export function CanvasSection() {
     smoothRendering,
     clearCanvas,
     updateImageFromClipboard,
+    updateCanvas,
   } = useCanvas();
 
   function updater() {
@@ -111,6 +112,7 @@ export function CanvasSection() {
     originalCanvas.onmouseup = () => {
       draggable = false;
       document.body.style.cursor = 'grab';
+      updateCanvas();
     };
     originalCanvas.onmouseenter = () => {
       document.body.style.cursor = 'grab';
