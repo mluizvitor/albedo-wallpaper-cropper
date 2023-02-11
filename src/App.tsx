@@ -4,6 +4,7 @@ import FileListSection from './sections/FileListSection';
 import IDB from './database/config';
 import { CircleNotch } from 'phosphor-react';
 import { useLoader } from './hooks/useLoader';
+import { UpdatePrompt } from './components/UpdatePrompt';
 
 function App() {
   const { loaderIsOn } = useLoader();
@@ -25,6 +26,7 @@ function App() {
           </span>
         </div>
       )}
+      <UpdatePrompt />
     </main>
   );
 }
