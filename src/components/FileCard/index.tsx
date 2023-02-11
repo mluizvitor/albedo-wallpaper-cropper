@@ -6,25 +6,28 @@ import { SystemProps } from '../../hooks/useSystemsCollection';
 
 interface FileCardProps {
   item: SystemProps;
+  hideBlurred?: boolean;
   renameMethod: () => void;
   replaceMethod: () => void;
   exportMethod: () => void;
   deleteMethod: () => void;
 }
 
-export function FileCard({ item, renameMethod, replaceMethod, exportMethod, deleteMethod }: FileCardProps) {
+export function FileCard({ item, hideBlurred, renameMethod, replaceMethod, exportMethod, deleteMethod }: FileCardProps) {
   return (
     <li className={[styles.cardContainer, 'group'].join(' ')}>
-      <div className={styles.cardImageWrapper}
+      <div className={[styles.cardImageWrapper, hideBlurred ? 'grid-cols-1' : 'grid-cols-[2fr_1fr]'].join(' ')}
         title={`ES theme: ${item.theme}\nName: ${item.fullName}\nManufacturer: ${item.manufacturer}`}>
         <Zoom zoomMargin={32}>
           <img className={[styles.cardSystemImg, 'rounded-l aspect-video'].join(' ')}
             src={item.file.normal} />
         </Zoom>
-        <Zoom zoomMargin={32}>
-          <img className={[styles.cardSystemImg, 'rounded-r aspect-auto'].join(' ')}
-            src={item.file.blurred} />
-        </Zoom>
+        {!hideBlurred && (
+          <Zoom zoomMargin={32}>
+            <img className={[styles.cardSystemImg, 'rounded-r aspect-auto'].join(' ')}
+              src={item.file.blurred} />
+          </Zoom>
+        )}
       </div>
       <div className='flex items-center mt-1'>
         <span className={styles.cardSystemName}>

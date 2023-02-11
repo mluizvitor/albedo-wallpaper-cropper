@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent, Fragment, useEffect, useState } from 'react';
 import { useCanvas } from '../../hooks/useCanvas';
-import { Backspace, CaretDoubleLeft, CaretDoubleRight, CaretDown, CaretLeft, CaretRight, CaretUp, CheckCircle, DownloadSimple, FloppyDisk, List, MagnifyingGlass, Plus, Trash, UploadSimple } from 'phosphor-react';
+import { Backspace, CaretDoubleLeft, CaretDoubleRight, CaretDown, CaretLeft, CaretRight, CaretUp, CheckCircle, DownloadSimple, FloppyDisk, Gear, List, MagnifyingGlass, Plus, Trash, UploadSimple } from 'phosphor-react';
 import { SideBar } from '../../components/SideBar';
 import { IndexedSystemProps, SystemProps, useSystemsCollection } from '../../hooks/useSystemsCollection';
 import Button from '../../components/Button';
@@ -11,6 +11,7 @@ import 'react-medium-image-zoom/dist/styles.css';
 
 import styles from './styles.module.css';
 import { FileCard } from '../../components/FileCard';
+import Checkbox from '../../components/Checkbox';
 
 export default function FileListSection() {
 
@@ -29,13 +30,16 @@ export default function FileListSection() {
   const [isClearDialogOpen, setIsClearDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isProjectDialogOpen, setIsProjectDialogOpen] = useState(false);
+  const [isFileListSettingsDialogOpen, setIsFileListSettingsDialogOpen] = useState(false);
 
   const [currentEditData, setCurrentEditData] = useState({} as SystemProps);
   const [selectedSystem, setSelectedSystem] = useState({} as IndexedSystemProps);
   const [systemQuerySearch, setSystemQuerySearch] = useState('');
   const [addedSystemQuery, setAddedSystemQuery] = useState('');
 
-  const [imagePerPage, setImagePerPage] = useState(10);
+  const [hideBlurredFile, setHideBlurredFile] = useState(false);
+
+  const [imagePerPage, setImagePerPage] = useState(15);
   const [paginatorStart, setPaginatorStart] = useState(0);
 
 
@@ -51,8 +55,6 @@ export default function FileListSection() {
   const filteredAddedSystem = addedSystemQuery === ''
     ? systemCollection
     : systemCollection.filter(item => {
-      // return item.systemName.toLowerCase().includes(addedSystemQuery.toLowerCase());
-
       const filteredByName = item.theme.toLowerCase().includes(addedSystemQuery.toLowerCase());
       const filteredByManufacturer = item.manufacturer.toLowerCase().includes(addedSystemQuery.toLowerCase());
       const filteredByFullName = item.fullName.toLowerCase().includes(addedSystemQuery.toLowerCase());
@@ -334,6 +336,7 @@ export default function FileListSection() {
           {filteredAddedSystem.map(item => (
             <FileCard key={item.id}
               item={item}
+              hideBlurred={hideBlurredFile}
               renameMethod={() => {
                 toggleEditDialog();
                 setCurrentEditData(item);
@@ -390,25 +393,53 @@ export default function FileListSection() {
               onClick={() => { setPaginatorStart((Math.ceil(filteredAddedSystem.length / imagePerPage) - 1) * imagePerPage); }} />
           </div>
         )}
-        <div className='flex gap-2 items-center mb-2'>
-          <span className='mr-2 shrink-0'>{'Items per page'}</span>
-          <Button label='10'
-            className={['flex-1 ring-2 justify-center', imagePerPage === 10 ? 'ring-yellow-400' : 'ring-transparent'].join(' ')}
-            onClick={() => setImagePerPage(10)}
-          />
-          <Button label='15'
-            className={['flex-1 ring-2 justify-center', imagePerPage === 15 ? 'ring-yellow-400' : 'ring-transparent'].join(' ')}
-            onClick={() => setImagePerPage(15)}
-          />
-          <Button label='20'
-            className={['flex-1 ring-2 justify-center', imagePerPage === 20 ? 'ring-yellow-400' : 'ring-transparent'].join(' ')}
-            onClick={() => setImagePerPage(20)}
-          />
+
+        <div className='flex items-center opacity-60'>
+          <span className='w-full text-sm'>
+            {addedSystemQuery.length !== 0 ? `Found ${filteredAddedSystem.length} ${filteredAddedSystem.length === 1 ? 'system' : 'systems'}` : `${systemCollection.length} of ${systemList.length} currently supported`}
+          </span>
+          <Button label='List settings'
+            hideLabel
+            className='p-1 h-auto bg-transparent'
+            icon={<Gear size={16}
+              weight='bold' />}
+            onClick={() => setIsFileListSettingsDialogOpen(true)} />
         </div>
-        <span className='w-full text-xs text-center opacity-60'>
-          {addedSystemQuery.length !== 0 ? `Found ${filteredAddedSystem.length} ${filteredAddedSystem.length === 1 ? 'system' : 'systems'}` : `${systemCollection.length} of ${systemList.length} currently supported`}
-        </span>
       </div>
+
+      {/**
+       * 
+       * File list settings
+       * 
+       */}
+
+      <Prompt open={isFileListSettingsDialogOpen}
+        onClose={() => setIsFileListSettingsDialogOpen(!isFileListSettingsDialogOpen)}
+        promptTitle='List settings'>
+        <div>
+          <Checkbox id='fileList_hideBlurredFile'
+            label='Hide blurred variations'
+            checked={hideBlurredFile}
+            className='bg-neutral-800 px-2 py-1 mb-2'
+            triggerMethod={() => setHideBlurredFile(!hideBlurredFile)} />
+
+          <span className='mb-1 block'>{'Items per page'}</span>
+          <div className='flex gap-2 items-center'>
+            <Button label='10'
+              className={['flex-1 ring-2 justify-center bg-neutral-800', imagePerPage === 10 ? 'ring-yellow-400' : 'ring-transparent'].join(' ')}
+              onClick={() => setImagePerPage(10)}
+            />
+            <Button label='15'
+              className={['flex-1 ring-2 justify-center bg-neutral-800', imagePerPage === 15 ? 'ring-yellow-400' : 'ring-transparent'].join(' ')}
+              onClick={() => setImagePerPage(15)}
+            />
+            <Button label='20'
+              className={['flex-1 ring-2 justify-center bg-neutral-800', imagePerPage === 20 ? 'ring-yellow-400' : 'ring-transparent'].join(' ')}
+              onClick={() => setImagePerPage(20)}
+            />
+          </div>
+        </div>
+      </Prompt>
 
       {/**
        * 

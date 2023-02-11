@@ -4,12 +4,13 @@ import { ReactNode, useState } from 'react';
 interface SectionSeparatorProps {
   title: string;
   className?: string;
+  closed?: boolean;
   children: ReactNode;
 }
 
-export function MenuSection({ title, className, children }: SectionSeparatorProps) {
+export function MenuSection({ title, className, closed = false, children }: SectionSeparatorProps) {
 
-  const [isMenuSectionOpen, setIsMenuSectionOpen] = useState(true);
+  const [isMenuSectionOpen, setIsMenuSectionOpen] = useState(!closed);
 
   function toggleMenuSection() {
     setIsMenuSectionOpen(!isMenuSectionOpen);

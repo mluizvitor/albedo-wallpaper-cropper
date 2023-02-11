@@ -4,7 +4,7 @@
 }
 
 .cardImageWrapper {
-  @apply grid gap-0.5 grid-cols-[2fr_1fr] grow;
+  @apply grid gap-0.5 grow;
 }
 
 .cardImageWrapper div {
