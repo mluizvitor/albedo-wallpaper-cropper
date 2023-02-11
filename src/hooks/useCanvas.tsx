@@ -5,6 +5,7 @@ import { useLoader } from './useLoader';
 export interface CanvasContentProps {
   normal: string;
   blurred: string;
+  thumbnail?: string;
 }
 
 interface CanvasContextData {
@@ -224,7 +225,6 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
     const newNormalCanvas = document.createElement('canvas');
     newNormalCanvas.width = originalCanvas.width;
     newNormalCanvas.height = originalCanvas.height;
-
     const newNormalContext = newNormalCanvas.getContext('2d', { willReadFrequently: true });
     newNormalContext && newNormalContext.drawImage(originalCanvas, 0, 0);
 
@@ -232,9 +232,19 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
     const newBlurredCanvas = document.createElement('canvas');
     newBlurredCanvas.width = originalCanvas.width;
     newBlurredCanvas.height = originalCanvas.height;
-
     const newBlurredContext = newBlurredCanvas.getContext('2d', { willReadFrequently: true });
     newBlurredContext && newBlurredContext.drawImage(originalCanvas, 0, 0);
+
+    const scaleSize = () => {
+      return 1 / Math.min(canvasWidth, canvasHeight) * 192;
+    };
+
+    const newThumbnailCanvas = document.createElement('canvas');
+    newThumbnailCanvas.width = originalCanvas.width / 1 * scaleSize();
+    newThumbnailCanvas.height = originalCanvas.height / 1 * scaleSize();
+    const newThumbnailContext = newThumbnailCanvas.getContext('2d', { willReadFrequently: true });
+    newThumbnailContext?.scale(scaleSize(), scaleSize());
+    newThumbnailContext?.drawImage(originalCanvas, 0, 0);
 
     const normal = originalCanvas.toDataURL('image/webp', 0.9);
 
@@ -242,7 +252,11 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
 
     const blurred = newBlurredCanvas.toDataURL('image/webp', 0.9);
 
-    setCanvasContent({ normal, blurred });
+    const thumbnail = newThumbnailCanvas.toDataURL('image/webp', 0.8);
+
+    console.log(thumbnail);
+
+    setCanvasContent({ normal, blurred, thumbnail });
   }
 
   function clearCanvas() {
@@ -261,9 +275,10 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
   useEffect(() => {
     const timeout = setTimeout(() => {
       updateCanvas();
+      console.log('updateCanvas timeout');
     }, 500);
     return () => clearTimeout(timeout);
-  }, [currentLoadedImage, blurAmount, integerScale, integerScaleValue, smoothRendering]);
+  }, [currentLoadedImage, blurAmount, integerScale, integerScaleValue, smoothRendering, canvasWidth, canvasHeight]);
 
   return (
     <CanvasContext.Provider value={{
