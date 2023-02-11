@@ -224,7 +224,10 @@ export default function FileListSection() {
           id='fileList_imageSelector'
           type='file'
           accept='.jpg, .jpeg, .webp, .png'
-          onChange={(e) => updateImage(e)} />
+          onChange={(e) => {
+            updateImage(e);
+            e.target.value = '';
+          }} />
       </div>
 
       <form onSubmit={handleSubmit}

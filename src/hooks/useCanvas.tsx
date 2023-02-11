@@ -254,6 +254,7 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
 
     setCanvasContent({ normal: '', blurred: '' });
     setCurrentLoadedImage('');
+    setCurrentLoadedFileName('');
     context.clearRect(0, 0, originalCanvas.width, originalCanvas.height);
   }
 

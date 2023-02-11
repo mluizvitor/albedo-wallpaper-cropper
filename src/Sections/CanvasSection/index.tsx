@@ -157,7 +157,7 @@ export function CanvasSection() {
 
   return (
     <section id='MainCanvas'
-      className='z-0 w-[100vw] h-[100vh] relative overflow-hidden flex items-center justify-center'
+      className='z-0 w-[100vw] h-[100vh] relative overflow-hidden flex items-center justify-center bg-[#0a0a0a]'
       onWheel={(e: WheelEvent<HTMLDivElement>) => wheelHandler(e)}
     >
       <div className='opacity-50 fixed top-0 inset-x-0 flex items-center justify-center h-16 font-teko text-lg'>
@@ -166,13 +166,13 @@ export function CanvasSection() {
 
       <div className='flex flex-col h-[100vh] items-center justify-center fixed inset-0'>
         <canvas id='canvasNormal'
-          className={['bg-neutral-700', showBlur && 'hidden'].join(' ')}
+          className={['bg-neutral-700', canvasWidth !== canvasHeight && 'brightness-[0.4]', showBlur && 'hidden'].join(' ')}
           width={canvasWidth}
           height={canvasHeight}
           style={{
             transform: `scale(${canvasScaleOnScreen / 100})`,
             borderRadius: 6 / (canvasScaleOnScreen / 100) * 1,
-            imageRendering: 'pixelated',
+            imageRendering: smoothRendering ? 'crisp-edges' : 'pixelated',
           }}
         />
 
@@ -186,13 +186,16 @@ export function CanvasSection() {
           }}
         />
 
-        <div className={['bg-black/30 border-4 border-white ring-4 ring-black pointer-events-none z-10 fixed', showBlur && 'hidden'].join(' ')}
-          style={{
-            transform: `scale(${canvasScaleOnScreen / 100})`,
-            width: canvasHeight,
-            height: canvasHeight,
-          }}
-        />
+        {canvasHeight !== canvasWidth && (
+          <div className={['pointer-events-none z-10 fixed', canvasWidth !== canvasHeight && 'backdrop-brightness-[2.5]', showBlur && 'hidden'].join(' ')}
+            style={{
+              background: 'none',
+              transform: `scale(${canvasScaleOnScreen / 100})`,
+              width: Math.min(canvasHeight, canvasWidth),
+              height: Math.min(canvasHeight, canvasWidth),
+            }}
+          />
+        )}
       </div>
 
       <div className='fixed bottom-0 inset-x-0 flex items-center justify-center h-16 text-lg'>
