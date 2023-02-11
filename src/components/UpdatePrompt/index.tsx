@@ -65,7 +65,7 @@ export function UpdatePrompt() {
         />
 
         <Button label='Update now'
-          className='bg-amber-400 text-black/80'
+          className='bg-yellow-400 text-black/80'
           onClick={handleUpdate}
         />
       </div>

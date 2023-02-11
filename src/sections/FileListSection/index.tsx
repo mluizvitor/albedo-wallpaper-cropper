@@ -35,7 +35,7 @@ export default function FileListSection() {
   const [systemQuerySearch, setSystemQuerySearch] = useState('');
   const [addedSystemQuery, setAddedSystemQuery] = useState('');
 
-  const imagePerPage = 15;
+  const [imagePerPage, setImagePerPage] = useState(10);
   const [paginatorStart, setPaginatorStart] = useState(0);
 
 
@@ -135,7 +135,7 @@ export default function FileListSection() {
 
   useEffect(() => {
     setPaginatorStart(0);
-  }, [addedSystemQuery]);
+  }, [addedSystemQuery, imagePerPage]);
 
   useEffect(() => {
     if (filteredAddedSystem.length > 0 && filteredAddedSystem.length <= paginatorStart) {
@@ -325,7 +325,12 @@ export default function FileListSection() {
           )}
         </div>
 
-        <ul className='grid grid-cols-3 grid-rows-5 w-full grow gap-2'>
+        <ul className={[
+          'grid w-full grow gap-2',
+          imagePerPage === 10 && 'grid-cols-2 grid-rows-5',
+          imagePerPage === 15 && 'grid-cols-3 grid-rows-5',
+          imagePerPage === 20 && 'grid-cols-4 grid-rows-5'
+        ].join(' ')}>
           {filteredAddedSystem.map(item => (
             <FileCard key={item.id}
               item={item}
@@ -384,8 +389,22 @@ export default function FileListSection() {
               disabled={!(paginatorStart + imagePerPage < filteredAddedSystem.length)}
               onClick={() => { setPaginatorStart((Math.ceil(filteredAddedSystem.length / imagePerPage) - 1) * imagePerPage); }} />
           </div>
-
         )}
+        <div className='flex gap-2 items-center mb-2'>
+          <span className='mr-2 shrink-0'>{'Items per page'}</span>
+          <Button label='10'
+            className={['flex-1 ring-2 justify-center', imagePerPage === 10 ? 'ring-yellow-400' : 'ring-transparent'].join(' ')}
+            onClick={() => setImagePerPage(10)}
+          />
+          <Button label='15'
+            className={['flex-1 ring-2 justify-center', imagePerPage === 15 ? 'ring-yellow-400' : 'ring-transparent'].join(' ')}
+            onClick={() => setImagePerPage(15)}
+          />
+          <Button label='20'
+            className={['flex-1 ring-2 justify-center', imagePerPage === 20 ? 'ring-yellow-400' : 'ring-transparent'].join(' ')}
+            onClick={() => setImagePerPage(20)}
+          />
+        </div>
         <span className='w-full text-xs text-center opacity-60'>
           {addedSystemQuery.length !== 0 ? `Found ${filteredAddedSystem.length} ${filteredAddedSystem.length === 1 ? 'system' : 'systems'}` : `${systemCollection.length} of ${systemList.length} currently supported`}
         </span>
