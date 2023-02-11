@@ -1,6 +1,6 @@
-import { CropperSection } from './Sections/CropperSection';
-import { CanvasSection } from './Sections/CanvasSection';
-import FileListSection from './Sections/FileListSection';
+import { CropperSection } from './sections/CropperSection';
+import { CanvasSection } from './sections/CanvasSection';
+import FileListSection from './sections/FileListSection';
 import IDB from './database/config';
 import { CircleNotch } from 'phosphor-react';
 import { useLoader } from './hooks/useLoader';
