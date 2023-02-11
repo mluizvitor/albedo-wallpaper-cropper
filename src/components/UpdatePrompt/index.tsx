@@ -5,7 +5,7 @@ import Button from '../Button';
 
 export function UpdatePrompt() {
 
-  const [promptIsOpen, setPromptIsOpen] = useState(true);
+  const [promptIsOpen, setPromptIsOpen] = useState(false);
 
   const {
     needRefresh: [needRefresh, setNeedRefresh],

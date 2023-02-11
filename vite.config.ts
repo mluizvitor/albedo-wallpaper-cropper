@@ -19,7 +19,7 @@ export default defineConfig({
       includeAssets: ['icon.png'],
       manifest: {
         name: 'Albedo Wallpaper Cropper',
-        short_name: 'Agadêmicos Cropper',
+        short_name: 'Albedo Cropper',
         description: 'Crop and collect wallpapers for Albedo Theme',
         theme_color: '#FBBF24',
         background_color: '#121212',
