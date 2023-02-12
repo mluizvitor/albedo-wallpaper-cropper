@@ -12,7 +12,7 @@
 }
 
 .cardSystemImg {
-  @apply object-cover
+  @apply object-cover max-w-[192px]
   h-full w-full
   border border-neutral-700;
 }

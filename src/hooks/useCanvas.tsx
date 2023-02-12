@@ -222,39 +222,64 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
       return;
     }
 
-    const newNormalCanvas = document.createElement('canvas');
-    newNormalCanvas.width = originalCanvas.width;
-    newNormalCanvas.height = originalCanvas.height;
-    const newNormalContext = newNormalCanvas.getContext('2d', { willReadFrequently: true });
-    newNormalContext && newNormalContext.drawImage(originalCanvas, 0, 0);
+    const normalCanvas = document.createElement('canvas');
+    normalCanvas.width = originalCanvas.width;
+    normalCanvas.height = originalCanvas.height;
+    const normalContext = normalCanvas.getContext('2d', { willReadFrequently: true });
+    normalContext && normalContext.drawImage(originalCanvas, 0, 0);
 
 
-    const newBlurredCanvas = document.createElement('canvas');
-    newBlurredCanvas.width = originalCanvas.width;
-    newBlurredCanvas.height = originalCanvas.height;
-    const newBlurredContext = newBlurredCanvas.getContext('2d', { willReadFrequently: true });
-    newBlurredContext && newBlurredContext.drawImage(originalCanvas, 0, 0);
+    const blurredCanvas = document.createElement('canvas');
+    blurredCanvas.width = originalCanvas.width;
+    blurredCanvas.height = originalCanvas.height;
+    const blurredContext = blurredCanvas.getContext('2d', { willReadFrequently: true });
+    blurredContext && blurredContext.drawImage(originalCanvas, 0, 0);
+
+    StackBlur.canvasRGBA(blurredCanvas, 0, 0, blurredCanvas.width, blurredCanvas.height, blurAmount);
+
+    const thumbnailCanvas = document.createElement('canvas');
+    const thumbnailContext = thumbnailCanvas.getContext('2d', { willReadFrequently: true });
+
+    const auxThumbCanvas = document.createElement('canvas');
+    const auxThumbContext = auxThumbCanvas.getContext('2d', { willReadFrequently: true });
+    if (!thumbnailContext || !thumbnailCanvas || !auxThumbCanvas || !auxThumbContext) {
+      return;
+    }
 
     const scaleSize = () => {
       return 1 / Math.min(canvasWidth, canvasHeight) * 192;
     };
 
-    const newThumbnailCanvas = document.createElement('canvas');
-    newThumbnailCanvas.width = originalCanvas.width / 1 * scaleSize();
-    newThumbnailCanvas.height = originalCanvas.height / 1 * scaleSize();
-    const newThumbnailContext = newThumbnailCanvas.getContext('2d', { willReadFrequently: true });
-    newThumbnailContext?.scale(scaleSize(), scaleSize());
-    newThumbnailContext?.drawImage(originalCanvas, 0, 0);
+    let curCanvasSize = {
+      width: Math.floor(originalCanvas.width * 0.5),
+      height: Math.floor(originalCanvas.height * 0.5),
+    };
+
+    thumbnailCanvas.width = originalCanvas.width / 1 * scaleSize();
+    thumbnailCanvas.height = originalCanvas.height / 1 * scaleSize();
+
+    auxThumbCanvas.width = curCanvasSize.width;
+    auxThumbCanvas.height = curCanvasSize.height;
+
+    auxThumbContext.drawImage(originalCanvas, 0, 0, curCanvasSize.width, curCanvasSize.height);
+
+    while (Math.min(curCanvasSize.width, curCanvasSize.height) * 0.5 > Math.min(thumbnailCanvas.width, thumbnailCanvas.height)) {
+      curCanvasSize = {
+        width: Math.floor(curCanvasSize.width * 0.5),
+        height: Math.floor(curCanvasSize.height * 0.5),
+      };
+
+      auxThumbContext.drawImage(auxThumbCanvas, 0, 0, curCanvasSize.width * 2, curCanvasSize.height * 2, 0, 0, curCanvasSize.width, curCanvasSize.height);
+    }
+    const scaleValue = 1 / Math.min(curCanvasSize.width, curCanvasSize.height) * 192;
+
+    thumbnailContext.scale(scaleValue, scaleValue);
+    thumbnailContext.drawImage(auxThumbCanvas, 0, 0, curCanvasSize.width, curCanvasSize.height, 0, 0, curCanvasSize.width, curCanvasSize.height);
 
     const normal = originalCanvas.toDataURL('image/webp', 0.9);
+    const blurred = blurredCanvas.toDataURL('image/webp', 0.9);
+    const thumbnail = thumbnailCanvas.toDataURL('image/webp', 0.75);
 
-    StackBlur.canvasRGBA(newBlurredCanvas, 0, 0, newBlurredCanvas.width, newBlurredCanvas.height, blurAmount);
-
-    const blurred = newBlurredCanvas.toDataURL('image/webp', 0.9);
-
-    const thumbnail = newThumbnailCanvas.toDataURL('image/webp', 0.8);
-
-    console.log(thumbnail);
 
     setCanvasContent({ normal, blurred, thumbnail });
   }

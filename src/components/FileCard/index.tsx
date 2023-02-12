@@ -20,7 +20,7 @@ export function FileCard({ item, hideBlurred, renameMethod, replaceMethod, expor
         title={`ES theme: ${item.theme}\nName: ${item.fullName}\nManufacturer: ${item.manufacturer}`}>
         <Zoom zoomMargin={32}
           zoomImg={{ src: item.file.normal }}>
-          <img className={[styles.cardSystemImg, 'rounded-l aspect-video'].join(' ')}
+          <img className={[styles.cardSystemImg, hideBlurred ? 'rounded' : 'rounded-l', 'aspect-video'].join(' ')}
             src={item.file.thumbnail || item.file.normal} />
         </Zoom>
         {!hideBlurred && (
