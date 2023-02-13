@@ -12,6 +12,7 @@ import 'react-medium-image-zoom/dist/styles.css';
 import styles from './styles.module.css';
 import { FileCard } from '../../components/FileCard';
 import Checkbox from '../../components/Checkbox';
+import Input from '../../components/Input';
 
 export default function FileListSection() {
 
@@ -31,6 +32,7 @@ export default function FileListSection() {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isProjectDialogOpen, setIsProjectDialogOpen] = useState(false);
   const [isFileListSettingsDialogOpen, setIsFileListSettingsDialogOpen] = useState(false);
+  const [isSaveProjectDialogOpen, setIsSaveProjectDialogOpen] = useState(false);
 
   const [currentEditData, setCurrentEditData] = useState({} as SystemProps);
   const [selectedSystem, setSelectedSystem] = useState({} as IndexedSystemProps);
@@ -41,6 +43,8 @@ export default function FileListSection() {
 
   const [imagePerPage, setImagePerPage] = useState(15);
   const [paginatorStart, setPaginatorStart] = useState(0);
+
+  const [downloadFileName, setDownloadFileName] = useState('');
 
 
   const filteredSystem = systemQuerySearch === ''
@@ -72,6 +76,10 @@ export default function FileListSection() {
 
   function toggleProjectDialog() {
     setIsProjectDialogOpen(!isProjectDialogOpen);
+  }
+
+  function toggleSaveProjectDialog() {
+    setIsSaveProjectDialogOpen(!isSaveProjectDialogOpen);
   }
 
   function editCurrentEditData(targetSystem: IndexedSystemProps) {
@@ -107,6 +115,18 @@ export default function FileListSection() {
     } else {
       toggleProjectDialog();
     }
+  }
+
+  function handleExportProject() {
+    const parsedDate = new Date().toISOString().slice(0, 19).replaceAll('-', '').replaceAll(':', '').replaceAll('T', '');
+    setDownloadFileName('AlbedoBackup-' + parsedDate);
+    toggleSaveProjectDialog();
+  }
+
+  function handleExportProjectSubmit(event: FormEvent) {
+    event.preventDefault();
+    exportProject(downloadFileName);
+    toggleSaveProjectDialog();
   }
 
   function loadImage() {
@@ -186,7 +206,7 @@ export default function FileListSection() {
 
             <Button label='Save Project'
               className='w-full bg-neutral-600'
-              onClick={exportProject}
+              onClick={handleExportProject}
               icon={<FloppyDisk size={16}
                 weight='bold' />} />
 
@@ -555,6 +575,12 @@ export default function FileListSection() {
         </form>
       </Prompt>
 
+      {/**
+       * 
+       * Load project prompt
+       * 
+       */}
+
       <Prompt open={isProjectDialogOpen}
         onClose={toggleProjectDialog}
         promptTitle='Loading a project will discard current changes. Are you sure you want to load a project?'>
@@ -566,6 +592,38 @@ export default function FileListSection() {
             className='bg-neutral-600'
             onClick={loadImage} />
         </div>
+      </Prompt>
+
+      {/**
+       * 
+       * Save project prompt
+       * 
+       */}
+
+      <Prompt open={isSaveProjectDialogOpen}
+        onClose={toggleSaveProjectDialog}
+        promptTitle='Save project as...'>
+        <form onSubmit={(e) => handleExportProjectSubmit(e)}
+          className='grid gap-4'>
+
+          <Input id='fileList_fileName'
+            label=''
+            type='text'
+            value={downloadFileName}
+            inputClassName='bg-neutral-800'
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setDownloadFileName(e.target.value)} />
+
+          <div className='grid grid-cols-2 gap-2'>
+            <Button label='Cancel'
+              className='bg-neutral-600'
+              type='button'
+              onClick={toggleSaveProjectDialog} />
+
+            <Button label='Download'
+              className='bg-yellow-400 text-black/80'
+              type='submit' />
+          </div>
+        </form>
       </Prompt>
 
     </SideBar >

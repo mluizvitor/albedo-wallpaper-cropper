@@ -8,9 +8,10 @@ interface InputProps extends ComponentPropsWithoutRef<ElementType> {
   placeholder?: string;
   type: HTMLInputTypeAttribute;
   className?: string;
+  inputClassName?: string;
 }
 
-export default function Input({ id, label, helperText, placeholder, type, className, ...rest }: InputProps) {
+export default function Input({ id, label, helperText, placeholder, type, className, inputClassName, ...rest }: InputProps) {
   return (
     <div className={[styles.inputContainer, className].join(' ')}>
 
@@ -23,7 +24,7 @@ export default function Input({ id, label, helperText, placeholder, type, classN
         type={type}
         {...rest}
         placeholder={placeholder}
-        className={type === 'range' ? '' : styles.inputText}
+        className={[type === 'range' ? '' : styles.inputText, inputClassName].join(' ')}
         onFocus={(e) => { e.target.select(); }} />
       {helperText && <span className='opacity-70 leading-[100%] mt-2 text-xs ml-2 w-auto'>{helperText}</span>}
     </div>

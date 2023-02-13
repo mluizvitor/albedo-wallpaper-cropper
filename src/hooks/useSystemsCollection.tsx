@@ -31,7 +31,7 @@ interface SystemsContextData {
   updateSystemList: () => void;
 
   exportFilesAsZip: (systemName: string | 'all') => void;
-  exportProject: () => void;
+  exportProject: (fineName: string) => void;
   importProject: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -227,17 +227,12 @@ export function SystemsProvider({ children }: SystemProviderProps) {
     });
   }
 
-  function exportProject() {
+  function exportProject(fileName: string) {
     const file = new Blob([JSON.stringify(systemCollection)], { type: 'application/json' });
-    const parsedDate = new Date().toISOString().slice(0, 19).replaceAll('-', '').replaceAll(':', '').replaceAll('T', '');
-
-    const newName = prompt('Save as...', `AlbedoBackup.${parsedDate}`);
-
-    if (!newName) {
+    if (!fileName) {
       return null;
     }
-
-    saveAs(file, newName + '.awc.json');
+    saveAs(file, fileName + '.awc.json');
   }
 
   function importProject(event: ChangeEvent<HTMLInputElement>) {
