@@ -63,3 +63,7 @@
 .imgPerPageButtonSelected {
   @apply ring-2 ring-amber-400 bg-neutral-800
 }
+
+.paginatorButton {
+  @apply disabled:pointer-events-none bg-opacity-70 disabled:text-white/30
+}

@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent, Fragment, useEffect, useState } from 'react';
 import { useCanvas } from '../../hooks/useCanvas';
-import { Backspace, CaretDoubleLeft, CaretDoubleRight, CaretDown, CaretLeft, CaretRight, CaretUp, CheckCircle, DownloadSimple, FloppyDisk, Gear, List, MagnifyingGlass, Plus, Trash, UploadSimple } from 'phosphor-react';
+import { Backspace, CaretDoubleLeft, CaretDoubleRight, CaretDown, CaretLeft, CaretRight, CaretUp, CheckCircle, DownloadSimple, FloppyDisk, Gear, GearSix, List, MagnifyingGlass, Plus, Trash, UploadSimple } from 'phosphor-react';
 import { SideBar } from '../../components/SideBar';
 import { IndexedSystemProps, SystemProps, useSystemsCollection } from '../../hooks/useSystemsCollection';
 import Button from '../../components/Button';
@@ -375,7 +375,7 @@ export default function FileListSection() {
               hideLabel
               icon={<CaretDoubleLeft size={16}
                 weight='bold' />}
-              className='disabled:pointer-events-none rounded-r-none hover:rounded-r-none group bg-opacity-70 disabled:text-white/30'
+              className={styles.paginatorButton + ' mr-1'}
               disabled={!(paginatorStart > 0)}
               onClick={() => setPaginatorStart(0)} />
 
@@ -383,11 +383,11 @@ export default function FileListSection() {
               hideLabel
               icon={<CaretLeft size={16}
                 weight='bold' />}
-              className='disabled:pointer-events-none rounded-none hover:rounded-none group bg-opacity-70 disabled:text-white/30'
+              className={styles.paginatorButton + ' px-4'}
               disabled={!(paginatorStart > 0)}
               onClick={() => loadLess()} />
 
-            <div className='px-2 bg-neutral-700 h-auto text-center grow bg-opacity-70'>
+            <div className='h-auto text-center grow bg-opacity-70'>
               <span className='leading-8 text-sm'>{'Page '}{Math.ceil((paginatorStart + imagePerPage) / imagePerPage)}{' of '}{Math.ceil(filteredAddedSystem.length / imagePerPage)}</span>
             </div>
 
@@ -395,7 +395,7 @@ export default function FileListSection() {
               hideLabel
               icon={<CaretRight size={16}
                 weight='bold' />}
-              className='disabled:pointer-events-none rounded-none hover:rounded-none group bg-opacity-70 disabled:text-white/30'
+              className={styles.paginatorButton + ' px-4'}
               disabled={!(paginatorStart + imagePerPage < filteredAddedSystem.length)}
               onClick={() => loadMore()} />
 
@@ -403,20 +403,20 @@ export default function FileListSection() {
               hideLabel
               icon={<CaretDoubleRight size={16}
                 weight='bold' />}
-              className='disabled:pointer-events-none rounded-l-none hover:rounded-l-none group bg-opacity-70 disabled:text-white/30'
+              className={styles.paginatorButton + ' ml-1'}
               disabled={!(paginatorStart + imagePerPage < filteredAddedSystem.length)}
               onClick={() => { setPaginatorStart((Math.ceil(filteredAddedSystem.length / imagePerPage) - 1) * imagePerPage); }} />
           </div>
         )}
 
-        <div className='flex items-center opacity-60'>
-          <span className='w-full text-sm'>
+        <div className='flex items-center'>
+          <span className='w-full text-sm opacity-60'>
             {addedSystemQuery.length !== 0 ? `Found ${filteredAddedSystem.length} ${filteredAddedSystem.length === 1 ? 'system' : 'systems'}` : `${systemCollection.length} of ${systemList.length} currently supported`}
           </span>
           <Button label='List settings'
             hideLabel
-            className='p-1 h-auto bg-transparent'
-            icon={<Gear size={16}
+            className='p-1 h-auto bg-transparent shadow-none opacity-60 hover:opacity-100'
+            icon={<GearSix size={16}
               weight='bold' />}
             onClick={() => setIsFileListSettingsDialogOpen(true)} />
         </div>

@@ -2,7 +2,7 @@ import { Minus, Plus } from 'phosphor-react';
 import Button from '../../components/Button';
 import { useCanvas } from '../../hooks/useCanvas';
 import { getScaleFactor } from '../../utils/GetScaleFactor';
-import { WheelEvent, useEffect, useState } from 'react';
+import { ChangeEvent, WheelEvent, useEffect, useState } from 'react';
 
 export function CanvasSection() {
 
@@ -124,13 +124,21 @@ export function CanvasSection() {
   }
 
   const [canvasScaleOnScreen, setCanvasScaleOnScreen] = useState(50);
+  const maxScale = 300;
+  const minScale = 10;
 
   function updateCanvasScaleOnScreen(type: 'zoomIn' | 'zoomOut') {
-    if (type === 'zoomIn' && canvasScaleOnScreen < 200) {
+    if (type === 'zoomIn' && canvasScaleOnScreen < maxScale) {
       setCanvasScaleOnScreen(canvasScaleOnScreen + 5);
 
-    } else if (type === 'zoomOut' && canvasScaleOnScreen > 20) {
+    } else if (type === 'zoomOut' && canvasScaleOnScreen > minScale) {
       setCanvasScaleOnScreen(canvasScaleOnScreen - 5);
+    }
+  }
+
+  function handleUpdateScaleInput(scaleTarget: number) {
+    if (scaleTarget >= minScale && scaleTarget <= maxScale) {
+      setCanvasScaleOnScreen(scaleTarget);
     }
   }
 
@@ -200,25 +208,36 @@ export function CanvasSection() {
 
       <div className='fixed bottom-0 inset-x-0 flex items-center justify-center h-16 text-lg'>
 
-        <div className='opacity-50 hover:opacity-100 flex group transition-opacity duration-300'>
+        <div className='opacity-50 hover:opacity-100 flex transition-opacity duration-300'>
           <Button label='Clear Canvas'
             className='mr-4 text-sm'
             onClick={clearCanvas} />
 
           <Button label='Zoom Out'
             hideLabel
-            className='rounded-r-none hover:rounded-l-xl hover:rounded-r-none'
             icon={<Minus size={16} />}
             onClick={() => {
               updateCanvasScaleOnScreen('zoomOut');
             }}
           />
-          <div className='w-16 bg-neutral-700 flex items-center justify-center font-bold text-sm pointer-events-none'>
-            {Math.ceil(canvasScaleOnScreen)}{'%'}
-          </div>
+
+          <label htmlFor='canvasSection_zoomInput'
+            className='w-16 bg-neutral-700 mx-1 rounded font-bold group text-sm flex items-center'
+            style={{
+              boxShadow: '0 0 0 1px rgba(255, 255, 255, 0.15) inset,' +
+                '0 0 0 1px rgba(0,0,0,0.4),' +
+                '0 2px 8px -2px rgba(0,0,0,0.5)',
+            }}>
+            <input id='canvasSection_zoomInput'
+              value={Math.ceil(canvasScaleOnScreen)}
+              type='number'
+              onChange={(e: ChangeEvent<HTMLInputElement>) => handleUpdateScaleInput(Number(e.target.value))}
+              className='h-full rounded text-end focus-within:text-center min-w-0 w-full focus-within:w-full bg-transparent block ml-auto' />
+            <span className='group-focus-within:hidden ml-1 mr-2'>{'%'}</span>
+          </label>
+
           <Button label='Zoom Out'
             hideLabel
-            className='rounded-l-none hover:rounded-l-none hover:rounded-r-xl'
             icon={<Plus size={16} />}
             onClick={() => {
               updateCanvasScaleOnScreen('zoomIn');
