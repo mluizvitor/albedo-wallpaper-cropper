@@ -33,10 +33,26 @@
 }
 
 .popOverPanel {
-  @apply absolute top-9 -left-2 z-20 bg-neutral-700 border border-neutral-600 px-0.5 py-1 min-w-[12rem] rounded-lg;
-  box-shadow: 0 0 0 1px rgba(0,0,0,0.5),
-  0 0.5rem 1.5rem -0.25rem rgba(0,0,0,0.5),
-  0 0.25rem 0.75rem -0.125rem rgba(0,0,0,0.5);
+  @apply absolute top-9 -left-2 z-20 bg-neutral-700/70 px-0.5 py-1 min-w-[12rem] rounded-lg
+  backdrop-blur-md backdrop-saturate-200 backdrop-brightness-75;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.15) inset,
+    0 0 0 1px rgba(0,0,0,0.4),
+    0 0.5rem 1.5rem -0.25rem rgba(0,0,0,0.5),
+    0 0.25rem 0.75rem -0.125rem rgba(0,0,0,0.5);
+}
+.popOverOption {
+  @apply font-normal w-full shadow-none bg-transparent hover:bg-white/20;
+}
+
+.popOverButton {
+  @apply px-2 h-8 flex items-center
+  hover:brightness-125 rounded hover:rounded-lg transition-all duration-300;
+  background-color: rgb(82,82,82) !important;
+  box-shadow: 
+    0 0 0 1px rgba(255, 255, 255, 0.15) inset,
+    0 0 0 1px rgba(0,0,0,0.4),
+    0 2px 8px -2px rgba(0,0,0,0.5);
 }
 
 .imgPerPageButton,

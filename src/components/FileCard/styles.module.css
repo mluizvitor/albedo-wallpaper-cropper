@@ -32,11 +32,13 @@
 }
 
 .menuSurface {
-  @apply bg-neutral-700 absolute -right-3 bottom-8 px-0.5 py-1 z-50
-  w-32 rounded-lg border border-neutral-600;
-  box-shadow: 0 0 0 1px rgba(0,0,0,0.5),
-  0 0.4rem 1rem -0.25rem rgba(0,0,0,0.5),
-  0 0.2rem 0.75rem -0.4rem rgba(0,0,0,0.5);
+  @apply bg-neutral-700/80 absolute -right-3 bottom-8 px-0.5 py-1 z-50
+  w-32 rounded-lg backdrop-blur-md backdrop-saturate-200 backdrop-brightness-75;
+  box-shadow: 
+    0 0 0 1px rgba(255, 255, 255, 0.15) inset,
+    0 0 0 1px rgba(0,0,0,0.4),
+    0 0.4rem 1rem -0.25rem rgba(0,0,0,0.5),
+    0 0.2rem 0.75rem -0.4rem rgba(0,0,0,0.5);
 }
 
 .menuItem {

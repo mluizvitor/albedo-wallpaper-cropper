@@ -191,41 +191,40 @@ export default function FileListSection() {
       <div className='relative shrink-0 w-full flex bg-neutral-700 p-4 pb-2'>
 
         <Popover className='relative'>
-          <Popover.Button className='px-2 h-8 flex items-center bg-neutral-600 hover:brightness-125 rounded hover:rounded-lg transition-all duration-300'>
+          <Popover.Button className={styles.popOverButton}>
             <List size={16}
               weight='bold' />
-            <span className='ml-2 font-bold'>{'Menu'}</span>
           </Popover.Button>
 
           <Popover.Panel className={styles.popOverPanel}>
             <Button label='Load Project'
-              className='font-normal w-full'
+              className={styles.popOverOption}
               onClick={handleOpenProject}
               icon={<UploadSimple size={16}
                 weight='bold' />} />
 
             <Button label='Save Project'
-              className='font-normal w-full'
+              className={styles.popOverOption}
               onClick={handleExportProject}
               icon={<FloppyDisk size={16}
                 weight='bold' />} />
 
             {systemCollection.length !== 0 && (
               <>
-                <hr className='border-neutral-500 my-1' />
+                <hr className='border-neutral-500 my-1 -mx-0.5' />
 
                 <Button label='Download as ZIP'
                   id='buttonDownloadZip'
                   icon={<DownloadSimple size={16}
                     weight='bold' />}
-                  className='font-normal w-full'
+                  className={styles.popOverOption}
                   onClick={() => exportFilesAsZip('all')}
                 />
 
                 <Button label='Clear Collection'
                   icon={<Trash size={16}
                     weight='bold' />}
-                  className='font-normal p-2 w-full text-red-200 hover:bg-red-400/20'
+                  className={styles.popOverOption + ' text-red-200 hover:bg-red-400/20'}
                   onClick={toggleDeleteDialog}
                 />
               </>
