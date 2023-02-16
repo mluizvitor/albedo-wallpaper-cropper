@@ -7,5 +7,5 @@
 }
 
 .iconContainer {
-  @apply shrink-0 rounded ring-yellow-100 mr-2;
+  @apply shrink-0 rounded ring-amber-100 mr-2;
 }

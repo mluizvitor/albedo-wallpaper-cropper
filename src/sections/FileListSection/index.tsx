@@ -197,19 +197,18 @@ export default function FileListSection() {
             <span className='ml-2 font-bold'>{'Menu'}</span>
           </Popover.Button>
 
-          <Popover.Panel className='absolute top-9 -left-2 z-20 bg-neutral-600 p-2 min-w-[12rem] rounded-lg shadow-xl shadow-black/30 grid gap-1'>
+          <Popover.Panel className={styles.popOverPanel}>
             <Button label='Load Project'
-              className='w-full bg-neutral-600'
+              className='font-normal w-full'
               onClick={handleOpenProject}
               icon={<UploadSimple size={16}
                 weight='bold' />} />
 
             <Button label='Save Project'
-              className='w-full bg-neutral-600'
+              className='font-normal w-full'
               onClick={handleExportProject}
               icon={<FloppyDisk size={16}
                 weight='bold' />} />
-
 
             {systemCollection.length !== 0 && (
               <>
@@ -219,14 +218,14 @@ export default function FileListSection() {
                   id='buttonDownloadZip'
                   icon={<DownloadSimple size={16}
                     weight='bold' />}
-                  className='w-full bg-neutral-600'
+                  className='font-normal w-full'
                   onClick={() => exportFilesAsZip('all')}
                 />
 
                 <Button label='Clear Collection'
                   icon={<Trash size={16}
                     weight='bold' />}
-                  className='bg-red-500 p-2 w-full text-white'
+                  className='font-normal p-2 w-full text-red-200 hover:bg-red-400/20'
                   onClick={toggleDeleteDialog}
                 />
               </>
@@ -322,7 +321,7 @@ export default function FileListSection() {
           type='submit'
           icon={<Plus size={16}
             weight='bold' />}
-          className='bg-yellow-300 text-black/80 pr-3 ml-4'
+          className='bg-amber-300 text-black/80 pr-3 ml-4'
         />
       </form>
 
@@ -353,9 +352,10 @@ export default function FileListSection() {
           imagePerPage === 15 && 'grid-cols-3 grid-rows-5',
           imagePerPage === 20 && 'grid-cols-4 grid-rows-5'
         ].join(' ')}>
-          {filteredAddedSystem.map(item => (
+          {filteredAddedSystem.map((item, idx) => (
             <FileCard key={item.id}
               item={item}
+              first={idx === systemCollection.length - 1}
               hideBlurred={hideBlurredFile}
               renameMethod={() => {
                 toggleEditDialog();
@@ -375,18 +375,16 @@ export default function FileListSection() {
             <Button label='First Page'
               hideLabel
               icon={<CaretDoubleLeft size={16}
-                className='group-disabled:opacity-30'
                 weight='bold' />}
-              className='disabled:pointer-events-none rounded-r-none hover:rounded-r-none group bg-opacity-70'
+              className='disabled:pointer-events-none rounded-r-none hover:rounded-r-none group bg-opacity-70 disabled:text-white/30'
               disabled={!(paginatorStart > 0)}
               onClick={() => setPaginatorStart(0)} />
 
             <Button label='Previous Page'
               hideLabel
               icon={<CaretLeft size={16}
-                className='group-disabled:opacity-30'
                 weight='bold' />}
-              className='disabled:pointer-events-none rounded-none hover:rounded-none group bg-opacity-70'
+              className='disabled:pointer-events-none rounded-none hover:rounded-none group bg-opacity-70 disabled:text-white/30'
               disabled={!(paginatorStart > 0)}
               onClick={() => loadLess()} />
 
@@ -397,18 +395,16 @@ export default function FileListSection() {
             <Button label='Next Page'
               hideLabel
               icon={<CaretRight size={16}
-                className='group-disabled:opacity-30'
                 weight='bold' />}
-              className='disabled:pointer-events-none rounded-none hover:rounded-none group bg-opacity-70'
+              className='disabled:pointer-events-none rounded-none hover:rounded-none group bg-opacity-70 disabled:text-white/30'
               disabled={!(paginatorStart + imagePerPage < filteredAddedSystem.length)}
               onClick={() => loadMore()} />
 
             <Button label='Last Page'
               hideLabel
               icon={<CaretDoubleRight size={16}
-                className='group-disabled:opacity-30'
                 weight='bold' />}
-              className='disabled:pointer-events-none rounded-l-none hover:rounded-l-none group bg-opacity-70'
+              className='disabled:pointer-events-none rounded-l-none hover:rounded-l-none group bg-opacity-70 disabled:text-white/30'
               disabled={!(paginatorStart + imagePerPage < filteredAddedSystem.length)}
               onClick={() => { setPaginatorStart((Math.ceil(filteredAddedSystem.length / imagePerPage) - 1) * imagePerPage); }} />
           </div>
@@ -446,15 +442,15 @@ export default function FileListSection() {
           <span className='mb-1 block'>{'Items per page'}</span>
           <div className='flex gap-2 items-center'>
             <Button label='10'
-              className={['flex-1 ring-2 justify-center bg-neutral-800', imagePerPage === 10 ? 'ring-yellow-400' : 'ring-transparent'].join(' ')}
+              className={[imagePerPage === 10 ? styles.imgPerPageButtonSelected : styles.imgPerPageButton].join(' ')}
               onClick={() => setImagePerPage(10)}
             />
             <Button label='15'
-              className={['flex-1 ring-2 justify-center bg-neutral-800', imagePerPage === 15 ? 'ring-yellow-400' : 'ring-transparent'].join(' ')}
+              className={[imagePerPage === 15 ? styles.imgPerPageButtonSelected : styles.imgPerPageButton].join(' ')}
               onClick={() => setImagePerPage(15)}
             />
             <Button label='20'
-              className={['flex-1 ring-2 justify-center bg-neutral-800', imagePerPage === 20 ? 'ring-yellow-400' : 'ring-transparent'].join(' ')}
+              className={[imagePerPage === 20 ? styles.imgPerPageButtonSelected : styles.imgPerPageButton].join(' ')}
               onClick={() => setImagePerPage(20)}
             />
           </div>
@@ -620,7 +616,7 @@ export default function FileListSection() {
               onClick={toggleSaveProjectDialog} />
 
             <Button label='Download'
-              className='bg-yellow-400 text-black/80'
+              className='bg-amber-400 text-black/80'
               type='submit' />
           </div>
         </form>

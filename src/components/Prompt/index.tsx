@@ -20,7 +20,7 @@ export function Prompt({ open, onClose, promptTitle, children }: PromptProps) {
     >
       <div className='bg-black/50 fixed inset-0' />
       <div className='fixed inset-0 flex items-center justify-center p-4'>
-        <Dialog.Panel className='w-full max-w-sm bg-neutral-700 p-4 rounded-2xl shadow-xl grid gap-4 relative'>
+        <Dialog.Panel className='w-full max-w-sm bg-neutral-700 p-4 border border-neutral-600 ring-1 ring-black/50 rounded-2xl shadow-xl shadow-black/30 relative'>
 
           <Button label='Close'
             hideLabel
@@ -29,11 +29,11 @@ export function Prompt({ open, onClose, promptTitle, children }: PromptProps) {
             onClick={onClose}
             className='absolute top-3 right-3' />
 
-          <Dialog.Title className='text-lg leading-6 mr-7'>
+          <Dialog.Title className='text-lg leading-6 mr-7 mb-4'>
             {promptTitle || 'This is a placeholder text.'}
           </Dialog.Title>
 
-          <hr className='border-yellow-500' />
+          <hr className='border-neutral-500 -mx-4 mb-4' />
 
           {children}
 

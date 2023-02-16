@@ -1,10 +1,10 @@
-import { ComponentPropsWithoutRef, ElementType, ReactNode } from 'react';
+import { ComponentPropsWithoutRef, ElementType, ReactElement, cloneElement } from 'react';
 
 import styles from './styles.module.css';
 
 interface ButtonProps extends ComponentPropsWithoutRef<ElementType> {
   label: string;
-  icon?: ReactNode;
+  icon?: ReactElement;
   className?: string;
   hideLabel?: boolean;
 }
@@ -14,7 +14,9 @@ export default function Button({ label, icon, className, hideLabel, ...rest }: B
     <button className={[styles.button, className].join(' ')}
       title={label}
       {...rest}>
-      {icon && icon}
+      {icon && cloneElement(icon, {
+        className: 'shrink-0',
+      })}
       {!hideLabel && (
         <span className={icon ? 'ml-2' : ''}>
           {label}

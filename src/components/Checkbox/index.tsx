@@ -25,7 +25,7 @@ export default function Checkbox({ checked, id, label, value, triggerMethod, cla
         {checked ? (
           <CheckSquare size={bigCheckbox ? 24 : 16}
             weight='fill'
-            className='text-yellow-400' />
+            className='text-amber-400' />
         ) : (
           <Square size={bigCheckbox ? 24 : 16}
             weight='bold'

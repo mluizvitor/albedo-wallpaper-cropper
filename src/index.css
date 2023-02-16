@@ -22,5 +22,5 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-neutral-400 hover:bg-yellow-500;
+  @apply bg-neutral-400 hover:bg-amber-500;
 }

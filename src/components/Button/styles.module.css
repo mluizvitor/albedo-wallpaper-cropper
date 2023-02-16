@@ -5,5 +5,5 @@
   
   transition-all duration-300
   hover:brightness-125
-  rounded hover:rounded-lg
+  rounded hover:rounded-lg;
 }
