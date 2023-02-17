@@ -1,10 +1,8 @@
 import Zoom from 'react-medium-image-zoom';
 import styles from './styles.module.css';
 import { Menu } from '@headlessui/react';
-import { ArrowsLeftRight, DotsThreeVertical, DownloadSimple, Question, Textbox, TrashSimple } from 'phosphor-react';
+import { ArrowsLeftRight, DotsThreeVertical, DownloadSimple, Textbox, TrashSimple } from 'phosphor-react';
 import { SystemProps } from '../../hooks/useSystemsCollection';
-import Button from '../Button';
-import { Fragment } from 'react';
 
 interface FileCardProps {
   item: SystemProps;
