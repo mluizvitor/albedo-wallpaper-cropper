@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent, Fragment, useEffect, useState } from 'react';
 import { useCanvas } from '../../hooks/useCanvas';
-import { Backspace, CaretDoubleLeft, CaretDoubleRight, CaretDown, CaretLeft, CaretRight, CaretUp, CheckCircle, DotsThree, DownloadSimple, FloppyDisk, GearSix, List, MagnifyingGlass, Plus, Trash, UploadSimple } from 'phosphor-react';
+import { CaretDoubleLeft, CaretDoubleRight, CaretDown, CaretLeft, CaretRight, CaretUp, CheckCircle, DotsThree, DownloadSimple, FloppyDisk, GearSix, List, MagnifyingGlass, Plus, Trash, UploadSimple, X } from 'phosphor-react';
 import { SideBar } from '../../components/SideBar';
 import { IndexedSystemProps, SystemProps, useSystemsCollection } from '../../hooks/useSystemsCollection';
 import Button from '../../components/Button';
@@ -335,14 +335,12 @@ export default function FileListSection() {
           {addedSystemQuery.length !== 0 && (
             <Button label='Clear search'
               hideLabel
-              icon={
-                <Backspace size={16}
-                  weight='bold' />
-              }
+              className='shadow-none bg-transparent opacity-60 hover:opacity-100'
+              icon={<X size={16}
+                weight='bold' />}
               onClick={() => setAddedSystemQuery('')} />
           )}
         </div>
-
         <ul className={[
           'grid w-full grow gap-2',
           itemsPerPage === 10 && 'grid-cols-2 grid-rows-5',
@@ -459,6 +457,8 @@ export default function FileListSection() {
             className='bg-neutral-800 px-2 py-1 mb-2'
             triggerMethod={() => setHideBlurredFile(!hideBlurredFile)} />
 
+          <hr className='-mx-4 my-4' />
+
           <span className='mb-1 block'>{'Items per page'}</span>
           <div className='flex gap-2 items-center'>
             <Button label='10'
@@ -508,7 +508,7 @@ export default function FileListSection() {
 
       <Prompt open={isEditDialogOpen}
         onClose={toggleEditDialog}
-        promptTitle='Enter a new name'>
+        promptTitle='Enter a new system'>
 
         <form onSubmit={(e) => handleEditSubmit(e)}
           className='grid grid-cols-2 gap-x-2 gap-y-4'
@@ -519,11 +519,12 @@ export default function FileListSection() {
             as='div'
             className='block col-span-2'>
 
-            <div className={[styles.comboboxInput, 'bg-neutral-700'].join(' ')}>
+            <div className={styles.comboboxInput}>
               <Combobox.Input onChange={(event) => setSystemQuerySearch(event.target.value)}
                 displayValue={(option: IndexedSystemProps) => option.theme || ''}
                 placeholder='Type to add a system'
                 autoFocus
+                spellCheck='false'
                 className='min-w-0 w-full outline-none border-0 bg-transparent ' />
 
               <Combobox.Options className={styles.comboboxList}>

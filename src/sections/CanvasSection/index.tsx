@@ -208,7 +208,7 @@ export function CanvasSection() {
 
       <div className='fixed bottom-0 inset-x-0 flex items-center justify-center h-16 text-lg'>
 
-        <div className='opacity-50 hover:opacity-100 flex transition-opacity duration-300'>
+        <div className='opacity-60 hover:opacity-100 flex transition-opacity duration-300'>
           <Button label='Clear Canvas'
             className='mr-4 text-sm'
             onClick={clearCanvas} />
@@ -222,7 +222,7 @@ export function CanvasSection() {
           />
 
           <label htmlFor='canvasSection_zoomInput'
-            className='w-16 bg-neutral-700 mx-1 rounded font-bold group text-sm flex items-center'
+            className='w-16 bg-neutral-700 mx-1 rounded font-bold group text-sm flex items-center cursor-text'
             style={{
               boxShadow: '0 0 0 1px rgba(255, 255, 255, 0.15) inset,' +
                 '0 0 0 1px rgba(0,0,0,0.4),' +
