@@ -33,12 +33,12 @@ export function FileCard({ item, hideBlurred, renameMethod, replaceMethod, expor
           </Zoom>
         )}
       </div>
-      <div className='flex items-center mt-1'>
+      <div className='flex items-center mt-1 h-5'>
         <span className={styles.cardSystemName}>
           {item.theme}
         </span>
         <Menu as='div'
-          className='relative'>
+          className='relative flex'>
           <Menu.Button as='button'
             className={styles.menuListButton}>
             <DotsThreeVertical size={16}

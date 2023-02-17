@@ -27,12 +27,12 @@
 }
 
 .cardSystemName {
-  @apply w-full px-1 text-sm
+  @apply w-full px-1 text-sm leading-[100%]
   min-w-0 whitespace-nowrap overflow-ellipsis overflow-hidden
 }
 
 .menuListButton {
-  @apply hover:bg-white/10 p-1 rounded
+  @apply hover:bg-white/10 rounded h-5 w-5 p-0.5 items-center justify-center
   transition-all duration-300;
 }
 
