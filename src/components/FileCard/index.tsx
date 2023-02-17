@@ -21,13 +21,13 @@ export function FileCard({ item, hideBlurred, renameMethod, replaceMethod, expor
         title={`ES theme: ${item.theme}\nName: ${item.fullName}\nManufacturer: ${item.manufacturer}`}>
         <Zoom zoomMargin={32}
           zoomImg={{ src: item.file.normal }}>
-          <div className={[styles.cardSystemImg, hideBlurred ? 'rounded' : 'rounded-l', 'aspect-video'].join(' ')}
+          <div className={[styles.cardSystemImg, hideBlurred ? 'rounded' : 'rounded-l'].join(' ')}
             role='img'
             style={{ backgroundImage: `url(${item.file.thumbnail || item.file.normal})` }} />
         </Zoom>
         {!hideBlurred && (
           <Zoom zoomMargin={32}>
-            <div className={[styles.cardSystemImg, 'rounded-r aspect-auto'].join(' ')}
+            <div className={[styles.cardSystemImg, 'rounded-r'].join(' ')}
               role='img'
               style={{ backgroundImage: `url(${item.file.blurred})` }} />
           </Zoom>
@@ -88,7 +88,7 @@ export function FileCard({ item, hideBlurred, renameMethod, replaceMethod, expor
                 </button>
               )}
             </Menu.Item>
-            <hr className='my-1 border-neutral-500 -mx-0.5' />
+            <hr className='my-1 -mx-0.5' />
             <Menu.Item>
               {({ active }) => (
                 <button className={[styles.menuItem, active ? 'bg-red-500/30' : '', 'text-red-200 hover:bg-red-400/20'].join(' ')}
