@@ -35,6 +35,7 @@ export function UpdatePrompt() {
 
   function handleCloseDialog() {
     setNeedRefresh(false);
+    setPromptIsOpen(false);
   }
 
   function handleOpenDialog() {
@@ -53,11 +54,9 @@ export function UpdatePrompt() {
       open={promptIsOpen}
       onClose={handleCloseDialog}>
 
-      <div>
-        <span>
-          {'Please, update Albedo Cropper to get the latest features and fixes.'}
-        </span>
-      </div>
+      <p className='mb-4'>
+        {'Please, update Albedo Cropper to get the latest features and fixes.'}
+      </p>
 
       <div className='grid grid-cols-2 gap-2'>
         <Button label='Update on next boot'

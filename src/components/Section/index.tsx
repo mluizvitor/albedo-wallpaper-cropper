@@ -28,7 +28,7 @@ export function MenuSection({ title, className, closed = false, children }: Sect
           className={['shrink-0', !isMenuSectionOpen && 'rotate-180'].join(' ')}
         />
       </div>
-      <div className={['m-4', !isMenuSectionOpen && 'hidden', className].join(' ')}>
+      <div className={['p-4', !isMenuSectionOpen && 'hidden', className].join(' ')}>
         {children}
       </div>
     </div>

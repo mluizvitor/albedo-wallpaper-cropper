@@ -94,14 +94,11 @@ export function CropperSection() {
       <MenuSection title='Integer Scale'
         className='grid gap-2'>
         <Checkbox id='cropperSection_smoothRendering'
-          className='bg-neutral-900 py-1 px-2'
           label='Smooth rendering'
           checked={smoothRendering}
           triggerMethod={toggleSmoothRendering} />
 
-        <Checkbox
-          className='bg-neutral-900 py-1 px-2'
-          id='cropperSection_integerCheckbox'
+        <Checkbox id='cropperSection_integerCheckbox'
           checked={integerScale}
           label='Manual scale'
           triggerMethod={toggleIntegerScale}
@@ -126,7 +123,6 @@ export function CropperSection() {
           label='Show blurred variant'
           checked={showBlur}
           triggerMethod={toggleImageBlur}
-          className='px-2 py-1 bg-neutral-900'
         />
         <Input label={'Blur: ' + blurAmount}
           helperText='0 to 180'

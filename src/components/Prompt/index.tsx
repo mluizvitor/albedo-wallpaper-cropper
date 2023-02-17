@@ -33,7 +33,7 @@ export function Prompt({ open, onClose, promptTitle, children }: PromptProps) {
             {promptTitle || 'This is a placeholder text.'}
           </Dialog.Title>
 
-          <hr className='border-neutral-500 -mx-4 mb-4' />
+          <hr className='-mx-4 mb-4' />
 
           {children}
 
