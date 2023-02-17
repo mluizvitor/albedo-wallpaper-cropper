@@ -22,7 +22,7 @@
 
 .cardSystemImg {
   @apply bg-cover bg-center
-  w-full h-full;
+  w-full h-full min-h-[4rem];
   box-shadow: 0 0 0 1px rgba(255,255,255,0.2) inset;
 }
 

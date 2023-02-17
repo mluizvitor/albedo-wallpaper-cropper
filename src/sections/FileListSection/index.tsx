@@ -329,7 +329,7 @@ export default function FileListSection() {
         </form>
       </div>
 
-      <div className='h-full flex flex-col bg-neutral-800 overflow-y-auto relative border-t border-b border-neutral-600 p-4 pt-6'>
+      <div className='h-full flex flex-col bg-neutral-800 overflow-y-auto relative border-t border-b border-neutral-600 p-4'>
         <div className={[styles.searchBar, 'group'].join(' ')}>
           <MagnifyingGlass size={16}
             weight='bold'

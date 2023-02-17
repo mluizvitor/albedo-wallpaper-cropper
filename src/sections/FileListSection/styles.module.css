@@ -35,7 +35,7 @@
 }
 
 .searchBar {
-  @apply bg-neutral-900/80 w-full h-8 pl-2 mb-6 sticky -top-4 shrink-0 z-10 overflow-hidden
+  @apply bg-neutral-900/80 w-full h-8 pl-2 mb-4 sticky -top-3 shrink-0 z-10 overflow-hidden
   flex items-center rounded hover:rounded-lg transition-all duration-300 
   focus-within:outline-none ring-amber-500/30 focus-within:ring-offset-amber-500 focus-within:ring-4 focus-within:ring-offset-2
   backdrop-blur-md backdrop-saturate-200 backdrop-brightness-75;
