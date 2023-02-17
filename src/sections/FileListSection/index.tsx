@@ -186,143 +186,150 @@ export default function FileListSection() {
   return (
     <SideBar anchor='left'
       className='z-10 flex flex-col'>
-      <div className='relative shrink-0 w-full flex bg-neutral-700 p-4 pb-2'>
 
-        <Popover className='relative'>
-          <Popover.Button className={styles.popOverButton}>
-            <List size={16}
-              weight='bold' />
-          </Popover.Button>
 
-          <Popover.Panel className={styles.popOverPanel}>
-            <Button label='Load Project'
-              className={styles.popOverOption}
-              onClick={handleOpenProject}
-              icon={<UploadSimple size={16}
-                weight='bold' />} />
+      <div className='p-4 py-3 bg-neutral-700'>
+        <div className='relative shrink-0 w-full flex'>
+          <Popover className='relative'>
+            <Popover.Button className={styles.popOverButton}
+              title='Menu'>
+              <List size={16}
+                weight='bold' />
+            </Popover.Button>
 
-            <Button label='Save Project'
-              className={styles.popOverOption}
-              onClick={handleExportProject}
-              icon={<FloppyDisk size={16}
-                weight='bold' />} />
+            <Popover.Panel className={styles.popOverPanel}>
+              <Button label='Load Project'
+                className={styles.popOverOption}
+                onClick={handleOpenProject}
+                icon={<UploadSimple size={16}
+                  weight='bold' />} />
 
-            {systemCollection.length !== 0 && (
-              <>
-                <hr className='border-neutral-500 my-1 -mx-0.5' />
+              <Button label='Save Project'
+                className={styles.popOverOption}
+                onClick={handleExportProject}
+                icon={<FloppyDisk size={16}
+                  weight='bold' />} />
 
-                <Button label='Download as ZIP'
-                  id='buttonDownloadZip'
-                  icon={<DownloadSimple size={16}
-                    weight='bold' />}
-                  className={styles.popOverOption}
-                  onClick={() => exportFilesAsZip('all')}
-                />
+              {systemCollection.length !== 0 && (
+                <>
+                  <hr className='my-1 -mx-0.5' />
 
-                <Button label='Clear Collection'
-                  icon={<Trash size={16}
-                    weight='bold' />}
-                  className={styles.popOverOption + ' text-red-200 hover:bg-red-400/20'}
-                  onClick={toggleDeleteDialog}
-                />
-              </>
-            )}
-          </Popover.Panel>
-        </Popover>
-        <Button label='Load Image'
-          type='button'
-          icon={<UploadSimple size={16}
-            weight='bold' />}
-          className='bg-neutral-600 ml-auto'
-          onClick={() => {
-            document.getElementById('fileList_imageSelector')?.click();
-          }}
-        />
-        <input className='hidden'
-          id='fileList_imageSelector'
-          type='file'
-          accept='.jpg, .jpeg, .webp, .png'
-          onChange={(e) => {
-            updateImage(e);
-            e.target.value = '';
-          }} />
+                  <Button label='Download as ZIP'
+                    id='buttonDownloadZip'
+                    icon={<DownloadSimple size={16}
+                      weight='bold' />}
+                    className={styles.popOverOption}
+                    onClick={() => exportFilesAsZip('all')}
+                  />
+
+                  <Button label='Clear Collection'
+                    icon={<Trash size={16}
+                      weight='bold' />}
+                    className={styles.popOverOption + ' text-red-200 hover:bg-red-400/20'}
+                    onClick={toggleDeleteDialog}
+                  />
+                </>
+              )}
+            </Popover.Panel>
+          </Popover>
+          <Button label='Load Image'
+            type='button'
+            icon={<UploadSimple size={16}
+              weight='bold' />}
+            className='bg-neutral-600 ml-auto'
+            onClick={() => {
+              document.getElementById('fileList_imageSelector')?.click();
+            }}
+          />
+          <input className='hidden'
+            id='fileList_imageSelector'
+            type='file'
+            accept='.jpg, .jpeg, .webp, .png'
+            onChange={(e) => {
+              updateImage(e);
+              e.target.value = '';
+            }} />
+        </div>
+
+        <hr className='my-3 -mx-4' />
+
+        <form onSubmit={handleSubmit}
+          className='flex'
+          autoComplete='off'>
+
+          <Combobox value={selectedSystem}
+            onChange={setSelectedSystem}>
+            <div className={styles.comboboxInput}>
+              <Combobox.Input onChange={(event) => setSystemQuerySearch(event.target.value.toLowerCase())}
+                displayValue={(option: IndexedSystemProps) => option.theme || ''}
+                placeholder='Type to add a system'
+                spellCheck='false'
+                className='min-w-0 w-full outline-none border-0 bg-transparent' />
+
+              <Combobox.Options className={styles.comboboxList}>
+                {systemQuerySearch.length > 0 && !systemList.find((item) => (item.theme || item.manufacturer) === systemQuerySearch) && (
+                  <Combobox.Option value={{ theme: systemQuerySearch } as IndexedSystemProps}
+                    as={Fragment}>
+                    {({ active, selected }) => (
+                      <li className={[styles.comboboxOption, active && 'bg-white/20', selected && 'bg-amber-500 text-black/80'].join(' ')}>
+                        <Plus size={16}
+                          weight='bold'
+                          className='mr-2' />
+                        <span className='w-full rounded py-1'>
+                          {systemQuerySearch.toLowerCase()}
+                        </span>
+                      </li>
+                    )}
+                  </Combobox.Option>
+                )}
+                {filteredSystem.map((option) => (
+                  <Combobox.Option key={option.theme}
+                    value={option}
+                    disabled={option.added}
+                    as={Fragment}>
+                    {({ active, selected }) => (
+                      <li className={[styles.comboboxOption, active && 'bg-white/20', selected && 'bg-amber-400 text-black/80'].join(' ')}>
+                        <div className='w-full'>
+                          <span className='block leading-[100%] mb-1'>
+                            {option.theme}
+                          </span>
+                          <span className='text-xs block font-semibold opacity-60 leading-[100%]'>
+                            {option.manufacturer + ' · ' + option.fullName}
+                          </span>
+                        </div>
+                        {option.added && (
+                          <CheckCircle size={16}
+                            weight='bold'
+                            className='shrink-0' />
+                        )}
+                      </li>
+                    )}
+                  </Combobox.Option>
+                ))}
+              </Combobox.Options>
+
+              <Combobox.Button className={styles.comboboxButton}>
+                <CaretUp size={12}
+                  className='top-1 inset-x-2.5 absolute'
+                  weight='bold' />
+
+                <CaretDown size={12}
+                  className='bottom-1 inset-x-2.5 absolute'
+                  weight='bold' />
+              </Combobox.Button>
+            </div>
+          </Combobox>
+
+          <Button label='Add System'
+            type='submit'
+            icon={<Plus size={16}
+              weight='bold' />}
+            className='bg-amber-400 text-black/80 pr-3 ml-4'
+          />
+        </form>
       </div>
 
-      <form onSubmit={handleSubmit}
-        className='flex p-4 pt-2 bg-neutral-700'
-        autoComplete='off'>
-
-        <Combobox value={selectedSystem}
-          onChange={setSelectedSystem}>
-          <div className={styles.comboboxInput}>
-            <Combobox.Input onChange={(event) => setSystemQuerySearch(event.target.value.toLowerCase())}
-              displayValue={(option: IndexedSystemProps) => option.theme || ''}
-              placeholder='Type to add a system'
-              className='min-w-0 w-full outline-none border-0 bg-transparent' />
-
-            <Combobox.Options className={styles.comboboxList}>
-              {systemQuerySearch.length > 0 && !systemList.find((item) => (item.theme || item.manufacturer) === systemQuerySearch) && (
-                <Combobox.Option value={{ theme: systemQuerySearch } as IndexedSystemProps}
-                  as={Fragment}>
-                  {({ active, selected }) => (
-                    <li className={[styles.comboboxOption, active && 'bg-neutral-700', selected && 'bg-orange-500'].join(' ')}>
-                      <Plus size={16}
-                        weight='bold'
-                        className='mr-2' />
-                      <span className='w-full rounded py-1'>
-                        {systemQuerySearch.toLowerCase()}
-                      </span>
-                    </li>
-                  )}
-                </Combobox.Option>
-              )}
-              {filteredSystem.map((option) => (
-                <Combobox.Option key={option.theme}
-                  value={option}
-                  disabled={option.added}
-                  as={Fragment}>
-                  {({ active, selected }) => (
-                    <li className={[styles.comboboxOption, active && 'bg-neutral-700', selected && 'bg-orange-500'].join(' ')}>
-                      <div className='w-full'>
-                        <span className='block leading-[100%] mb-1'>
-                          {option.theme}
-                        </span>
-                        <span className='text-xs block font-semibold opacity-60 leading-[100%]'>
-                          {option.manufacturer + ' · ' + option.fullName}
-                        </span>
-                      </div>
-                      {option.added && (
-                        <CheckCircle size={16}
-                          weight='bold'
-                          className='shrink-0' />
-                      )}
-                    </li>
-                  )}
-                </Combobox.Option>
-              ))}
-            </Combobox.Options>
-
-            <Combobox.Button className={styles.comboboxButton}>
-              <CaretUp size={12}
-                className='top-1 inset-x-2.5 absolute'
-                weight='bold' />
-
-              <CaretDown size={12}
-                className='bottom-1 inset-x-2.5 absolute'
-                weight='bold' />
-            </Combobox.Button>
-          </div>
-        </Combobox>
-
-        <Button label='Add System'
-          type='submit'
-          icon={<Plus size={16}
-            weight='bold' />}
-          className='bg-amber-300 text-black/80 pr-3 ml-4'
-        />
-      </form>
-
-      <div className='h-full flex flex-col bg-neutral-900 overflow-y-auto relative border-t border-b border-neutral-600 px-4 pt-6 pb-8'>
+      <div className='h-full flex flex-col bg-neutral-800 overflow-y-auto relative border-t border-b border-neutral-600 p-4 pt-6'>
         <div className={[styles.searchBar, 'group'].join(' ')}>
           <MagnifyingGlass size={16}
             weight='bold'
@@ -454,7 +461,7 @@ export default function FileListSection() {
           <Checkbox id='fileList_hideBlurredFile'
             label='Hide blurred variations'
             checked={hideBlurredFile}
-            className='bg-neutral-800 px-2 py-1 mb-2'
+            className='mb-2'
             triggerMethod={() => setHideBlurredFile(!hideBlurredFile)} />
 
           <hr className='-mx-4 my-4' />
