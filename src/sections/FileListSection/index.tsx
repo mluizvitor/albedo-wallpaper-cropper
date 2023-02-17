@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent, Fragment, useEffect, useState } from 'react';
 import { useCanvas } from '../../hooks/useCanvas';
-import { Backspace, CaretDoubleLeft, CaretDoubleRight, CaretDown, CaretLeft, CaretRight, CaretUp, CheckCircle, DownloadSimple, FloppyDisk, Gear, GearSix, List, MagnifyingGlass, Plus, Trash, UploadSimple } from 'phosphor-react';
+import { Backspace, CaretDoubleLeft, CaretDoubleRight, CaretDown, CaretLeft, CaretRight, CaretUp, CheckCircle, DotsThree, DownloadSimple, FloppyDisk, GearSix, List, MagnifyingGlass, Plus, Trash, UploadSimple } from 'phosphor-react';
 import { SideBar } from '../../components/SideBar';
 import { IndexedSystemProps, SystemProps, useSystemsCollection } from '../../hooks/useSystemsCollection';
 import Button from '../../components/Button';
@@ -13,6 +13,7 @@ import styles from './styles.module.css';
 import { FileCard } from '../../components/FileCard';
 import Checkbox from '../../components/Checkbox';
 import Input from '../../components/Input';
+import { usePagination } from '../../hooks/usePagination';
 
 export default function FileListSection() {
 
@@ -27,6 +28,18 @@ export default function FileListSection() {
     exportProject,
     importProject,
   } = useSystemsCollection();
+  const {
+    itemsPerPage,
+    currentPage,
+    totalPages,
+    pages,
+    prevPage,
+    nextPage,
+    goFirst,
+    goLast,
+    goXPage,
+    updateImagePerPage,
+  } = usePagination();
 
   const [isClearDialogOpen, setIsClearDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -40,9 +53,6 @@ export default function FileListSection() {
   const [addedSystemQuery, setAddedSystemQuery] = useState('');
 
   const [hideBlurredFile, setHideBlurredFile] = useState(false);
-
-  const [imagePerPage, setImagePerPage] = useState(15);
-  const [paginatorStart, setPaginatorStart] = useState(0);
 
   const [downloadFileName, setDownloadFileName] = useState('');
 
@@ -141,27 +151,13 @@ export default function FileListSection() {
     };
   }
 
-  function loadMore() {
-    if (paginatorStart + imagePerPage < filteredAddedSystem.length) {
-      setPaginatorStart(paginatorStart + imagePerPage);
-    }
-  }
-
-  function loadLess() {
-    if (paginatorStart >= imagePerPage) {
-      setPaginatorStart(paginatorStart - imagePerPage);
-    } else {
-      setPaginatorStart(0);
-    }
-  }
+  useEffect(() => {
+    goFirst();
+  }, [addedSystemQuery]);
 
   useEffect(() => {
-    setPaginatorStart(0);
-  }, [addedSystemQuery, imagePerPage]);
-
-  useEffect(() => {
-    if (filteredAddedSystem.length > 0 && filteredAddedSystem.length <= paginatorStart) {
-      setPaginatorStart(paginatorStart - imagePerPage);
+    if (filteredAddedSystem.length > 0 && filteredAddedSystem.length <= currentPage * itemsPerPage) {
+      prevPage();
     };
   }, [filteredSystem]);
 
@@ -347,9 +343,9 @@ export default function FileListSection() {
 
         <ul className={[
           'grid w-full grow gap-2',
-          imagePerPage === 10 && 'grid-cols-2 grid-rows-5',
-          imagePerPage === 15 && 'grid-cols-3 grid-rows-5',
-          imagePerPage === 20 && 'grid-cols-4 grid-rows-5'
+          itemsPerPage === 10 && 'grid-cols-2 grid-rows-5',
+          itemsPerPage === 15 && 'grid-cols-3 grid-rows-5',
+          itemsPerPage === 20 && 'grid-cols-4 grid-rows-5'
         ].join(' ')}>
           {filteredAddedSystem.map((item, idx) => (
             <FileCard key={item.id}
@@ -364,48 +360,71 @@ export default function FileListSection() {
               exportMethod={() => exportFilesAsZip(item.theme)}
               deleteMethod={() => removeSystemFromCollection(item.id)}
             />
-          )).reverse().slice(paginatorStart, paginatorStart + imagePerPage)}
+          )).reverse().slice(currentPage * itemsPerPage, currentPage * itemsPerPage + itemsPerPage)}
         </ul>
       </div >
 
       <div className='bg-neutral-800 shrink-0 px-4 py-2 flex flex-col justify-center items-stretch'>
-        {(filteredAddedSystem.length > imagePerPage) && (
-          <div className='flex items-stretch mb-2'>
+        {(filteredAddedSystem.length > itemsPerPage) && (
+          <div className='grid grid-cols-[repeat(11,_1fr)] gap-1 mb-2'>
             <Button label='First Page'
               hideLabel
               icon={<CaretDoubleLeft size={16}
                 weight='bold' />}
-              className={styles.paginatorButton + ' mr-1'}
-              disabled={!(paginatorStart > 0)}
-              onClick={() => setPaginatorStart(0)} />
+              className={styles.paginatorButton}
+              disabled={!(currentPage > 0)}
+              onClick={goFirst} />
 
             <Button label='Previous Page'
               hideLabel
               icon={<CaretLeft size={16}
                 weight='bold' />}
-              className={styles.paginatorButton + ' px-4'}
-              disabled={!(paginatorStart > 0)}
-              onClick={() => loadLess()} />
+              className={styles.paginatorButton}
+              disabled={!(currentPage > 0)}
+              onClick={prevPage} />
 
-            <div className='h-auto text-center grow bg-opacity-70'>
-              <span className='leading-8 text-sm'>{'Page '}{Math.ceil((paginatorStart + imagePerPage) / imagePerPage)}{' of '}{Math.ceil(filteredAddedSystem.length / imagePerPage)}</span>
-            </div>
+            <span title={`More pages before page ${currentPage - 1}`}
+              className={[currentPage >= 3 ? 'opacity-100' : 'opacity-0 pointer-events-none', 'm-auto'].join(' ')}>
+              <DotsThree size={16}
+                weight='bold' />
+            </span>
+
+            {pages.map((page) => {
+              if (currentPage < 3 ? page <= 5 : (page > currentPage - 2) && (page <= currentPage + 3)) {
+                return (
+                  <Button key={page}
+                    label={page.toString()}
+                    title={`Go to page ${page}`}
+                    className={[currentPage === (page - 1) ? 'bg-amber-400 text-black/80' : '', 'justify-center'].join(' ')}
+                    onClick={() => goXPage(page - 1)} />
+                );
+              }
+            })}
+
+            <span title={`More pages after page ${currentPage > 2 ? currentPage + 3 : 5}`}
+              className={[(currentPage < pages.length - 3) && (totalPages > 5) ? 'opacity-100' : 'opacity-0 pointer-events-none', 'm-auto col-start-9 col-end-10'].join(' ')}>
+              <DotsThree size={16}
+                weight='bold' />
+            </span>
 
             <Button label='Next Page'
               hideLabel
               icon={<CaretRight size={16}
                 weight='bold' />}
-              className={styles.paginatorButton + ' px-4'}
-              disabled={!(paginatorStart + imagePerPage < filteredAddedSystem.length)}
-              onClick={() => loadMore()} />
+              className={styles.paginatorButton}
+              onClick={nextPage}
+              disabled={currentPage === totalPages - 1}
+            />
 
             <Button label='Last Page'
+              title={`Go to the last page. Page #${totalPages}`}
               hideLabel
               icon={<CaretDoubleRight size={16}
                 weight='bold' />}
-              className={styles.paginatorButton + ' ml-1'}
-              disabled={!(paginatorStart + imagePerPage < filteredAddedSystem.length)}
-              onClick={() => { setPaginatorStart((Math.ceil(filteredAddedSystem.length / imagePerPage) - 1) * imagePerPage); }} />
+              className={styles.paginatorButton}
+              disabled={currentPage === totalPages - 1}
+              onClick={goLast}
+            />
           </div>
         )}
 
@@ -441,16 +460,16 @@ export default function FileListSection() {
           <span className='mb-1 block'>{'Items per page'}</span>
           <div className='flex gap-2 items-center'>
             <Button label='10'
-              className={[imagePerPage === 10 ? styles.imgPerPageButtonSelected : styles.imgPerPageButton].join(' ')}
-              onClick={() => setImagePerPage(10)}
+              className={[itemsPerPage === 10 ? styles.imgPerPageButtonSelected : styles.imgPerPageButton].join(' ')}
+              onClick={() => updateImagePerPage(10)}
             />
             <Button label='15'
-              className={[imagePerPage === 15 ? styles.imgPerPageButtonSelected : styles.imgPerPageButton].join(' ')}
-              onClick={() => setImagePerPage(15)}
+              className={[itemsPerPage === 15 ? styles.imgPerPageButtonSelected : styles.imgPerPageButton].join(' ')}
+              onClick={() => updateImagePerPage(15)}
             />
             <Button label='20'
-              className={[imagePerPage === 20 ? styles.imgPerPageButtonSelected : styles.imgPerPageButton].join(' ')}
-              onClick={() => setImagePerPage(20)}
+              className={[itemsPerPage === 20 ? styles.imgPerPageButtonSelected : styles.imgPerPageButton].join(' ')}
+              onClick={() => updateImagePerPage(20)}
             />
           </div>
         </div>
