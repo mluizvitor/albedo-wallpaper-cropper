@@ -13,6 +13,7 @@ interface PaginationContextData {
   goLast: (length: number) => void;
   goXPage: (index: number) => void;
   updateImagePerPage: (amount: number) => void;
+  updateTotalPages: (amount: number) => void;
 }
 const PaginationContext = createContext<PaginationContextData>({} as PaginationContextData);
 
@@ -30,13 +31,7 @@ export function PaginationProvider({ children }: PaginationProviderProps) {
   const [pages, setPages] = useState<number[]>([]);
 
   useEffect(() => {
-    const totalPagesValue = Math.ceil(systemCollection.length / itemsPerPage);
-    setTotalPages(totalPagesValue);
-    const newPages: number[] = [];
-    for (let i = 1; i <= totalPagesValue; i++) {
-      newPages.push(i);
-    }
-    setPages(newPages);
+    updateTotalPages(systemCollection.length);
   }, [systemCollection, itemsPerPage]);
 
   useEffect(() => {
@@ -73,6 +68,16 @@ export function PaginationProvider({ children }: PaginationProviderProps) {
     setItemsPerPage(Math.round(amount / 5) * 5);
   }
 
+  function updateTotalPages(amount: number) {
+    const totalPagesValue = Math.ceil(amount / itemsPerPage);
+    const newPages: number[] = [];
+    for (let i = 1; i <= totalPagesValue; i++) {
+      newPages.push(i);
+    }
+    setTotalPages(totalPagesValue);
+    setPages(newPages);
+  }
+
   return (
     <PaginationContext.Provider value={{
       itemsPerPage,
@@ -85,6 +90,7 @@ export function PaginationProvider({ children }: PaginationProviderProps) {
       goLast,
       goXPage,
       updateImagePerPage,
+      updateTotalPages,
     }}>
       {children}
     </PaginationContext.Provider>

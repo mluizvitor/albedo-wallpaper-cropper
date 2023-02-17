@@ -39,6 +39,7 @@ export default function FileListSection() {
     goLast,
     goXPage,
     updateImagePerPage,
+    updateTotalPages,
   } = usePagination();
 
   const [isClearDialogOpen, setIsClearDialogOpen] = useState(false);
@@ -153,6 +154,7 @@ export default function FileListSection() {
 
   useEffect(() => {
     goFirst();
+    updateTotalPages(filteredAddedSystem.length);
   }, [addedSystemQuery]);
 
   useEffect(() => {
