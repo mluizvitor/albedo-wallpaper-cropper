@@ -236,7 +236,7 @@ export default function FileListSection() {
             type='button'
             icon={<UploadSimple size={16}
               weight='bold' />}
-            className='bg-neutral-600 ml-auto'
+            className='bg-blue-300 text-black/80 ml-auto'
             onClick={() => {
               document.getElementById('fileList_imageSelector')?.click();
             }}

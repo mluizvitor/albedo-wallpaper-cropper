@@ -1,4 +1,4 @@
-import { ArrowsClockwise } from 'phosphor-react';
+import { ArrowsClockwise, Question } from 'phosphor-react';
 import { useCanvas } from '../../hooks/useCanvas';
 import { MenuSection } from '../../components/Section';
 import Input from '../../components/Input';
@@ -59,39 +59,98 @@ export function CropperSection() {
         />
       </MenuSection>
 
-      <MenuSection title='Presets'
-        className='grid grid-cols-2 gap-2'>
-        <span className='text-sm text-neutral-200 col-span-2'>{'1 : 1'}</span>
-        <Button className='justify-center flex-1'
-          label='320x320'
-          onClick={() => updateSizes(320, 320)} />
-        <Button className='justify-center flex-1'
-          label='1920x1920'
-          onClick={() => updateSizes(1920, 1920)} />
+      <MenuSection title='Presets'>
+        <div className='flex mb-2 items-center'>
+          <span className='text-sm text-neutral-200'>{'1 : 1 · Square'}</span>
+          <span className='ml-2 opacity-50 cursor-help'
+            title={'Square images are good if you want balance between horizontal and vertical content.\nHowever, on RG552 it\'ll not look good.\nHover the following buttons for more details.'}>
+            <Question size={16}
+              weight='bold' />
+          </span>
+        </div>
+        <div className='grid grid-cols-3 gap-2 mb-3'>
+          <Button className='justify-center flex-1'
+            label='320 x 320'
+            title={'Width: 320 pixels\nHeight: 320 pixels\nMinimum size for RG351P/M'}
+            onClick={() => updateSizes(320, 320)} />
 
-        <span className='text-sm text-neutral-200 col-span-2'>{'3 : 2'}</span>
-        <Button className='justify-center flex-1'
-          label='480x320'
-          onClick={() => updateSizes(480, 320)} />
-        <Button className='justify-center flex-1'
-          label='1920x1280'
-          onClick={() => updateSizes(1920, 1280)} />
+          <Button className='justify-center flex-1'
+            label='480 x 480'
+            title={'Width: 480 pixels\nHeight: 480 pixels\nMinimum size for RG351V/MP'}
+            onClick={() => updateSizes(480, 480)} />
 
-        <span className='text-sm text-neutral-200 col-span-2'>{'4 : 3'}</span>
-        <Button className='justify-center flex-1'
-          label='640x480'
-          onClick={() => updateSizes(640, 480)} />
-        <Button className='justify-center flex-1'
-          label='1920x1440'
-          onClick={() => updateSizes(1920, 1440)} />
+          <Button className='justify-center flex-1'
+            label='1152 x 1152'
+            title={'Width: 1152 pixels\nHeight: 1152 pixels\nMinimum size for RG552'}
+            onClick={() => updateSizes(1152, 1152)} />
 
-        <span className='text-sm text-neutral-200 col-span-2'>{'5 : 3'}</span>
-        <Button className='justify-center flex-1'
-          label='1920x1152'
-          onClick={() => updateSizes(1920, 1152)} />
+          <Button className='justify-center flex-1'
+            label='1280 x 1280'
+            title={'Width: 1280 pixels\nHeight: 1280 pixels\n4x RG351P/M size'}
+            onClick={() => updateSizes(1280, 1280)} />
+
+          <Button className='justify-center flex-1'
+            label='1920 x 1920'
+            title={'Width: 1920 pixels\nHeight: 1920 pixels\n4x RG351V/MP size'}
+            onClick={() => updateSizes(1920, 1920)} />
+        </div>
+
+        <div className='flex mb-2 items-center'>
+          <span className='text-sm text-neutral-200'>{'3 : 2'}</span>
+          <span className='ml-2 opacity-50 cursor-help'
+            title={'3:2 images fit perfectly on RG351P/M.\nHover the following buttons for more details.'}>
+            <Question size={16}
+              weight='bold' />
+          </span>
+        </div>
+        <div className='grid grid-cols-3 gap-2 mb-3'>
+          <Button className='justify-center flex-1'
+            label='480 x 320'
+            title={'Width: 480 pixels\nHeight: 320 pixels\nRG351P/M original resolution.'}
+            onClick={() => updateSizes(480, 320)} />
+
+          <Button className='justify-center flex-1'
+            label='1920 x 1280'
+            title={'Width: 1920 pixels\nHeight: 1280 pixels\nRG351P/M resolution multiplied by 4.'}
+            onClick={() => updateSizes(1920, 1280)} />
+        </div>
+
+        <div className='flex mb-2 items-center'>
+          <span className='text-sm text-neutral-200'>{'4 : 3'}</span>
+          <span className='ml-2 opacity-50 cursor-help'
+            title={'4:3 images fit perfectly on RG351V/MP.\nHover the following buttons for more details.'}>
+            <Question size={16}
+              weight='bold' />
+          </span>
+        </div>
+        <div className='grid grid-cols-3 gap-2 mb-3'>
+          <Button className='justify-center flex-1'
+            label='640 x 480'
+            title={'Width: 640 pixels\nHeight: 480 pixels\nRG351V/MP original resolution.'}
+            onClick={() => updateSizes(640, 480)} />
+          <Button className='justify-center flex-1'
+            label='1920 x 1440'
+            title={'Width: 1920 pixels\nHeight: 1440 pixels\nRG351V/MP resolution multiplied by 3.'}
+            onClick={() => updateSizes(1920, 1440)} />
+        </div>
+
+        <div className='flex mb-2 items-center'>
+          <span className='text-sm text-neutral-200'>{'5 : 3'}</span>
+          <span className='ml-2 opacity-50 cursor-help'
+            title={'5:3 images fit perfectly on RG552.\nHover the following buttons for more details.'}>
+            <Question size={16}
+              weight='bold' />
+          </span>
+        </div>
+        <div className='grid grid-cols-3 gap-2 mb-3'>
+          <Button className='justify-center flex-1'
+            label='1920 x 1152'
+            title={'Width: 1920 pixels\nHeight: 1152 pixels\nRG552 original resolution.'}
+            onClick={() => updateSizes(1920, 1152)} />
+        </div>
       </MenuSection>
 
-      <MenuSection title='Integer Scale'
+      <MenuSection title='Render options'
         className='grid gap-2'>
         <Checkbox id='cropperSection_smoothRendering'
           label='Smooth rendering'

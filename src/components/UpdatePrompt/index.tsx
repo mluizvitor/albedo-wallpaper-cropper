@@ -5,9 +5,11 @@ import Button from '../Button';
 
 export function UpdatePrompt() {
 
-  const [promptIsOpen, setPromptIsOpen] = useState(false);
+  const [promptUpdateIsOpen, setPrompUpdatetIsOpen] = useState(true);
+  const [promptOfflineIsOpen, setPromptOfflineIsOpen] = useState(true);
 
   const {
+    offlineReady: [offlineReady, setOfflineReady],
     needRefresh: [needRefresh, setNeedRefresh],
     updateServiceWorker,
 
@@ -33,41 +35,65 @@ export function UpdatePrompt() {
     updateServiceWorker(true);
   }
 
-  function handleCloseDialog() {
+  function handleCloseUpdateDialog() {
     setNeedRefresh(false);
-    setPromptIsOpen(false);
+    setPrompUpdatetIsOpen(false);
   }
 
-  function handleOpenDialog() {
-    setPromptIsOpen(true);
+  function handleOpenUpdateDialog() {
+    setPrompUpdatetIsOpen(true);
+  }
+
+  function handleCloseOfflineDialog() {
+    setOfflineReady(false);
+    setPromptOfflineIsOpen(false);
+  }
+
+  function handleOpenOfflineDialog() {
+    setPromptOfflineIsOpen(true);
   }
 
   useEffect(() => {
     if (needRefresh) {
-      handleOpenDialog();
-      console.log(needRefresh);
+      handleOpenUpdateDialog();
     }
   }, [needRefresh]);
 
+  useEffect(() => {
+    if (offlineReady) {
+      handleOpenOfflineDialog();
+    }
+  }, [offlineReady]);
+
   return (
-    <Prompt promptTitle='Update available'
-      open={promptIsOpen}
-      onClose={handleCloseDialog}>
+    <>
+      <Prompt promptTitle='Update available'
+        open={promptUpdateIsOpen}
+        onClose={handleCloseUpdateDialog}>
 
-      <p className='mb-4'>
-        {'Please, update Albedo Cropper to get the latest features and fixes.'}
-      </p>
+        <p className='mb-4'>
+          {'Please, update Albedo Cropper to get the latest features and fixes.'}
+        </p>
 
-      <div className='grid grid-cols-2 gap-2'>
-        <Button label='Update on next boot'
-          onClick={handleCloseDialog}
-        />
+        <div className='grid grid-cols-2 gap-2'>
+          <Button label='Update on next boot'
+            onClick={handleCloseUpdateDialog}
+          />
 
-        <Button label='Update now'
-          className='bg-amber-400 text-black/80'
-          onClick={handleUpdate}
-        />
-      </div>
-    </Prompt>
+          <Button label='Update now'
+            className='bg-amber-400 text-black/80'
+            onClick={handleUpdate}
+          />
+        </div>
+      </Prompt>
+
+      <Prompt promptTitle='Ready to work offline!'
+        open={promptOfflineIsOpen}
+        onClose={handleCloseOfflineDialog}>
+        <Button label='Close'
+          className='w-full bg-amber-400 text-black/80'
+          onClick={handleCloseOfflineDialog} />
+      </Prompt>
+    </>
   );
 }
