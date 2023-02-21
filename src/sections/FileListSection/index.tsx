@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent, Fragment, useEffect, useState } from 'react';
 import { useCanvas } from '../../hooks/useCanvas';
-import { CaretDoubleLeft, CaretDoubleRight, CaretDown, CaretLeft, CaretRight, CaretUp, CheckCircle, DotsThree, DownloadSimple, FloppyDisk, GearSix, List, MagnifyingGlass, Plus, Trash, UploadSimple, X } from 'phosphor-react';
+import { CaretDoubleLeft, CaretDoubleRight, CaretDown, CaretLeft, CaretRight, CaretUp, CheckCircle, DotsThree, DownloadSimple, FloppyDisk, GearSix, List, MagnifyingGlass, Plus, Question, Trash, UploadSimple, X } from 'phosphor-react';
 import { SideBar } from '../../components/SideBar';
 import { IndexedSystemProps, SystemProps, useSystemsCollection } from '../../hooks/useSystemsCollection';
 import Button from '../../components/Button';
@@ -232,6 +232,20 @@ export default function FileListSection() {
               )}
             </Popover.Panel>
           </Popover>
+          <Button label='Help'
+            title='Open basic tutorial on new tab'
+            className='ml-2 bg-neutral-600'
+            icon={<Question size={16}
+              weight='bold' />}
+            onClick={() => {
+              const helpURL = 'https://github.com/mluizvitor/albedo-wallpaper-cropper/blob/master/README.md';
+              const anchor = document.createElement('a') as HTMLAnchorElement;
+
+              anchor.href = helpURL;
+              anchor.target = '_blank';
+              anchor.click();
+            }}
+          />
           <Button label='Load Image'
             type='button'
             icon={<UploadSimple size={16}
