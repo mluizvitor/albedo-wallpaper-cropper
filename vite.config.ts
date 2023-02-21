@@ -20,13 +20,13 @@ export default defineConfig({
       manifest: {
         name: 'Albedo Wallpaper Cropper',
         short_name: 'Albedo Cropper',
-        description: 'Crop and collect wallpapers for Albedo Theme',
+        description: 'Crop and collect wallpapers for Albedo ES Theme',
         theme_color: '#FBBF24',
         background_color: '#121212',
         icons: [
           {
             src: 'icon.png',
-            sizes: '192x192',
+            sizes: '128x128',
             type: 'image/png',
           }
         ],
