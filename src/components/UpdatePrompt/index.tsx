@@ -5,8 +5,8 @@ import Button from '../Button';
 
 export function UpdatePrompt() {
 
-  const [promptUpdateIsOpen, setPrompUpdatetIsOpen] = useState(true);
-  const [promptOfflineIsOpen, setPromptOfflineIsOpen] = useState(true);
+  const [promptUpdateIsOpen, setPrompUpdatetIsOpen] = useState(false);
+  const [promptOfflineIsOpen, setPromptOfflineIsOpen] = useState(false);
 
   const {
     offlineReady: [offlineReady, setOfflineReady],
