@@ -1,10 +1,10 @@
 # About
 
+> First of all, English is not my main language, nor am I fluent in it. I hope all the following instructions made some sense for you. 
+
 Albedo Wallpaper Cropper (AWC) is an utility to load, crop, and save images. It's not an image editor like Photoshop or GIMP. Instead it's a tool to help collect and standardize custom backgrounds for [Albedo ES Theme](https://github.com/mluizvitor/es-theme-albedo).
 
 You can load an image, position it on canvas, link it to a videogame console. Many images are accepted, but one at time. After saving an image, you can download one or all as zip.
-
-Open [Albedo Wallpaper Cropper](https://albedo-wallpaper-cropper.vercel.app/)
 
 - [About](#about)
 - [Creating your own background step by step](#creating-your-own-background-step-by-step)
@@ -15,10 +15,13 @@ Open [Albedo Wallpaper Cropper](https://albedo-wallpaper-cropper.vercel.app/)
       - [Exporting single item](#exporting-single-item)
       - [Exporting all items](#exporting-all-items)
     - [5. Extracting to the right place](#5-extracting-to-the-right-place)
-    - [Finishing](#finishing)
+    - [Other options](#other-options)
+    - [Important Notes](#important-notes)
 
 
 # Creating your own background step by step 
+
+To start collecting your images, open [Albedo Wallpaper Cropper](https://albedo-wallpaper-cropper.vercel.app/).
 
 AWC is a simple app, but can be a bit confuse. This tutorial will cover the basic usage: load image, position, change resolution, link to a videogame console, download as zip, extract zip to the theme folder.
 
@@ -59,15 +62,15 @@ Smooth rendering is good if you are trying to use a photo or illustration.
 
 Of course you noted that the canvas has dimmed parts. It's a visual clue to help you position your image. The area inside the square on center will appear on the theme carousel, and the dimmed parts on the sides will appear on Game List.
 
-You can move your image for the better framing. By default the canvas anchor your image on the edges and will move only horizontally or vertically, but not both. If your image has portrait sizes (height greater than width) and your canvas has landscape sizes (width greater than height), some parts of your image ill be off canvas. Anchoring the image to move in just one direction help you move without the risk of getting an unwanted black border on tour image. 
+You can move your image for the better framing. By default the canvas anchor your image on the edges and will move only horizontally or vertically, but not both. If your image has portrait sizes (height greater than width) and your canvas has landscape sizes (width greater than height), some parts of your image ill be off canvas. Anchoring the image to move in just one direction help move it without the risk of getting an unwanted black border on your resulting image. 
 
 ### 3. Adding your image to the list
 
-On the left side, click on the text field `Type to add a system`. I'll search for 'Game Boy Advance (Hacks)', as the screenshot I loaded is from a Pokémon hackrom.
+On the left side, click on the text field `Type to add a system`. I'll search for 'Game Boy Advance (Hacks)', as the screenshot I loaded is from a Pokémon hack rom.
 
 ![](.github/application-menu.png)
 
-The system list on AWC is the same used by AmberELEC, found on [es_systems.cfg](https://github.com/AmberELEC/AmberELEC/blob/dev/packages/ui/emulationstation/config/es_systems.cfg), plus auto collections. The search accepts a console full name (e.g. Game Boy Advance), the theme name (e.g. gba) and manufacturer name.
+The list of systems on AWC is the same used by AmberELEC, found on [es_systems.cfg](https://github.com/AmberELEC/AmberELEC/blob/dev/packages/ui/emulationstation/config/es_systems.cfg), plus automatic collections. The search accepts the full console name (e.g. Game Boy Advance), the theme name (e.g. gba) and manufacturer name.
 Start typing and click on desired option, I'll select `gbah`, then click on the yellow button labeled 'Add System'.
 
 ![](.github/application-add-system.png)
@@ -78,7 +81,7 @@ Start typing and click on desired option, I'll select `gbah`, then click on the 
 
 ![](.github/application-list.png)
 
-The image will be added to a list o images sorted by the newest to the oldest added image. AWC will always save a normal and a blurred version of your image as you can see on the above screenshot. When you hover the image, your mouse pointer will change to a magnifying glass. You can zoom the added image to see the final result. 
+The image will be added to a list o images sorted by the newest (with orange border) to the oldest added image. AWC will always save a normal and a blurred version of your image as you can see on the above screenshot. When you hover the image, your mouse pointer will change to a magnifying glass. You can zoom the added image to see the final result. 
 
 <br>
 
@@ -90,7 +93,7 @@ The image will be added to a list o images sorted by the newest to the oldest ad
 | :------------------------------------------: | :--------------------------------------: |
 |                  Pagination                  |                  Search                  |
 
-I used the same image on new entries to show you the pagination and search features. Pagination is pretty simple. You can hover the buttons for more clues. Search added systems work the same way as search to add a system. You can use full names, theme name or manufacturer.
+I used the same image on new entries to show you the pagination and search features. Pagination is pretty simple. You can hover the buttons for more clues. Search added items work the same way as search to add a system. You can use full names, theme name or manufacturer.
 
 ### 4. Downloading you images.
 
@@ -103,7 +106,7 @@ To export a single item, click on the 3 dots button of the item card, them click
 
 ![](.github/application-list-export-single.png)
 
-A zip file will be downloaded containing the normal and blurred versions. 
+A zip file will be downloaded containing the normal and blurred versions inside a subfolder called *blurred*.
 
 ![](.github/zip-single.png)
 
@@ -141,4 +144,18 @@ The following pictures shows the changes from **Default** to **Custom** backgrou
 | :---------------------------------------: | :--------------------------------------: |
 |       Full image \| blurred version       |        Full image \| not blurred         |
 
-As you can see, on carousel interface, just the center of the image is showed. As mentioned on step 2, the dimmed area of the canvas is supposed to appear only on game list.
+As you can see, on carousel interface, just the center of the image is shown. As mentioned on step 2, the dimmed area of the canvas is supposed to appear only on game list.
+
+### Other options
+
+You can replace any added image with the image currently on canvas without deleting it first.
+
+![](.github/replace.gif)
+
+### Important Notes
+
+AWC saves your images locally on browser database and will never collect any data. AWC depend on Internet connection just for the first load an can work offline.
+
+You can export your background collection as a file if you want to save on cloud and can import the file if needed. Exporting will save a JSON file with the extension `.awc.json`. The `.awc` extension prefix serves as a filter so the browser will not show any other `.json` files when loading projects.
+
+![](.github/application-save-project.png)
