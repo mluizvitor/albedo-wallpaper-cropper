@@ -25,8 +25,23 @@ export default defineConfig({
         background_color: '#121212',
         icons: [
           {
-            src: 'icon.png',
+            src: 'icon_48.png',
+            sizes: '48x48',
+            type: 'image/png',
+          },
+          {
+            src: 'icon_64.png',
+            sizes: '64x64',
+            type: 'image/png',
+          },
+          {
+            src: 'icon_128.png',
             sizes: '128x128',
+            type: 'image/png',
+          },
+          {
+            src: 'icon_256.png',
+            sizes: '256x256',
             type: 'image/png',
           }
         ],
