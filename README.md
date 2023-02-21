@@ -73,27 +73,24 @@ On the left side, click on the text field `Type to add a system`. I'll search fo
 The list of systems on AWC is the same used by AmberELEC, found on [es_systems.cfg](https://github.com/AmberELEC/AmberELEC/blob/dev/packages/ui/emulationstation/config/es_systems.cfg), plus automatic collections. The search accepts the full console name (e.g. Game Boy Advance), the theme name (e.g. gba) and manufacturer name.
 Start typing and click on desired option, I'll select `gbah`, then click on the yellow button labeled 'Add System'.
 
-![](.github/application-add-system.png)
-
 > If you're using Albedo ES Theme on a different system, you can enter a custom name if the entries present on list is not compatible. Batocera accept `gbc2players` as theme and rom directory for example.
 
-<br>
-
-![](.github/application-list.png)
+| ![](.github/application-add-system.png) | ![](.github/application-list.png) |
+| :-------------------------------------: | :-------------------------------: |
+|        Search for desired system        |        Image added to list        |
 
 The image will be added to a list o images sorted by the newest (with orange border) to the oldest added image. AWC will always save a normal and a blurred version of your image as you can see on the above screenshot. When you hover the image, your mouse pointer will change to a magnifying glass. You can zoom the added image to see the final result. 
 
-<br>
 
 ***You can repeat the steps above if you want to add more images.***
 
-<br>
+I used the same image on new entries to show you the pagination and search features. Pagination is pretty simple. You can hover the buttons for more information. Search added items work the same way as search to add a system. You can use full name, theme name or manufacturer.
 
 | ![](.github/application-list-pagination.png) | ![](.github/application-list-search.png) |
 | :------------------------------------------: | :--------------------------------------: |
 |                  Pagination                  |                  Search                  |
 
-I used the same image on new entries to show you the pagination and search features. Pagination is pretty simple. You can hover the buttons for more clues. Search added items work the same way as search to add a system. You can use full names, theme name or manufacturer.
+<br>
 
 ### 4. Downloading you images.
 
@@ -103,22 +100,22 @@ AWC can export one or all items. (Select specific items to export is not yet imp
 #### Exporting single item
 
 To export a single item, click on the 3 dots button of the item card, them click `Export ***`. In this tutorial example: `Export gbah`.
-
-![](.github/application-list-export-single.png)
-
 A zip file will be downloaded containing the normal and blurred versions inside a subfolder called *blurred*.
 
-![](.github/zip-single.png)
+| ![](.github/application-list-export-single.png) | ![](.github/zip-single.png) |
+| :---------------------------------------------: | :-------------------------: |
+|         Downloading single item as Zip          | Images and blurred variant  |
+
+<br>
 
 #### Exporting all items
 
 To export all items, click on Menu button, with the 3 bars. Then, click on `Download as ZIP`.
-
-![](.github/application-list-export-all.png)
-
 A zip file will be downloaded containing all the items and its blurred versions.
 
-![](.github/zip-all.png)
+| ![](.github/application-list-export-all.png) |  ![](.github/zip-all.png)   |
+| :------------------------------------------: | :-------------------------: |
+|          Download all items as Zip           | Images and blurred variants |
 
 ### 5. Extracting to the right place
 
