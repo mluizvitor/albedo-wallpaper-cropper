@@ -6,16 +6,25 @@ import { CircleNotch } from 'phosphor-react';
 import { useLoader } from './hooks/useLoader';
 import { UpdatePrompt } from './components/UpdatePrompt';
 import { PaginationProvider } from './hooks/usePagination';
+import { useState } from 'react';
+
+export type GuideProps = 'none' | 'albedo' | 'elementerial';
 
 function App() {
   const { loaderIsOn } = useLoader();
 
   IDB();
 
+  const [guide, setGuide] = useState<GuideProps>('elementerial');
+
+  function changeGuide(guide: GuideProps) {
+    setGuide(guide);
+  }
+
   return (
     <main>
-      <CanvasSection />
-      <CropperSection />
+      <CanvasSection guideState={guide} />
+      <CropperSection guideMethod={changeGuide} />
 
       <PaginationProvider>
         <FileListSection />

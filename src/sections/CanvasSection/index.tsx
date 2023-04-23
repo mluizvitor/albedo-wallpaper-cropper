@@ -3,8 +3,13 @@ import Button from '../../components/Button';
 import { useCanvas } from '../../hooks/useCanvas';
 import { getScaleFactor } from '../../utils/GetScaleFactor';
 import { ChangeEvent, WheelEvent, useEffect, useState } from 'react';
+import { GuideProps } from '../../App';
 
-export function CanvasSection() {
+interface CanvasProps {
+  guideState: GuideProps;
+}
+
+export function CanvasSection({ guideState }: CanvasProps) {
 
   const {
     canvasContent,
@@ -174,7 +179,7 @@ export function CanvasSection() {
 
       <div className='flex flex-col h-[100vh] items-center justify-center fixed inset-0'>
         <canvas id='canvasNormal'
-          className={['bg-neutral-700', canvasWidth !== canvasHeight && 'brightness-[0.4]', showBlur && 'hidden'].join(' ')}
+          className={['bg-neutral-700', guideState !== 'none' && 'brightness-[0.4]', showBlur && 'hidden'].join(' ')}
           width={canvasWidth}
           height={canvasHeight}
           style={{
@@ -195,12 +200,12 @@ export function CanvasSection() {
         />
 
         {canvasHeight !== canvasWidth && (
-          <div className={['pointer-events-none z-10 fixed', canvasWidth !== canvasHeight && 'backdrop-brightness-[2.5]', showBlur && 'hidden'].join(' ')}
+          <div className={['pointer-events-none z-10 fixed', guideState !== 'none' && 'backdrop-brightness-[2.5]', showBlur && 'hidden'].join(' ')}
             style={{
               background: 'none',
               transform: `scale(${canvasScaleOnScreen / 100})`,
-              width: Math.min(canvasHeight, canvasWidth),
-              height: Math.min(canvasHeight, canvasWidth),
+              width: guideState === 'elementerial' ? canvasWidth : Math.min(canvasHeight, canvasWidth),
+              height: guideState === 'elementerial' ? canvasHeight / 2 : Math.min(canvasHeight, canvasWidth),
             }}
           />
         )}

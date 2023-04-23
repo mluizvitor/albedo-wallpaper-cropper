@@ -6,8 +6,13 @@ import { ChangeEvent } from 'react';
 import { SideBar } from '../../components/SideBar';
 import Checkbox from '../../components/Checkbox';
 import Button from '../../components/Button';
+import { GuideProps } from '../../App';
 
-export function CropperSection() {
+interface CropperProps {
+  guideMethod: (guide: GuideProps) => void;
+}
+
+export function CropperSection({ guideMethod: changeMethod }: CropperProps) {
 
   const {
     blurAmount,
@@ -70,29 +75,44 @@ export function CropperSection() {
         </div>
         <div className='grid grid-cols-3 gap-2 mb-3'>
           <Button className='justify-center flex-1'
-            label='320 x 320'
-            title={'Width: 320 pixels\nHeight: 320 pixels\nMinimum size for RG351P/M'}
-            onClick={() => updateSizes(320, 320)} />
-
-          <Button className='justify-center flex-1'
             label='480 x 480'
-            title={'Width: 480 pixels\nHeight: 480 pixels\nMinimum size for RG351V/MP'}
+            title={'Width: 480 pixels\nHeight: 480 pixels'}
             onClick={() => updateSizes(480, 480)} />
 
           <Button className='justify-center flex-1'
-            label='1152 x 1152'
-            title={'Width: 1152 pixels\nHeight: 1152 pixels\nMinimum size for RG552'}
-            onClick={() => updateSizes(1152, 1152)} />
-
-          <Button className='justify-center flex-1'
-            label='1280 x 1280'
-            title={'Width: 1280 pixels\nHeight: 1280 pixels\n4x RG351P/M size'}
-            onClick={() => updateSizes(1280, 1280)} />
+            label='640 x 640'
+            title={'Width: 640 pixels\nHeight: 640 pixels'}
+            onClick={() => updateSizes(640, 640)} />
 
           <Button className='justify-center flex-1'
             label='1920 x 1920'
-            title={'Width: 1920 pixels\nHeight: 1920 pixels\n4x RG351V/MP size'}
+            title={'Width: 1920 pixels\nHeight: 1920 pixels'}
             onClick={() => updateSizes(1920, 1920)} />
+        </div>
+
+        <div className='flex mb-2 items-center'>
+          <span className='text-sm text-neutral-200'>{'2 : 1'}</span>
+          <span className='ml-2 opacity-50 cursor-help'
+            title='2:1 images are used on Elementerial theme it fits perfectly on 3:2, 4:3 and 5:3 devices.'>
+            <Question size={16}
+              weight='bold' />
+          </span>
+        </div>
+        <div className='grid grid-cols-3 gap-2 mb-3'>
+          <Button className='justify-center flex-1'
+            label='480 x 240'
+            title={'Width: 480 pixels\nHeight: 240 pixels\nRG351P/M screen width.'}
+            onClick={() => updateSizes(480, 240)} />
+
+          <Button className='justify-center flex-1'
+            label='640 x 320'
+            title={'Width: 640 pixels\nHeight: 320 pixels\nRG351MP/V and RG353 screen width.'}
+            onClick={() => updateSizes(640, 320)} />
+
+          <Button className='justify-center flex-1'
+            label='1920 x 960'
+            title={'Width: 1920 pixels\nHeight: 960 pixels\nRG351P/M screen width multiplied by 4.\nRG351MP/V and RG353 screen width multiplied by 3\nRG552 native screen width'}
+            onClick={() => updateSizes(1920, 960)} />
         </div>
 
         <div className='flex mb-2 items-center'>
@@ -148,6 +168,30 @@ export function CropperSection() {
             title={'Width: 1920 pixels\nHeight: 1152 pixels\nRG552 original resolution.'}
             onClick={() => updateSizes(1920, 1152)} />
         </div>
+
+        <div className='flex mb-2 items-center'>
+          <span className='text-sm text-neutral-200'>{'Theme guide'}</span>
+          <span className='ml-2 opacity-50 cursor-help'
+            title={'In this context, guide is a square or rectangle that will help you position your wallpaper.\nThe highlighted area means the best position for your image and the dimmed is a safe area can can or cannot be showed depending on device.'}>
+            <Question size={16}
+              weight='bold' />
+          </span>
+        </div>
+        <div className='grid grid-cols-3 gap-2 mb-3'>
+          <Button className='justify-center flex-1'
+            label='None'
+            title='This option will remove any rectangular guides'
+            onClick={() => changeMethod('none')} />
+          <Button className='justify-center flex-1'
+            label='Albedo'
+            title={'Recommended aspect ratio → 3:2 is a good choice, but your device aspect ratio is a better choice\nThis option will show a square in the middle of the canvas to help you position your image for best results when creating wallpapers for Albedo theme.'}
+            onClick={() => changeMethod('albedo')} />
+          <Button className='justify-center flex-1'
+            label='Elementerial'
+            title={'Recommended aspect ratio → 2:1\nThis option will show an wide rectangle in the middle of the canvas to help you position your image for best results when creating wallpapers for Elementerial theme.'}
+            onClick={() => changeMethod('elementerial')} />
+        </div>
+
       </MenuSection>
 
       <MenuSection title='Render options'
