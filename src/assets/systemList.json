@@ -2,6 +2,51 @@
   "systemList": {
     "system": [
       {
+        "fullname": "Final Fantasy",
+        "theme" :"Final Fantasy",
+        "manufacturer": "Custom Collection"
+      },
+      {
+        "fullname": "Persona",
+        "theme" :"Persona",
+        "manufacturer": "Custom Collection"
+      },
+      {
+        "fullname": "Pokemon",
+        "theme" :"Pokemon",
+        "manufacturer": "Custom Collection"
+      },
+      {
+        "fullname": "Mario",
+        "theme" :"Mario",
+        "manufacturer": "Custom Collection"
+      },
+      {
+        "fullname": "Metroid",
+        "theme" :"Metroid",
+        "manufacturer": "Custom Collection"
+      },
+      {
+        "fullname": "Grouvee Playing",
+        "theme" :"Grouvee Playing",
+        "manufacturer": "Custom Collection"
+      },
+      {
+        "fullname": "Capcom Play System 1",
+        "theme" :"cps1",
+        "manufacturer": "Capcom"
+      },
+      {
+        "fullname": "Capcom Play System 2",
+        "theme" :"cps2",
+        "manufacturer": "Capcom"
+      },
+      {
+        "fullname": "Capcom Play System 3",
+        "theme" :"cps3",
+        "manufacturer": "Capcom"
+      },
+      {
         "fullname": "Unknown",
         "theme" :"unknown",
         "manufacturer": "Generic Background"
