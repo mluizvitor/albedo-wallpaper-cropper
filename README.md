@@ -133,13 +133,13 @@ After moving the images to the right place, you need to enable custom background
 
 The following pictures shows the changes from **Default** to **Custom** backgrounds, and the differences between choosing `normal` or `blurred` on **Game List Background** option
 
-| ![](.github/result-carousel-default.webp) | ![](.github/result-carousel-custom.webp) |
-| :---------------------------------------: | :--------------------------------------: |
-|       Default background for `gbah`       |       Custom background for `gbah`       |
+| ![](https://i.imgur.com/LzeR5Qe.png) | ![](https://i.imgur.com/1QwshaZ.png) |
+| :----------------------------------: | :----------------------------------: |
+| Default background for `gbah`        | Custom background for `gbah`         |
 
-| ![](.github/result-gamelist-blurred.webp) | ![](.github/result-gamelist-normal.webp) |
-| :---------------------------------------: | :--------------------------------------: |
-|       Full image \| blurred version       |        Full image \| not blurred         |
+| ![](https://i.imgur.com/fYvVQeO.png) | ![](https://i.imgur.com/Wr7PnWb.png) |
+| :----------------------------------: | :----------------------------------: |
+| Full image \| blurred version        | Full image \| not blurred            |
 
 As you can see, on carousel interface, just the center of the image is shown. As mentioned on step 2, the dimmed area of the canvas is supposed to appear only on game list.
 
