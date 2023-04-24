@@ -587,6 +587,24 @@
         }
       },
       {
+        "name": "daphne",
+        "fullname": "Daphne",
+        "manufacturer": "Arcade",
+        "hardware": "arcade",
+        "path": "/storage/roms/daphne",
+        "extension": ".daphne .ld",
+        "command": "/usr/bin/runemu.py --rom %ROM% --platform %SYSTEM% --emulator %EMULATOR% --core %CORE% --controllers \"%CONTROLLERSCONFIG%\"",
+        "platform": "arcade daphne americanlasergames actionmax",
+        "theme": "daphne",
+        "emulators": {
+          "emulator": {
+            "cores": {
+              "core": "hypseus_singe"
+            }
+          }
+        }
+      },
+      {
         "name": "dreamcast",
         "fullname": "Dreamcast",
         "manufacturer": "Sega",
