@@ -2,7 +2,7 @@
 
 > First of all, English is not my main language, nor am I fluent in it. I hope all the following instructions made some sense for you. 
 
-Albedo Wallpaper Cropper (AWC) is an utility to load, crop, and save images. It's not an image editor like Photoshop or GIMP. Instead it's a tool to help collect and standardize custom backgrounds for [Albedo ES Theme](https://github.com/mluizvitor/es-theme-albedo).
+Albedo Wallpaper Cropper (AWC) is an utility to load, crop, and save images. It's not an image editor like Photoshop or GIMP. Instead it's a tool to help collect and standardize custom backgrounds for [Albedo ES Theme](https://github.com/mluizvitor/es-theme-albedo) and [Elementerial ES Theme](https://github.com/mluizvitor/es-theme-elementerial).
 
 You can load an image, position it on canvas, link it to a videogame console. Many images are accepted, but one at time. After saving an image, you can download one or all as zip.
 
@@ -119,7 +119,7 @@ A zip file will be downloaded containing all the items and its blurred versions.
 
 ### 5. Extracting to the right place
 
-Extract the files anywhere and move them to a folder called `customBackground` located on the root of the theme directory.
+Extract the files anywhere and move them to a folder called `customBackground` located on the root of the theme directory. Note that **Elementerial ES Theme** does not need `blur` variants, and **Albedo ES Theme** you can opt to use non blurred background, thus `blur` directory os not mandatory in both cases.
 
 On the video below I show the process. I access my RG351M through SMB, entering its local IP and navigating to the AmberELEC theme folder:
 
