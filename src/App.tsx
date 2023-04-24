@@ -15,7 +15,7 @@ function App() {
 
   IDB();
 
-  const [guide, setGuide] = useState<GuideProps>('elementerial');
+  const [guide, setGuide] = useState<GuideProps>('none');
 
   function changeGuide(guide: GuideProps) {
     setGuide(guide);
@@ -24,7 +24,8 @@ function App() {
   return (
     <main>
       <CanvasSection guideState={guide} />
-      <CropperSection guideMethod={changeGuide} />
+      <CropperSection guideMethod={changeGuide}
+        guide={guide} />
 
       <PaginationProvider>
         <FileListSection />

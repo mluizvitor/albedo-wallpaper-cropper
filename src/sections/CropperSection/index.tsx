@@ -9,10 +9,11 @@ import Button from '../../components/Button';
 import { GuideProps } from '../../App';
 
 interface CropperProps {
+  guide: GuideProps;
   guideMethod: (guide: GuideProps) => void;
 }
 
-export function CropperSection({ guideMethod: changeMethod }: CropperProps) {
+export function CropperSection({ guide, guideMethod }: CropperProps) {
 
   const {
     blurAmount,
@@ -74,17 +75,17 @@ export function CropperSection({ guideMethod: changeMethod }: CropperProps) {
           </span>
         </div>
         <div className='grid grid-cols-3 gap-2 mb-3'>
-          <Button className='justify-center flex-1'
+          <Button className={['justify-center flex-1', (canvasWidth === 480 && canvasHeight === 480) && 'bg-amber-500 text-black/80'].join(' ')}
             label='480 x 480'
             title={'Width: 480 pixels\nHeight: 480 pixels'}
             onClick={() => updateSizes(480, 480)} />
 
-          <Button className='justify-center flex-1'
+          <Button className={['justify-center flex-1', (canvasWidth === 640 && canvasHeight === 640) && 'bg-amber-500 text-black/80'].join(' ')}
             label='640 x 640'
             title={'Width: 640 pixels\nHeight: 640 pixels'}
             onClick={() => updateSizes(640, 640)} />
 
-          <Button className='justify-center flex-1'
+          <Button className={['justify-center flex-1', (canvasWidth === 1920 && canvasHeight === 1920) && 'bg-amber-500 text-black/80'].join(' ')}
             label='1920 x 1920'
             title={'Width: 1920 pixels\nHeight: 1920 pixels'}
             onClick={() => updateSizes(1920, 1920)} />
@@ -99,17 +100,17 @@ export function CropperSection({ guideMethod: changeMethod }: CropperProps) {
           </span>
         </div>
         <div className='grid grid-cols-3 gap-2 mb-3'>
-          <Button className='justify-center flex-1'
+          <Button className={['justify-center flex-1', (canvasWidth === 480 && canvasHeight === 240) && 'bg-amber-500 text-black/80'].join(' ')}
             label='480 x 240'
             title={'Width: 480 pixels\nHeight: 240 pixels\nRG351P/M screen width.'}
             onClick={() => updateSizes(480, 240)} />
 
-          <Button className='justify-center flex-1'
+          <Button className={['justify-center flex-1', (canvasWidth === 640 && canvasHeight === 320) && 'bg-amber-500 text-black/80'].join(' ')}
             label='640 x 320'
             title={'Width: 640 pixels\nHeight: 320 pixels\nRG351MP/V and RG353 screen width.'}
             onClick={() => updateSizes(640, 320)} />
 
-          <Button className='justify-center flex-1'
+          <Button className={['justify-center flex-1', (canvasWidth === 1920 && canvasHeight === 960) && 'bg-amber-500 text-black/80'].join(' ')}
             label='1920 x 960'
             title={'Width: 1920 pixels\nHeight: 960 pixels\nRG351P/M screen width multiplied by 4.\nRG351MP/V and RG353 screen width multiplied by 3\nRG552 native screen width'}
             onClick={() => updateSizes(1920, 960)} />
@@ -124,12 +125,12 @@ export function CropperSection({ guideMethod: changeMethod }: CropperProps) {
           </span>
         </div>
         <div className='grid grid-cols-3 gap-2 mb-3'>
-          <Button className='justify-center flex-1'
+          <Button className={['justify-center flex-1', (canvasWidth === 480 && canvasHeight === 320) && 'bg-amber-500 text-black/80'].join(' ')}
             label='480 x 320'
             title={'Width: 480 pixels\nHeight: 320 pixels\nRG351P/M original resolution.'}
             onClick={() => updateSizes(480, 320)} />
 
-          <Button className='justify-center flex-1'
+          <Button className={['justify-center flex-1', (canvasWidth === 1920 && canvasHeight === 1280) && 'bg-amber-500 text-black/80'].join(' ')}
             label='1920 x 1280'
             title={'Width: 1920 pixels\nHeight: 1280 pixels\nRG351P/M resolution multiplied by 4.'}
             onClick={() => updateSizes(1920, 1280)} />
@@ -144,11 +145,12 @@ export function CropperSection({ guideMethod: changeMethod }: CropperProps) {
           </span>
         </div>
         <div className='grid grid-cols-3 gap-2 mb-3'>
-          <Button className='justify-center flex-1'
+          <Button className={['justify-center flex-1', (canvasWidth === 640 && canvasHeight === 480) && 'bg-amber-500 text-black/80'].join(' ')}
             label='640 x 480'
             title={'Width: 640 pixels\nHeight: 480 pixels\nRG351V/MP original resolution.'}
             onClick={() => updateSizes(640, 480)} />
-          <Button className='justify-center flex-1'
+
+          <Button className={['justify-center flex-1', (canvasWidth === 1920 && canvasHeight === 1440) && 'bg-amber-500 text-black/80'].join(' ')}
             label='1920 x 1440'
             title={'Width: 1920 pixels\nHeight: 1440 pixels\nRG351V/MP resolution multiplied by 3.'}
             onClick={() => updateSizes(1920, 1440)} />
@@ -163,7 +165,7 @@ export function CropperSection({ guideMethod: changeMethod }: CropperProps) {
           </span>
         </div>
         <div className='grid grid-cols-3 gap-2 mb-3'>
-          <Button className='justify-center flex-1'
+          <Button className={['justify-center flex-1', (canvasWidth === 1920 && canvasHeight === 1152) && 'bg-amber-500 text-black/80'].join(' ')}
             label='1920 x 1152'
             title={'Width: 1920 pixels\nHeight: 1152 pixels\nRG552 original resolution.'}
             onClick={() => updateSizes(1920, 1152)} />
@@ -178,18 +180,20 @@ export function CropperSection({ guideMethod: changeMethod }: CropperProps) {
           </span>
         </div>
         <div className='grid grid-cols-3 gap-2 mb-3'>
-          <Button className='justify-center flex-1'
+          <Button className={['justify-center flex-1', guide === 'none' && 'bg-amber-500 text-black/80'].join(' ')}
             label='None'
             title='This option will remove any rectangular guides'
-            onClick={() => changeMethod('none')} />
-          <Button className='justify-center flex-1'
+            onClick={() => guideMethod('none')} />
+
+          <Button className={['justify-center flex-1', guide === 'albedo' && 'bg-amber-500 text-black/80'].join(' ')}
             label='Albedo'
             title={'Recommended aspect ratio → 3:2 is a good choice, but your device aspect ratio is a better choice\nThis option will show a square in the middle of the canvas to help you position your image for best results when creating wallpapers for Albedo theme.'}
-            onClick={() => changeMethod('albedo')} />
-          <Button className='justify-center flex-1'
+            onClick={() => guideMethod('albedo')} />
+
+          <Button className={['justify-center flex-1', guide === 'elementerial' && 'bg-amber-500 text-black/80'].join(' ')}
             label='Elementerial'
             title={'Recommended aspect ratio → 2:1\nThis option will show an wide rectangle in the middle of the canvas to help you position your image for best results when creating wallpapers for Elementerial theme.'}
-            onClick={() => changeMethod('elementerial')} />
+            onClick={() => guideMethod('elementerial')} />
         </div>
 
       </MenuSection>
