@@ -44,16 +44,43 @@ const CanvasContext = createContext<CanvasContextData>({} as CanvasContextData);
 export function CanvasProvider({ children }: CanvasProviderProps) {
   const { showLoader, hideLoader } = useLoader();
 
-  const [blurAmount, setBlurAmount] = useState(60);
+  const [blurAmount, setBlurAmount] = useState(() => {
+    const getValue = localStorage.getItem('blurAmount');
+    if (Number(getValue)) {
+      return Number(getValue);
+    }
+    return 60;
+  });
   const [canvasContent, setCanvasContent] = useState({} as CanvasContentProps);
-  const [canvasHeight, setCanvasHeight] = useState(1280);
-  const [canvasWidth, setCanvasWidth] = useState(1920);
+  const [canvasHeight, setCanvasHeight] = useState<number>(() => {
+    const getValue = localStorage.getItem('canvasHeight');
+    if (Number(getValue)) {
+      return Number(getValue);
+    }
+    return 1280;
+  });
+  const [canvasWidth, setCanvasWidth] = useState<number>(() => {
+    const getValue = localStorage.getItem('canvasWidth');
+    if (Number(getValue)) {
+      return Number(getValue);
+    }
+    return 1920;
+  });
   const [currentLoadedImage, setCurrentLoadedImage] = useState('');
   const [currentLoadedFileName, setCurrentLoadedFileName] = useState('');
   const [integerScale, setIntegerScale] = useState(false);
   const [integerScaleValue, setIntegerScaleValue] = useState(1);
   const [showBlur, setShowBlur] = useState(false);
   const [smoothRendering, setSmoothRendering] = useState(true);
+
+  useEffect(() => {
+    localStorage.setItem('canvasHeight', canvasHeight.toString());
+    localStorage.setItem('canvasWidth', canvasWidth.toString());
+  }, [canvasHeight, canvasWidth]);
+
+  useEffect(() => {
+    localStorage.setItem('blurAmount', blurAmount.toString());
+  }, [blurAmount]);
 
   function updateBlur(blur: number) {
     if (0 <= blur && blur <= 180) {
