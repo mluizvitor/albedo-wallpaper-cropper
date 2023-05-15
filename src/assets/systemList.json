@@ -2,6 +2,16 @@
   "systemList": {
     "system": [
       {
+        "fullname": "SaGa",
+        "theme" :"SaGa",
+        "manufacturer": "Custom Collection"
+      },
+      {
+        "fullname": "Zelda",
+        "theme" :"Zelda",
+        "manufacturer": "Custom Collection"
+      },
+      {
         "fullname": "Final Fantasy",
         "theme" :"Final Fantasy",
         "manufacturer": "Custom Collection"
