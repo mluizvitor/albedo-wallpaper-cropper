@@ -6,37 +6,17 @@ import { CircleNotch } from 'phosphor-react';
 import { useLoader } from './hooks/useLoader';
 import { UpdatePrompt } from './components/UpdatePrompt';
 import { PaginationProvider } from './hooks/usePagination';
-import { useEffect, useState } from 'react';
 
-const guideNames = ['none', 'albedo', 'elementerial'];
-export type GuideProps = typeof guideNames[number];
 
 function App() {
   const { loaderIsOn } = useLoader();
 
   IDB();
 
-  const [guide, setGuide] = useState<GuideProps>(() => {
-    const getValue = localStorage.getItem('guideType');
-    if (typeof getValue === 'string' && guideNames.includes(getValue)) {
-      return getValue;
-    }
-    return 'none';
-  });
-
-  useEffect(() => {
-    localStorage.setItem('guideType', guide);
-  }, [guide]);
-
-  function changeGuide(guide: GuideProps) {
-    setGuide(guide);
-  }
-
   return (
     <main>
-      <CanvasSection guideState={guide} />
-      <CropperSection guideMethod={changeGuide}
-        guide={guide} />
+      <CanvasSection />
+      <CropperSection />
 
       <PaginationProvider>
         <FileListSection />

@@ -5,13 +5,16 @@ import './index.css';
 import { CanvasProvider } from './hooks/useCanvas';
 import { SystemsProvider } from './hooks/useSystemsCollection';
 import { LoaderProvider } from './hooks/useLoader';
+import { SettingsProvider } from './hooks/useSettings';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <LoaderProvider>
-    <CanvasProvider>
-      <SystemsProvider>
-        <App />
-      </SystemsProvider>
-    </CanvasProvider>
+    <SettingsProvider>
+      <CanvasProvider>
+        <SystemsProvider>
+          <App />
+        </SystemsProvider>
+      </CanvasProvider>
+    </SettingsProvider>
   </LoaderProvider>
 );

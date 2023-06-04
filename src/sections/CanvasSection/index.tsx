@@ -2,29 +2,32 @@ import { Minus, Plus } from 'phosphor-react';
 import Button from '../../components/Button';
 import { useCanvas } from '../../hooks/useCanvas';
 import { getScaleFactor } from '../../utils/GetScaleFactor';
-import { ChangeEvent, WheelEvent, useEffect, useState } from 'react';
-import { GuideProps } from '../../App';
+import { WheelEvent, useEffect, useState } from 'react';
+import { useSettings } from '../../hooks/useSettings';
+import EditText from 'react-editext';
+import styles from './styles.module.css';
 
-interface CanvasProps {
-  guideState: GuideProps;
-}
-
-export function CanvasSection({ guideState }: CanvasProps) {
+export function CanvasSection() {
 
   const {
     canvasContent,
-    canvasWidth,
-    canvasHeight,
     currentLoadedImage,
     currentLoadedFileName,
-    integerScale,
-    integerScaleValue,
-    showBlur,
-    smoothRendering,
     clearCanvas,
     updateImageFromClipboard,
     updateCanvas,
   } = useCanvas();
+
+  const {
+    canvasSize,
+    integerScale,
+    integerScaleValue,
+    showBlur,
+    smoothRendering,
+    guideType,
+    projectName,
+    updateProjectName,
+  } = useSettings();
 
   function updater() {
     const originalCanvas = document.getElementById('canvasNormal') as HTMLCanvasElement;
@@ -46,12 +49,12 @@ export function CanvasSection({ guideState }: CanvasProps) {
     let yPosition = 0;
     let xPosition = 0;
 
-    let newImageHeight = image.width / canvasWidth * canvasHeight;
-    let newImageWidth = image.height / canvasHeight * canvasWidth;
+    let newImageHeight = image.width / canvasSize.w * canvasSize.h;
+    let newImageWidth = image.height / canvasSize.h * canvasSize.w;
 
     image.onload = () => {
       context.clearRect(0, 0, originalCanvas.width, originalCanvas.height);
-      autoScaleValue = Math.max(getScaleFactor(image.height, canvasHeight), getScaleFactor(image.width, canvasWidth));
+      autoScaleValue = Math.max(getScaleFactor(image.height, canvasSize.h), getScaleFactor(image.width, canvasSize.w));
       imageWidthScaled = image.width * (integerScale ? integerScaleValue : autoScaleValue);
       imageHeightScaled = image.height * (integerScale ? integerScaleValue : autoScaleValue);
 
@@ -62,16 +65,16 @@ export function CanvasSection({ guideState }: CanvasProps) {
         context.drawImage(image, originalCanvas.width / 2 - imageWidthScaled / 2, originalCanvas.height / 2 - imageHeightScaled / 2, imageWidthScaled, imageHeightScaled);
 
       } else {
-        newImageHeight = image.width / canvasWidth * canvasHeight;
-        newImageWidth = image.height / canvasHeight * canvasWidth;
+        newImageHeight = image.width / canvasSize.w * canvasSize.h;
+        newImageWidth = image.height / canvasSize.h * canvasSize.w;
 
         yPosition = (image.height / 2) - (newImageHeight / 2);
         xPosition = (image.width / 2) - (newImageWidth / 2);
 
-        if (canvasWidth / canvasHeight > image.width / image.height) {
-          context.drawImage(image, 0, yPosition, image.width, newImageHeight, 0, 0, canvasWidth, canvasHeight);
+        if (canvasSize.w / canvasSize.h > image.width / image.height) {
+          context.drawImage(image, 0, yPosition, image.width, newImageHeight, 0, 0, canvasSize.w, canvasSize.h);
         } else {
-          context.drawImage(image, xPosition, 0, newImageWidth, image.height, 0, 0, canvasWidth, canvasHeight);
+          context.drawImage(image, xPosition, 0, newImageWidth, image.height, 0, 0, canvasSize.w, canvasSize.h);
         }
       }
     };
@@ -106,10 +109,10 @@ export function CanvasSection({ guideState }: CanvasProps) {
             context.drawImage(image, currentX - imageWidthScaled / 2, currentY - imageHeightScaled / 2, imageWidthScaled, imageHeightScaled);
           }
         } else {
-          if (canvasWidth / canvasHeight > image.width / image.height) {
-            context.drawImage(image, 0, currentY - (canvasWidth / image.width * image.height) / 2, canvasWidth, canvasWidth / image.width * image.height);
+          if (canvasSize.w / canvasSize.h > image.width / image.height) {
+            context.drawImage(image, 0, currentY - (canvasSize.w / image.width * image.height) / 2, canvasSize.w, canvasSize.w / image.width * image.height);
           } else {
-            context.drawImage(image, currentX - (canvasHeight / image.height * image.width) / 2, 0, canvasHeight / image.height * image.width, canvasHeight);
+            context.drawImage(image, currentX - (canvasSize.h / image.height * image.width) / 2, 0, canvasSize.h / image.height * image.width, canvasSize.h);
           }
         }
       }
@@ -162,7 +165,7 @@ export function CanvasSection({ guideState }: CanvasProps) {
 
     return () => clearTimeout(timeout);
 
-  }, [currentLoadedImage, integerScale, integerScaleValue, canvasHeight, canvasWidth, smoothRendering]);
+  }, [currentLoadedImage, integerScale, integerScaleValue, canvasSize, smoothRendering]);
 
   useEffect(() => {
     document.addEventListener('paste', (event: ClipboardEvent) => updateImageFromClipboard(event));
@@ -173,15 +176,47 @@ export function CanvasSection({ guideState }: CanvasProps) {
       className='z-0 w-[100vw] h-[100vh] relative overflow-hidden flex items-center justify-center bg-[#0a0a0a]'
       onWheel={(e: WheelEvent<HTMLDivElement>) => wheelHandler(e)}
     >
-      <div className='opacity-50 fixed top-0 inset-x-0 flex items-center justify-center h-16 font-teko text-lg'>
-        <h1>{currentLoadedFileName}</h1>
+      <div className='fixed top-0 inset-x-0 grid grid-cols-2 items-center justify-between z-20 py-3 bg-[#0a0a0a]/50 px-[25rem] 2xl:px-[29rem]'>
+        <EditText type='text'
+          value={projectName}
+
+          validation={(value) => !!value}
+          validationMessage="Title can't be empty"
+
+          onSave={(value) => {
+            updateProjectName(value);
+          }}
+
+          editButtonClassName='hidden'
+          cancelButtonClassName='hidden'
+          saveButtonClassName='hidden'
+
+          editOnViewClick
+          submitOnUnfocus
+          submitOnEnter
+          cancelOnEscape
+          hideIcons
+
+          inputProps={{
+            className: 'bg-transparent text-xl text-start outline-none h-10 border-b-2 border-amber-500 w-full',
+            placeholder: 'Project Title',
+          }}
+
+          containerProps={{
+            className: 'bg-transparent text-xl text-start outline-none h-10 flex border-b-2 border-transparent w-full',
+          }}
+        />
+        <span title={currentLoadedFileName}
+          className='opacity-50 text-lg font-teko leading-[1.25rem] inline-block overflow-hidden break-words text-ellipsis max-h-5 text-end'>
+          {currentLoadedFileName}
+        </span>
       </div>
 
       <div className='flex flex-col h-[100vh] items-center justify-center fixed inset-0'>
         <canvas id='canvasNormal'
-          className={['bg-neutral-700', guideState !== 'none' && 'brightness-[0.4]', showBlur && 'hidden'].join(' ')}
-          width={canvasWidth}
-          height={canvasHeight}
+          className={['bg-neutral-700', guideType !== 'none' && 'brightness-[0.4]', showBlur && 'hidden'].join(' ')}
+          width={canvasSize.w}
+          height={canvasSize.h}
           style={{
             transform: `scale(${canvasScaleOnScreen / 100})`,
             borderRadius: 6 / (canvasScaleOnScreen / 100) * 1,
@@ -191,21 +226,21 @@ export function CanvasSection({ guideState }: CanvasProps) {
 
         <img src={canvasContent.blurred}
           className={['bg-neutral-700 cursor-not-allowed pointer-events-none fixed', !showBlur && 'hidden'].join(' ')}
-          width={canvasWidth}
-          height={canvasHeight}
+          width={canvasSize.w}
+          height={canvasSize.h}
           style={{
             transform: `scale(${canvasScaleOnScreen / 100})`,
             borderRadius: 6 / (canvasScaleOnScreen / 100) * 1,
           }}
         />
 
-        {canvasHeight !== canvasWidth && (
-          <div className={['pointer-events-none z-10 fixed', guideState !== 'none' && 'backdrop-brightness-[2.5]', showBlur && 'hidden'].join(' ')}
+        {canvasSize.h !== canvasSize.w && (
+          <div className={['pointer-events-none z-10 fixed', guideType !== 'none' && 'backdrop-brightness-[2.5]', showBlur && 'hidden'].join(' ')}
             style={{
               background: 'none',
               transform: `scale(${canvasScaleOnScreen / 100})`,
-              width: guideState === 'elementerial' ? canvasWidth : Math.min(canvasHeight, canvasWidth),
-              height: guideState === 'elementerial' ? canvasHeight / 2 : Math.min(canvasHeight, canvasWidth),
+              width: guideType === 'elementerial' ? canvasSize.w : Math.min(canvasSize.h, canvasSize.w),
+              height: guideType === 'elementerial' ? canvasSize.h / 2 : Math.min(canvasSize.h, canvasSize.w),
             }}
           />
         )}
@@ -226,20 +261,34 @@ export function CanvasSection({ guideState }: CanvasProps) {
             }}
           />
 
-          <label htmlFor='canvasSection_zoomInput'
-            className='w-16 bg-neutral-700 mx-1 rounded font-bold group text-sm flex items-center cursor-text'
-            style={{
-              boxShadow: '0 0 0 1px rgba(255, 255, 255, 0.15) inset,' +
-                '0 0 0 1px rgba(0,0,0,0.4),' +
-                '0 2px 8px -2px rgba(0,0,0,0.5)',
-            }}>
-            <input id='canvasSection_zoomInput'
-              value={Math.ceil(canvasScaleOnScreen)}
-              type='number'
-              onChange={(e: ChangeEvent<HTMLInputElement>) => handleUpdateScaleInput(Number(e.target.value))}
-              className='h-full rounded text-end focus-within:text-center min-w-0 w-full focus-within:w-full bg-transparent block ml-auto' />
-            <span className='group-focus-within:hidden ml-1 mr-2'>{'%'}</span>
-          </label>
+          <EditText
+            type='number'
+            value={Math.ceil(canvasScaleOnScreen).toString()}
+            renderValue={() => `${Math.ceil(canvasScaleOnScreen).toString()}%`}
+
+            onSave={(value) => handleUpdateScaleInput(Number(value))}
+
+            editButtonClassName='hidden m-0 p-0'
+            cancelButtonClassName='hidden m-0 p-0'
+            saveButtonClassName='hidden m-0 p-0'
+
+            editOnViewClick
+            submitOnUnfocus
+            submitOnEnter
+            cancelOnEscape
+            hideIcons
+
+            containerProps={{
+              className: [styles.button, 'mx-1'].join(' '),
+            }}
+
+            viewContainerClassName='m-0'
+
+            inputProps={{
+              id: 'canvasSection_zoomInput',
+              className: 'min-w-0 w-full h-8 bg-transparent m-0 p-0 text-center outline-none',
+            }}
+          />
 
           <Button label='Zoom Out'
             hideLabel

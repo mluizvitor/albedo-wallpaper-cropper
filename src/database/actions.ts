@@ -69,9 +69,11 @@ export const idbEditElement = <T>(store: string, key: number | 'all', payload: o
 
         request.onerror = () => reject(request.error);
         request.onsuccess = () => {
-          const serialized = JSON.parse(JSON.stringify(payload));
-          const updateRequest = objectStore.put(serialized);
-          updateRequest.onsuccess = () => resolve(request.result);
+          if (request.result) {
+            const serialized = JSON.parse(JSON.stringify(payload));
+            const updateRequest = objectStore.put(serialized);
+            updateRequest.onsuccess = () => resolve(request.result);
+          }
         };
         transaction.oncomplete = () => db.close();
 

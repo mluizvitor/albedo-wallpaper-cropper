@@ -1,5 +1,6 @@
 import { ChangeEvent, ReactNode, createContext, useContext, useEffect, useState } from 'react';
 import { CanvasContentProps, useCanvas } from './useCanvas';
+import { useSettings } from './useSettings';
 
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
@@ -55,11 +56,12 @@ export function SystemsProvider({ children }: SystemProviderProps) {
     });
   });
   const [systemCollection, setSystemCollection] = useState<SystemProps[]>([]);
+  const { projectName } = useSettings();
 
   /**
-   * 
+   *
    * Add System Name and Image to the System Collection
-   * 
+   *
    */
   function addSystemToCollection(selectedSystem: IndexedSystemProps) {
     if (!currentLoadedImage) {
@@ -106,7 +108,7 @@ export function SystemsProvider({ children }: SystemProviderProps) {
   }
 
   /**
-   * 
+   *
    * Edit System Name on Collection
    * @param idToEdit
    * @param targetSystem
@@ -141,7 +143,7 @@ export function SystemsProvider({ children }: SystemProviderProps) {
   }
 
   /**
-   * 
+   *
    * Remove System from Collection
    * @param systemName
    */
@@ -153,7 +155,7 @@ export function SystemsProvider({ children }: SystemProviderProps) {
   }
 
   /**
-   * 
+   *
    * Clear collection
    */
   function clearCollection() {
@@ -162,7 +164,7 @@ export function SystemsProvider({ children }: SystemProviderProps) {
   }
 
   /**
-   * 
+   *
    */
 
   function updateSystemList() {
@@ -180,9 +182,9 @@ export function SystemsProvider({ children }: SystemProviderProps) {
   }
 
   /**
-  * 
+  *
   * Download as zip file
-  * 
+  *
   */
 
   function exportFilesAsZip(systemName: string | 'all') {
@@ -223,7 +225,7 @@ export function SystemsProvider({ children }: SystemProviderProps) {
     }
 
     zip.generateAsync({ type: 'blob' }).then(function (content) {
-      saveAs(content, systemName === 'all' ? 'wallpapers.zip' : systemName + '.zip');
+      saveAs(content, systemName === 'all' ? projectName.toLowerCase().replaceAll(' ', '-').replaceAll(/[*\\/@:]/g, '') + '-wallpapers.zip' : systemName + '.zip');
     });
   }
 

@@ -2,6 +2,8 @@ import { ChangeEvent, ReactElement, createContext, useContext, useEffect, useSta
 import * as StackBlur from 'stackblur-canvas';
 import { useLoader } from './useLoader';
 
+import { useSettings } from './useSettings';
+
 export interface CanvasContentProps {
   normal: string;
   blurred: string;
@@ -11,28 +13,12 @@ export interface CanvasContentProps {
 interface CanvasContextData {
   currentLoadedImage: string;
   currentLoadedFileName: string;
-
   canvasContent: CanvasContentProps;
-  canvasWidth: number;
-  canvasHeight: number;
-  integerScaleValue: number;
-  blurAmount: number;
-  integerScale: boolean;
-  showBlur: boolean;
-  smoothRendering: boolean;
-
 
   clearCanvas: () => void;
-  invertSizes: () => void;
-  updateBlur: (blur: number) => void;
   updateCanvas: () => void;
   updateImage: (event: ChangeEvent<HTMLInputElement>) => void;
   updateImageFromClipboard: (event: ClipboardEvent) => void;
-  updateIntegerScale: (scale: number) => void;
-  updateSizes: (width: number, height: number) => void;
-  toggleImageBlur: () => void;
-  toggleIntegerScale: () => void;
-  toggleSmoothRendering: () => void;
 }
 
 interface CanvasProviderProps {
@@ -43,87 +29,11 @@ const CanvasContext = createContext<CanvasContextData>({} as CanvasContextData);
 
 export function CanvasProvider({ children }: CanvasProviderProps) {
   const { showLoader, hideLoader } = useLoader();
+  const { blurAmount, canvasSize, integerScale, integerScaleValue, smoothRendering } = useSettings();
 
-  const [blurAmount, setBlurAmount] = useState(() => {
-    const getValue = localStorage.getItem('blurAmount');
-    if (Number(getValue)) {
-      return Number(getValue);
-    }
-    return 60;
-  });
   const [canvasContent, setCanvasContent] = useState({} as CanvasContentProps);
-  const [canvasHeight, setCanvasHeight] = useState<number>(() => {
-    const getValue = localStorage.getItem('canvasHeight');
-    if (Number(getValue)) {
-      return Number(getValue);
-    }
-    return 1280;
-  });
-  const [canvasWidth, setCanvasWidth] = useState<number>(() => {
-    const getValue = localStorage.getItem('canvasWidth');
-    if (Number(getValue)) {
-      return Number(getValue);
-    }
-    return 1920;
-  });
   const [currentLoadedImage, setCurrentLoadedImage] = useState('');
   const [currentLoadedFileName, setCurrentLoadedFileName] = useState('');
-  const [integerScale, setIntegerScale] = useState(false);
-  const [integerScaleValue, setIntegerScaleValue] = useState(1);
-  const [showBlur, setShowBlur] = useState(false);
-  const [smoothRendering, setSmoothRendering] = useState(true);
-
-  useEffect(() => {
-    localStorage.setItem('canvasHeight', canvasHeight.toString());
-    localStorage.setItem('canvasWidth', canvasWidth.toString());
-  }, [canvasHeight, canvasWidth]);
-
-  useEffect(() => {
-    localStorage.setItem('blurAmount', blurAmount.toString());
-  }, [blurAmount]);
-
-  function updateBlur(blur: number) {
-    if (0 <= blur && blur <= 180) {
-      setBlurAmount(blur);
-    }
-  }
-
-  function toggleSmoothRendering() {
-    setSmoothRendering(!smoothRendering);
-  }
-
-  function updateIntegerScale(scale: number) {
-    if (scale >= 1 && scale <= 32) {
-      setIntegerScaleValue(scale);
-    } else {
-      return null;
-    }
-  }
-
-  function toggleImageBlur() {
-    setShowBlur(!showBlur);
-  }
-
-  function toggleIntegerScale() {
-    setIntegerScale(!integerScale);
-  }
-
-  function updateSizes(width: number, height: number) {
-    if (width >= 0 && width <= 3000) {
-      setCanvasWidth(width);
-    }
-    if (height >= 0 && height <= 3000) {
-      setCanvasHeight(height);
-    }
-  }
-
-  function invertSizes() {
-    const newWidth = canvasHeight;
-    const newHeight = canvasWidth;
-
-    setCanvasWidth(newWidth);
-    setCanvasHeight(newHeight);
-  }
 
   function updateImageFromClipboard(event: ClipboardEvent) {
     event.preventDefault();
@@ -173,7 +83,7 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
           context.drawImage(image, 0, 0);
 
           setCurrentLoadedImage(canvas.toDataURL());
-          setCurrentLoadedFileName('From clipboard');
+          setCurrentLoadedFileName('Loaded from clipboard');
           hideLoader();
           console.log('Image loaded successfully!');
 
@@ -274,7 +184,7 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
     }
 
     const scaleSize = () => {
-      return 1 / Math.min(canvasWidth, canvasHeight) * 192;
+      return 1 / Math.min(canvasSize.w, canvasSize.h) * 192;
     };
 
     let curCanvasSize = {
@@ -327,35 +237,19 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
   useEffect(() => {
     const timeout = setTimeout(() => {
       updateCanvas();
-      console.log('updateCanvas timeout');
-    }, 500);
+    }, 750);
     return () => clearTimeout(timeout);
-  }, [currentLoadedImage, blurAmount, integerScale, integerScaleValue, smoothRendering, canvasWidth, canvasHeight]);
+  }, [currentLoadedImage, blurAmount, integerScale, integerScaleValue, smoothRendering, canvasSize]);
 
   return (
     <CanvasContext.Provider value={{
-      blurAmount,
       canvasContent,
-      canvasHeight,
-      canvasWidth,
       currentLoadedImage,
       currentLoadedFileName,
-      integerScale,
-      integerScaleValue,
-      showBlur,
-      smoothRendering,
-
       clearCanvas,
-      invertSizes,
-      updateBlur,
       updateCanvas,
-      toggleImageBlur,
-      toggleIntegerScale,
-      toggleSmoothRendering,
       updateImageFromClipboard,
-      updateIntegerScale,
       updateImage,
-      updateSizes,
     }}>
       {children}
     </CanvasContext.Provider>

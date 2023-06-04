@@ -1,0 +1,13 @@
+{
+  "blurAmount": 60,
+  "canvasSize": {
+    "h": 1280,
+    "w": 1920
+  },
+  "guideType": "none",
+  "integerScale": false,
+  "integerScaleValue": 1,
+  "projectName": "Untitled Project",
+  "showBlur": false,
+  "smoothRendering": true
+}
