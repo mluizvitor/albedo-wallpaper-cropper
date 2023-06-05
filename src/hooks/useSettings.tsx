@@ -130,13 +130,6 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
     });
   }
 
-  function updateSmoothRendering(smoothRendering: boolean) {
-    setSettings({
-      ...settings,
-      smoothRendering,
-    });
-  }
-
   /**
    * Update Integer Scale
    */
@@ -161,13 +154,6 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
     });
   }
 
-  function updateImageBlur(showBlur: boolean) {
-    setSettings({
-      ...settings,
-      showBlur,
-    });
-  }
-
   /**
  * Toggle canvas to zoom image in integer or floating point number
  */
@@ -175,13 +161,6 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
     setSettings({
       ...settings,
       integerScale: !settings.integerScale,
-    });
-  }
-
-  function updateIntegerScale(integerScale: boolean) {
-    setSettings({
-      ...settings,
-      integerScale,
     });
   }
 
