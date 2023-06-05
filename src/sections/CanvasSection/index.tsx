@@ -236,16 +236,14 @@ export function CanvasSection() {
           }}
         />
 
-        {canvasSize.h !== canvasSize.w && (
-          <div className={['pointer-events-none z-10 fixed', guideType !== 'none' && 'backdrop-brightness-[2.5]', showBlur && 'hidden'].join(' ')}
-            style={{
-              background: 'none',
-              transform: `scale(${canvasScaleOnScreen / 100})`,
-              width: guideType === 'elementerial' ? canvasSize.w : Math.min(canvasSize.h, canvasSize.w),
-              height: guideType === 'elementerial' ? canvasSize.h / 2 : Math.min(canvasSize.h, canvasSize.w),
-            }}
-          />
-        )}
+        <div className={['pointer-events-none z-10 fixed', guideType !== 'none' && 'backdrop-brightness-[2.5]', showBlur && 'hidden'].join(' ')}
+          style={{
+            background: 'none',
+            transform: `scale(${canvasScaleOnScreen / 100})`,
+            width: guideType === 'elementerial' ? canvasSize.w : Math.min(canvasSize.h, canvasSize.w),
+            height: guideType === 'elementerial' ? canvasSize.h / 2 : Math.min(canvasSize.h, canvasSize.w),
+          }}
+        />
       </div>
 
       <div className='fixed bottom-0 inset-x-0 flex items-center justify-center h-16 text-lg'>
