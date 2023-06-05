@@ -11,13 +11,7 @@ import { useSettings } from '../../hooks/useSettings';
 export function CropperSection() {
 
   const {
-    blurAmount,
-    canvasSize,
-    integerScale,
-    integerScaleValue,
-    showBlur,
-    smoothRendering,
-    guideType,
+    settings,
     invertCanvasValues,
     updateBlurAmount,
     updateCanvasSize,
@@ -27,6 +21,14 @@ export function CropperSection() {
     toggleSmoothRendering,
     updateGuideType,
   } = useSettings();
+
+  const canvasSize = settings.canvasSize;
+  const integerScale = settings.integerScale;
+  const integerScaleValue = settings.integerScaleValue;
+  const smoothRendering = settings.smoothRendering;
+  const guideType = settings.guideType;
+  const showBlur = settings.showBlur;
+  const blurAmount = settings.blurAmount;
 
   return (
     <SideBar anchor='right'>

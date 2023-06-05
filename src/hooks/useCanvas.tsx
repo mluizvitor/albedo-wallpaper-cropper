@@ -29,7 +29,7 @@ const CanvasContext = createContext<CanvasContextData>({} as CanvasContextData);
 
 export function CanvasProvider({ children }: CanvasProviderProps) {
   const { showLoader, hideLoader } = useLoader();
-  const { blurAmount, canvasSize, integerScale, integerScaleValue, smoothRendering } = useSettings();
+  const { settings } = useSettings();
 
   const [canvasContent, setCanvasContent] = useState({} as CanvasContentProps);
   const [currentLoadedImage, setCurrentLoadedImage] = useState('');
@@ -172,7 +172,7 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
     const blurredContext = blurredCanvas.getContext('2d', { willReadFrequently: true });
     blurredContext && blurredContext.drawImage(originalCanvas, 0, 0);
 
-    StackBlur.canvasRGBA(blurredCanvas, 0, 0, blurredCanvas.width, blurredCanvas.height, blurAmount);
+    StackBlur.canvasRGBA(blurredCanvas, 0, 0, blurredCanvas.width, blurredCanvas.height, settings.blurAmount);
 
     const thumbnailCanvas = document.createElement('canvas');
     const thumbnailContext = thumbnailCanvas.getContext('2d', { willReadFrequently: true });
@@ -184,7 +184,7 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
     }
 
     const scaleSize = () => {
-      return 1 / Math.min(canvasSize.w, canvasSize.h) * 192;
+      return 1 / Math.min(settings.canvasSize.w, settings.canvasSize.h) * 192;
     };
 
     let curCanvasSize = {
@@ -239,7 +239,7 @@ export function CanvasProvider({ children }: CanvasProviderProps) {
       updateCanvas();
     }, 750);
     return () => clearTimeout(timeout);
-  }, [currentLoadedImage, blurAmount, integerScale, integerScaleValue, smoothRendering, canvasSize]);
+  }, [currentLoadedImage, settings.blurAmount, settings.integerScale, settings.integerScaleValue, settings.smoothRendering, settings.canvasSize]);
 
   return (
     <CanvasContext.Provider value={{

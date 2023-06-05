@@ -42,7 +42,7 @@ export default function FileListSection() {
     updateImagePerPage,
     updateTotalPages,
   } = usePagination();
-  const { projectName } = useSettings();
+  const { settings } = useSettings();
 
   const [isClearDialogOpen, setIsClearDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -132,7 +132,7 @@ export default function FileListSection() {
 
   function handleExportProject() {
     const parsedDate = new Date().toISOString().slice(0, 19).replaceAll('-', '').replaceAll(':', '').replaceAll('T', '');
-    setDownloadFileName(projectName.toLowerCase().replaceAll(' ', '-').replaceAll(/[*\\/@:]/g, '') + '-' + parsedDate);
+    setDownloadFileName(settings.projectName.toLowerCase().replaceAll(' ', '-').replaceAll(/[*\\/@:]/g, '') + '-' + parsedDate);
     toggleSaveProjectDialog();
   }
 

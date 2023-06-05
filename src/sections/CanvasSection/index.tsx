@@ -19,15 +19,17 @@ export function CanvasSection() {
   } = useCanvas();
 
   const {
-    canvasSize,
-    integerScale,
-    integerScaleValue,
-    showBlur,
-    smoothRendering,
-    guideType,
-    projectName,
+    settings,
     updateProjectName,
   } = useSettings();
+
+  const canvasSize = settings.canvasSize;
+  const integerScale = settings.integerScale;
+  const integerScaleValue = settings.integerScaleValue;
+  const smoothRendering = settings.smoothRendering;
+  const projectName = settings.projectName;
+  const guideType = settings.guideType;
+  const showBlur = settings.showBlur;
 
   function updater() {
     const originalCanvas = document.getElementById('canvasNormal') as HTMLCanvasElement;
@@ -59,7 +61,7 @@ export function CanvasSection() {
       imageHeightScaled = image.height * (integerScale ? integerScaleValue : autoScaleValue);
 
       context.imageSmoothingQuality = 'high';
-      context.imageSmoothingEnabled = smoothRendering;
+      context.imageSmoothingEnabled = settings.smoothRendering;
 
       if (integerScale) {
         context.drawImage(image, originalCanvas.width / 2 - imageWidthScaled / 2, originalCanvas.height / 2 - imageHeightScaled / 2, imageWidthScaled, imageHeightScaled);

@@ -4,7 +4,7 @@ import sdv from '../assets/settingsDefaultValues.json';
 import { idbAddElement, idbEditElement, idbGetElement } from '../database/actions';
 import { useLoader } from './useLoader';
 
-export interface settingsProps {
+export interface SettingsProps {
   id: number,
   projectName: string,
   canvasSize: CanvasSizeProps,
@@ -25,14 +25,7 @@ const guideNames = ['none', 'albedo', 'elementerial'];
 export type GuideProps = typeof guideNames[number];
 
 interface SettingsContextData {
-  projectName: string;
-  canvasSize: CanvasSizeProps;
-  blurAmount: number;
-  integerScale: boolean;
-  integerScaleValue: number
-  smoothRendering: boolean;
-  showBlur: boolean;
-  guideType: GuideProps;
+  settings: SettingsProps;
 
   updateProjectName: (name: string) => void;
   updateCanvasSize: (w: number, h: number) => void;
@@ -43,6 +36,7 @@ interface SettingsContextData {
   toggleImageBlur: (value?: boolean) => void;
   toggleIntegerScale: (value?: boolean) => void;
   toggleSmoothRendering: (value?: boolean) => void;
+  saveInOneGo: (data: SettingsProps) => void;
 }
 
 const SettingsContext = createContext<SettingsContextData>({} as SettingsContextData);
@@ -52,23 +46,28 @@ interface SettingsProviderProps {
 }
 
 export function SettingsProvider({ children }: SettingsProviderProps) {
-  const [projectName, setProjectName] = useState(sdv.projectName);
-  const [blurAmount, setBlurAmount] = useState(sdv.blurAmount);
-  const [canvasSize, setCanvasSize] = useState<CanvasSizeProps>({ w: sdv.canvasSize.w, h: sdv.canvasSize.h });
-  const [integerScale, setIntegerScale] = useState(sdv.integerScale);
-  const [integerScaleValue, setIntegerScaleValue] = useState(sdv.integerScaleValue);
-  const [smoothRendering, setSmoothRendering] = useState(sdv.smoothRendering);
-  const [showBlur, setShowBlur] = useState(sdv.showBlur);
-  const [guideType, setGuideType] = useState<GuideProps>(sdv.guideType);
-
   const { showLoader, hideLoader } = useLoader();
+  const [settings, setSettings] = useState<SettingsProps>({
+    id: 1001001,
+    projectName: sdv.projectName,
+    blurAmount: sdv.blurAmount,
+    canvasSize: {
+      w: sdv.canvasSize.w,
+      h: sdv.canvasSize.h,
+    },
+    integerScale: sdv.integerScale,
+    integerScaleValue: sdv.integerScaleValue,
+    smoothRendering: sdv.smoothRendering,
+    showBlur: sdv.showBlur,
+    guideType: sdv.guideType,
+  });
 
   /**
    * Update Project Name
    */
-  function updateProjectName(name: string) {
-    if (name) {
-      setProjectName(name);
+  function updateProjectName(projectName: string) {
+    if (projectName) {
+      setSettings({ ...settings, projectName });
     }
   }
 
@@ -77,10 +76,22 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
    */
   function updateCanvasSize(w: number, h: number) {
     if (w >= 0 && w <= 3000) {
-      setCanvasSize({ w, h: h < 0 ? canvasSize.h : h });
+      setSettings({
+        ...settings,
+        canvasSize: {
+          w,
+          h: h < 0 ? settings.canvasSize.h : h,
+        },
+      });
     }
     if (h >= 0 && h <= 3000) {
-      setCanvasSize({ w: w < 0 ? canvasSize.w : w, h });
+      setSettings({
+        ...settings,
+        canvasSize: {
+          w: w < 0 ? settings.canvasSize.w : w,
+          h,
+        },
+      });
     }
   }
 
@@ -88,9 +99,13 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
    * Invert Canvas Values
    */
   function invertCanvasValues() {
-    const newWidth = canvasSize.h;
-    const newHeight = canvasSize.w;
-    setCanvasSize({ w: newWidth, h: newHeight });
+    setSettings({
+      ...settings,
+      canvasSize: {
+        w: settings.canvasSize.h,
+        h: settings.canvasSize.w,
+      },
+    });
   }
 
   /**
@@ -98,7 +113,10 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
    */
   function updateBlurAmount(amount: number) {
     if (0 <= amount && amount <= 180) {
-      setBlurAmount(amount);
+      setSettings({
+        ...settings,
+        blurAmount: amount,
+      });
     }
   }
 
@@ -106,19 +124,28 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
    * Toggle Smooth Rendering
    */
   function toggleSmoothRendering() {
-    setSmoothRendering(!smoothRendering);
+    setSettings({
+      ...settings,
+      smoothRendering: !settings.smoothRendering,
+    });
   }
 
-  function updateSmoothRendering(value: boolean) {
-    setSmoothRendering(value);
+  function updateSmoothRendering(smoothRendering: boolean) {
+    setSettings({
+      ...settings,
+      smoothRendering,
+    });
   }
 
   /**
    * Update Integer Scale
    */
-  function updateIntegerScaleValue(scale: number) {
-    if (scale >= 1 && scale <= 32) {
-      setIntegerScaleValue(scale);
+  function updateIntegerScaleValue(integerScaleValue: number) {
+    if (integerScaleValue >= 1 && integerScaleValue <= 32) {
+      setSettings({
+        ...settings,
+        integerScaleValue,
+      });
     } else {
       return null;
     }
@@ -128,62 +155,58 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
    * Toggle Canvas to show blurred variant
    */
   function toggleImageBlur() {
-    setShowBlur(!showBlur);
+    setSettings({
+      ...settings,
+      showBlur: !settings.showBlur,
+    });
   }
 
-  function updateImageBlur(value: boolean) {
-    setShowBlur(value);
+  function updateImageBlur(showBlur: boolean) {
+    setSettings({
+      ...settings,
+      showBlur,
+    });
   }
 
   /**
-   * Toggle canvas to zoom image in integer or floating point number
-   */
+ * Toggle canvas to zoom image in integer or floating point number
+ */
   function toggleIntegerScale() {
-    setIntegerScale(!integerScale);
+    setSettings({
+      ...settings,
+      integerScale: !settings.integerScale,
+    });
   }
 
-  function updateIntegerScale(value: boolean) {
-    setIntegerScale(value);
+  function updateIntegerScale(integerScale: boolean) {
+    setSettings({
+      ...settings,
+      integerScale,
+    });
   }
 
   /**
-   * Update Guide type
-   */
-  function updateGuideType(guide: GuideProps) {
-    setGuideType(guide);
+ * Update Guide type
+ */
+  function updateGuideType(guideType: GuideProps) {
+    setSettings({
+      ...settings,
+      guideType,
+    });
   }
 
   const firstUpdate = useRef(true);
 
   useEffect(() => {
     async function saveSettings() {
-      return await idbEditElement('albedoSettings', 1001001, {
-        id: 1001001,
-        blurAmount,
-        canvasSize,
-        guideType,
-        integerScale,
-        integerScaleValue,
-        projectName,
-        showBlur,
-        smoothRendering,
-      });
+      return await idbEditElement('albedoSettings', 1001001, settings);
     }
     if (firstUpdate.current) {
       firstUpdate.current = false;
       return;
     }
     saveSettings();
-  }, [
-    blurAmount,
-    canvasSize,
-    guideType,
-    integerScale,
-    integerScaleValue,
-    projectName,
-    showBlur,
-    smoothRendering
-  ]);
+  }, [settings]);
 
   const asyncCallTimeout = async (asyncPromise: unknown, timeLimit: number) => {
     let timeoutHandle: NodeJS.Timeout;
@@ -201,24 +224,23 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
     });
   };
 
+  /**
+   * Save
+   */
+  function saveInOneGo(data: SettingsProps) {
+    setSettings(data);
+  }
+
   async function getExistentData() {
     showLoader();
     await asyncCallTimeout(idbGetElement('albedoSettings', 1001001), 5000).then(async (result) => {
 
       if (result) {
-        const data: settingsProps = result as settingsProps;
-
-        updateProjectName(data.projectName);
-        updateCanvasSize(data.canvasSize.w, data.canvasSize.h);
-        updateGuideType(data.guideType);
-        updateBlurAmount(data.blurAmount);
-        updateIntegerScaleValue(data.integerScaleValue);
-        updateIntegerScale(data.integerScale);
-        updateSmoothRendering(data.smoothRendering);
-        updateImageBlur(data.showBlur);
+        const data: SettingsProps = result as SettingsProps;
+        saveInOneGo(data);
 
       } else {
-        const data: settingsProps = {
+        const data: SettingsProps = {
           id: 1001001,
           projectName: sdv.projectName,
           canvasSize: { w: sdv.canvasSize.w, h: sdv.canvasSize.h },
@@ -244,14 +266,7 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
 
   return (
     <SettingsContext.Provider value={{
-      projectName,
-      blurAmount,
-      canvasSize,
-      integerScale,
-      integerScaleValue,
-      smoothRendering,
-      showBlur,
-      guideType,
+      settings,
       updateProjectName,
       updateCanvasSize,
       updateBlurAmount,
@@ -261,6 +276,7 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
       toggleImageBlur,
       toggleIntegerScale,
       updateGuideType,
+      saveInOneGo,
     }}>
       {children}
     </SettingsContext.Provider>

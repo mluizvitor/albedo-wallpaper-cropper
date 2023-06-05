@@ -1,6 +1,6 @@
 import { ChangeEvent, ReactNode, createContext, useContext, useEffect, useState } from 'react';
 import { CanvasContentProps, useCanvas } from './useCanvas';
-import { useSettings } from './useSettings';
+import { SettingsProps, useSettings } from './useSettings';
 
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
@@ -56,7 +56,7 @@ export function SystemsProvider({ children }: SystemProviderProps) {
     });
   });
   const [systemCollection, setSystemCollection] = useState<SystemProps[]>([]);
-  const { projectName } = useSettings();
+  const { settings, saveInOneGo } = useSettings();
 
   /**
    *
@@ -145,7 +145,7 @@ export function SystemsProvider({ children }: SystemProviderProps) {
   /**
    *
    * Remove System from Collection
-   * @param systemName
+   * @param id
    */
   function removeSystemFromCollection(id: number) {
     const newCollection = [...systemCollection].filter(item => item.id !== id);
@@ -225,12 +225,17 @@ export function SystemsProvider({ children }: SystemProviderProps) {
     }
 
     zip.generateAsync({ type: 'blob' }).then(function (content) {
-      saveAs(content, systemName === 'all' ? projectName.toLowerCase().replaceAll(' ', '-').replaceAll(/[*\\/@:]/g, '') + '-wallpapers.zip' : systemName + '.zip');
+      saveAs(content, systemName === 'all' ? settings.projectName.toLowerCase().replaceAll(' ', '-').replaceAll(/[*\\/@:]/g, '') + '-wallpapers.zip' : systemName + '.zip');
     });
   }
 
-  function exportProject(fileName: string) {
-    const file = new Blob([JSON.stringify(systemCollection)], { type: 'application/json' });
+  async function exportProject(fileName: string) {
+    const data = {
+      settings: settings,
+      files: systemCollection,
+    };
+
+    const file = new Blob([JSON.stringify(data)], { type: 'application/json' });
     if (!fileName) {
       return null;
     }
@@ -279,6 +284,26 @@ export function SystemsProvider({ children }: SystemProviderProps) {
     };
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  function handleLoadedSystemContent(parsedContent: any) {
+    let newParsedContent: SystemProps[] = [];
+
+    for (const item of parsedContent) {
+      const systemData = systemList.find(foundSys => foundSys.theme === item.theme || item.systemName);
+
+
+      if ((item.id && item.file && item.theme || item.systemName) && systemData) {
+        const newData: SystemProps = { ...systemData, id: item.id, theme: item.theme || item.systemName, file: item.file };
+        idbAddElement('systemCollection', newData);
+        newParsedContent = [...newParsedContent, newData];
+      } else {
+        throw new Error('Invalid data format');
+      }
+    }
+
+    setSystemCollection(newParsedContent);
+  }
+
   function handleLoadPreviousVersion(result: object) {
     if (!result) {
       return null;
@@ -286,27 +311,21 @@ export function SystemsProvider({ children }: SystemProviderProps) {
 
     try {
       idbRemoveElement('systemCollection', 'all');
+      idbRemoveElement('albedoSettings', 'all');
 
       const parsedContent = result;
-      if (!Array.isArray(parsedContent)) {
+
+      if ('settings' in parsedContent && 'files' in parsedContent) {
+        idbAddElement('albedoSettings', parsedContent.settings as SettingsProps);
+        saveInOneGo(parsedContent.settings as SettingsProps);
+        handleLoadedSystemContent(parsedContent.files as SystemProps[]);
+
+      } else if (Array.isArray(parsedContent)) {
+        handleLoadedSystemContent(parsedContent);
+
+      } else {
         throw new Error('Invalid data format');
       }
-
-      let newParsedContent: SystemProps[] = [];
-
-      for (const item of parsedContent) {
-        const systemData = systemList.find(foundSys => foundSys.theme === item.theme || foundSys.theme === item.systemName);
-
-        if ((item.id && item.file && item.theme || item.systemName) && systemData) {
-          const newData: SystemProps = { ...systemData, id: item.id, theme: item.theme || item.systemName, file: item.file };
-          idbAddElement('systemCollection', newData);
-          newParsedContent = [...newParsedContent, newData];
-        } else {
-          throw new Error('Invalid data format');
-        }
-      }
-
-      setSystemCollection(newParsedContent);
 
     } catch (error) {
       alert(error);
