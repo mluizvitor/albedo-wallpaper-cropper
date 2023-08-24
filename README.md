@@ -1,3 +1,5 @@
+![AWC](./.github/card.png)
+
 # About
 
 > First of all, English is not my main language, nor am I fluent in it. I hope all the following instructions made some sense for you. 
