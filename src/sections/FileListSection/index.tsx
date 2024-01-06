@@ -154,6 +154,22 @@ export default function FileListSection() {
     };
   }
 
+
+  function getSupportedSystems(mode: 'supported' | 'new') {
+    let supported = 0;
+    systemList.map(listItem => {
+      systemCollection.map(colItem => {
+        colItem.theme === listItem.theme && supported++;
+      });
+    });
+
+    if (mode === 'supported') {
+      return supported;
+    } else {
+      return systemCollection.length - supported;
+    }
+  }
+
   useEffect(() => {
     goFirst();
     updateTotalPages(filteredAddedSystem.length);
@@ -451,9 +467,12 @@ export default function FileListSection() {
           </div>
         )}
 
-        <div className='flex items-center'>
-          <span className='w-full text-sm opacity-60'>
-            {addedSystemQuery.length !== 0 ? `Found ${filteredAddedSystem.length} ${filteredAddedSystem.length === 1 ? 'system' : 'systems'}` : `${systemCollection.length} of ${systemList.length} currently supported`}
+        <div className='flex items-center gap-4'>
+          <span className='shrink-0 text-sm opacity-60'>
+            {addedSystemQuery.length !== 0 ? `Found ${filteredAddedSystem.length} ${filteredAddedSystem.length === 1 ? 'system' : 'systems'}` : `${getSupportedSystems('supported')} of ${systemList.length} currently supported`}
+          </span>
+          <span className='shrink-0 grow text-sm opacity-60'>
+            {addedSystemQuery.length === 0 && `${getSupportedSystems('new')} new`}
           </span>
           <Button label='List settings'
             hideLabel
