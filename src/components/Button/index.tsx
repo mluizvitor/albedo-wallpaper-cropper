@@ -15,7 +15,7 @@ export default function Button({ label, icon, className, hideLabel, ...rest }: B
       title={label}
       {...rest}>
       {icon && cloneElement(icon, {
-        className: 'shrink-0',
+        className: ['shrink-0', icon.props.className].join(' '),
       })}
       {!hideLabel && (
         <span className={icon ? 'ml-2' : ''}>
