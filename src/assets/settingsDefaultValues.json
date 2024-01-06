@@ -9,5 +9,7 @@
   "integerScaleValue": 1,
   "projectName": "Untitled Project",
   "showBlur": false,
-  "smoothRendering": true
+  "smoothRendering": true,
+  "hideRightPanel": false,
+  "hideLeftPanel": false
 }

@@ -13,7 +13,9 @@ export interface SettingsProps {
   integerScale: boolean,
   integerScaleValue: number,
   smoothRendering: boolean
-  showBlur: boolean
+  showBlur: boolean,
+  hideLeftPanel: boolean,
+  hideRightPanel: boolean
 }
 
 export interface CanvasSizeProps {
@@ -37,6 +39,8 @@ interface SettingsContextData {
   toggleIntegerScale: (value?: boolean) => void;
   toggleSmoothRendering: (value?: boolean) => void;
   saveInOneGo: (data: SettingsProps) => void;
+  toggleLeftPanel: () => void;
+  toggleRightPanel: () => void;
 }
 
 const SettingsContext = createContext<SettingsContextData>({} as SettingsContextData);
@@ -60,6 +64,8 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
     smoothRendering: sdv.smoothRendering,
     showBlur: sdv.showBlur,
     guideType: sdv.guideType,
+    hideLeftPanel: sdv.hideLeftPanel,
+    hideRightPanel: sdv.hideRightPanel,
   });
 
   /**
@@ -229,6 +235,8 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
           integerScaleValue: sdv.integerScaleValue,
           smoothRendering: sdv.smoothRendering,
           showBlur: sdv.showBlur,
+          hideLeftPanel: sdv.hideLeftPanel,
+          hideRightPanel: sdv.hideRightPanel,
         };
 
         idbAddElement('albedoSettings', data);
@@ -237,6 +245,26 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
     setTimeout(() => {
       hideLoader();
     }, 2000);
+  }
+
+  /**
+   * Toggle Left Panel
+   */
+  function toggleLeftPanel() {
+    setSettings({
+      ...settings,
+      hideLeftPanel: !(settings.hideLeftPanel),
+    });
+  }
+
+  /**
+   * Toggle Right Panel
+   */
+  function toggleRightPanel() {
+    setSettings({
+      ...settings,
+      hideRightPanel: !(settings.hideRightPanel),
+    });
   }
 
   useEffect(() => {
@@ -256,6 +284,8 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
       toggleIntegerScale,
       updateGuideType,
       saveInOneGo,
+      toggleLeftPanel,
+      toggleRightPanel,
     }}>
       {children}
     </SettingsContext.Provider>
