@@ -79,3 +79,7 @@
 .paginatorButton {
   @apply disabled:pointer-events-none bg-opacity-70 disabled:text-white/30 px-0 items-center justify-center
 }
+
+.hidePanelButton {
+  @apply fixed h-10 w-6 px-1 bg-neutral-900 bottom-0 left-[24rem] 2xl:left-[28rem] z-20 rounded-l-none rounded-b-none hover:rounded-l-none hover:rounded-b-none;
+}

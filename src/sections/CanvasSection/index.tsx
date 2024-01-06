@@ -178,7 +178,7 @@ export function CanvasSection() {
       className='z-0 w-[100vw] h-[100vh] relative overflow-hidden flex items-center justify-center bg-[#0a0a0a]'
       onWheel={(e: WheelEvent<HTMLDivElement>) => wheelHandler(e)}
     >
-      <div className='fixed top-0 inset-x-0 grid grid-cols-2 items-center justify-between z-20 py-3 bg-[#0a0a0a]/50 px-[25rem] 2xl:px-[29rem]'>
+      <div className={['fixed top-0 inset-x-0 grid grid-cols-2 items-center justify-between z-20 py-3 px-[25rem] 2xl:px-[29rem] bg-[#0a0a0a]/50 transition-all duration-300', settings.hideLeftPanel && 'pl-12 2xl:pl-12', settings.hideRightPanel && 'pr-12 2xl:pr-12'].join(' ')}>
         <EditText type='text'
           value={projectName}
 
