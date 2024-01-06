@@ -269,6 +269,7 @@ export function CropperSection() {
           type='range'
           min={0}
           max={180}
+          step={5}
           className='mt-4'
           value={blurAmount}
           onChange={(e: ChangeEvent<HTMLInputElement>) => updateBlurAmount(Number(e.target.value))} />

@@ -24,7 +24,7 @@ export default function Input({ id, label, helperText, placeholder, type, classN
         type={type}
         {...rest}
         placeholder={placeholder}
-        className={[type === 'range' ? '' : styles.inputText, inputClassName].join(' ')}
+        className={[type === 'range' ? styles.inputRange : styles.inputText, inputClassName].join(' ')}
         onFocus={(e) => { e.target.select(); }} />
       {helperText && <span className='opacity-70 leading-[100%] mt-2 text-xs w-auto'>{helperText}</span>}
     </div>
